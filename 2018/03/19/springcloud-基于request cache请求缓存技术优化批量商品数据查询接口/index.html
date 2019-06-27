@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="springcloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基于request cache请求缓存技术优化批量商品数据查询接口(学习龙果学院中华石杉课程)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于request cache请求缓存技术优化批量商品数据查询接口">
+<meta property="og:url" content="http://boblwboy.github.io/2018/03/19/springcloud-基于request cache请求缓存技术优化批量商品数据查询接口/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="基于request cache请求缓存技术优化批量商品数据查询接口(学习龙果学院中华石杉课程)">
+<meta property="og:image" content="http://boblwboy.github.io/img/hystrix/request cache的原理.png">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.385Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于request cache请求缓存技术优化批量商品数据查询接口">
+<meta name="twitter:description" content="基于request cache请求缓存技术优化批量商品数据查询接口(学习龙果学院中华石杉课程)">
+<meta name="twitter:image" content="http://boblwboy.github.io/img/hystrix/request cache的原理.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2018/03/19/springcloud-基于request cache请求缓存技术优化批量商品数据查询接口/"/>
+
+
+
+
+
+  <title>基于request cache请求缓存技术优化批量商品数据查询接口 | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2018/03/19/springcloud-基于request cache请求缓存技术优化批量商品数据查询接口/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于request cache请求缓存技术优化批量商品数据查询接口</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T10:10:16+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于request cache请求缓存技术优化批量商品数据查询接口(学习龙果学院中华石杉课程)
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基于request-cache请求缓存技术优化批量商品数据查询接口"><a href="#基于request-cache请求缓存技术优化批量商品数据查询接口" class="headerlink" title="基于request cache请求缓存技术优化批量商品数据查询接口"></a>基于request cache请求缓存技术优化批量商品数据查询接口</h2><p>我们上一讲讲解的那个图片，顺着那个图片的流程，来一个一个的讲解hystrix的核心技术</p>
+<p>1、创建command，2种command类型<br>2、执行command，4种执行方式<br>3、查找是否开启了request cache，是否有请求缓存，如果有缓存，直接取用缓存，返回结果</p>
+<p>首先，有一个概念，叫做reqeust context，请求上下文，一般来说，在一个web应用中，hystrix</p>
+<p>我们会在一个filter里面，对每一个请求都施加一个请求上下文，就是说，tomcat容器内，每一次请求，就是一次请求上下文</p>
+<p>然后在这次请求上下文中，我们会去执行N多代码，调用N多依赖服务，有的依赖服务可能还会调用好几次</p>
+<p>在一次请求上下文中，如果有多个command，参数都是一样的，调用的接口也是一样的，其实结果可以认为也是一样的</p>
+<p>那么这个时候，我们就可以让第一次command执行，返回的结果，被缓存在内存中，然后这个请求上下文中，后续的其他对这个依赖的调用全部从内存中取用缓存结果就可以了</p>
+<p>不用在一次请求上下文中反复多次的执行一样的command，提升整个请求的性能</p>
+<p>HystrixCommand和HystrixObservableCommand都可以指定一个缓存key，然后hystrix会自动进行缓存，接着在同一个request context内，再次访问的时候，就会直接取用缓存</p>
+<p>用请求缓存，可以避免重复执行网络请求</p>
+<p>多次调用一个command，那么只会执行一次，后面都是直接取缓存</p>
+<p>对于请求缓存（request caching），请求合并（request collapsing），请求日志（request log），等等技术，都必须自己管理HystrixReuqestContext的声明周期</p>
+<p>在一个请求执行之前，都必须先初始化一个request context</p>
+<p>HystrixRequestContext context = HystrixRequestContext.initializeContext();</p>
+<p>然后在请求结束之后，需要关闭request context</p>
+<p>context.shutdown();</p>
+<p>一般来说，在java web来的应用中，都是通过filter过滤器来实现的</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * hystrix上下文过滤器</div><div class="line"> */</div><div class="line">public class HystrixRequestContextFilter implements Filter &#123;</div><div class="line">    @Override</div><div class="line">    public void init(FilterConfig filterConfig) throws ServletException &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException &#123;</div><div class="line"></div><div class="line">        HystrixRequestContext <span class="attr">hystrixRequestContext</span> = HystrixRequestContext.initializeContext();</div><div class="line">        try &#123;</div><div class="line">            filterChain.doFilter(servletRequest,servletResponse);</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;finally &#123;</div><div class="line">            hystrixRequestContext.shutdown();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void destroy() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//注册</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean filterRegistrationBean() &#123;</div><div class="line">        FilterRegistrationBean <span class="attr">filterRegistrationBean</span> = new FilterRegistrationBean(new HystrixRequestContextFilter());</div><div class="line">        filterRegistrationBean.addUrlPatterns(<span class="string">"/*"</span>);</div><div class="line">        return filterRegistrationBean;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">//调用</div><div class="line">        for (String productId : productIds.split(<span class="string">","</span>)) &#123;</div><div class="line">            HystrixCommand&lt;ProductInfo&gt; <span class="attr">command</span> = new GetProductInfoCommand(Long.valueOf(productId));</div><div class="line">            ProductInfo <span class="attr">productInfo</span> = command.execute();</div><div class="line">            System.out.println(productInfo);</div><div class="line">            System.out.println(command.isResponseFromCache());</div><div class="line">        &#125;</div><div class="line">//结果</div><div class="line">调用接口，查询商品数据，<span class="attr">productId=1</span></div><div class="line">ProductInfo [<span class="attr">id=1,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">false</span></div><div class="line">调用接口，查询商品数据，<span class="attr">productId=2</span></div><div class="line">ProductInfo [<span class="attr">id=2,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">false</span></div><div class="line">调用接口，查询商品数据，<span class="attr">productId=3</span></div><div class="line">ProductInfo [<span class="attr">id=3,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">false</span></div><div class="line">ProductInfo [<span class="attr">id=1,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">true</span></div><div class="line">ProductInfo [<span class="attr">id=2,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">true</span></div><div class="line">ProductInfo [<span class="attr">id=3,</span> <span class="attr">name=iphone7手机,</span> <span class="attr">price=5599.0,</span> <span class="attr">pictureList=a.jpg,b.jpg,</span> <span class="attr">specification=iphone7的规格,</span> <span class="attr">service=iphone7的售后服务,</span> <span class="attr">color=红色,白色,黑色,</span> <span class="attr">size=5.5,</span> <span class="attr">shopId=1,</span> <span class="attr">modifiedTime=2017-01-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, <span class="attr">cityId=1,</span> <span class="attr">cityName=null,</span> <span class="attr">brandId=null,</span> <span class="attr">brandName=null]</span></div><div class="line"><span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>结合咱们的业务背景，我们做了一个批量查询商品数据的接口，在这个里面，我们其实通过HystrixObservableCommand一次性批量查询多个商品id的数据</p>
+<p>但是这里有个问题，如果说nginx在本地缓存失效了，重新获取一批缓存，传递过来的productId都没有进行去重，1,1,2,2,5,6,7</p>
+<p>那么可能说，商品id出现了重复，如果按照我们之前的业务逻辑，可能就会重复对productId=1的商品查询两次，productId=2的商品查询两次</p>
+<p>我们对批量查询商品数据的接口，可以用request cache做一个优化，就是说一次请求，就是一次request context，对相同的商品查询只能执行一次，其余的都走request cache</p>
+<p><img src="http://boblwboy.github.io/img/hystrix/request cache的原理.png" alt="request cache的原理"></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//清理缓存</span></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">GetProductInfoCommand</span> <span class="keyword">extends</span> <span class="title">HystrixCommand&lt;ProductInfo&gt;</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> static <span class="keyword">final</span> <span class="type">HystrixCommandKey</span> <span class="type">KEY</span> = <span class="type">HystrixCommandKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"GetProductInfoCommand"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="type">Long</span> productId;</div><div class="line"></div><div class="line">    public <span class="type">GetProductInfoCommand</span>(<span class="type">Long</span> productId) &#123;</div><div class="line"></div><div class="line">        <span class="keyword">super</span>(<span class="type">Setter</span>.withGroupKey(<span class="type">HystrixCommandGroupKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"ProductInfoService"</span>))</div><div class="line">                .andCommandKey(<span class="type">KEY</span>)</div><div class="line">                .andThreadPoolKey(<span class="type">HystrixThreadPoolKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"GetProductInfoPool"</span>))</div><div class="line">                <span class="comment">//线程池大小，一般来说用默认的10就够了</span></div><div class="line">                .andThreadPoolPropertiesDefaults(<span class="type">HystrixThreadPoolProperties</span>.<span class="type">Setter</span>().withCoreSize(<span class="number">20</span>)</div><div class="line">                        <span class="comment">//线程池缓冲队列大小</span></div><div class="line">                        .withQueueSizeRejectionThreshold(<span class="number">10</span>)));</div><div class="line">        <span class="keyword">this</span>.productId = productId;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="type">ProductInfo</span> run() <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</div><div class="line"></div><div class="line">        <span class="type">String</span> url = <span class="string">"http://localhost:8082/getProductInfo?productId="</span> + productId;</div><div class="line">        <span class="type">String</span> response = <span class="type">HttpClientUtils</span>.sendGetRequest(url);</div><div class="line">        <span class="type">System</span>.out.println(<span class="string">"调用接口，查询商品数据，productId="</span>+productId);</div><div class="line">        <span class="keyword">return</span> <span class="type">JSONObject</span>.parseObject(response,<span class="type">ProductInfo</span>.<span class="keyword">class</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="type">String</span> getCacheKey() &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"product_info_"</span> + <span class="keyword">this</span>.productId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void flushCache(<span class="type">Long</span> productId) &#123;</div><div class="line">        <span class="type">HystrixRequestCache</span>.getInstance(<span class="type">KEY</span>,<span class="type">HystrixConcurrencyStrategyDefault</span>.getInstance()).clear(<span class="string">"product_info_"</span> + productId);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">UpdateProductInfoCommand</span> <span class="keyword">extends</span> <span class="title">HystrixCommand&lt;Boolean&gt;</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> static <span class="keyword">final</span> <span class="type">HystrixCommandKey</span> <span class="type">KEY</span> = <span class="type">HystrixCommandKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"UpdateProductInfoCommand"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="type">Long</span> productId;</div><div class="line"></div><div class="line">    public <span class="type">UpdateProductInfoCommand</span>(<span class="type">Long</span> productId) &#123;</div><div class="line"></div><div class="line">        <span class="keyword">super</span>(<span class="type">Setter</span>.withGroupKey(<span class="type">HystrixCommandGroupKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"ProductInfoService"</span>))</div><div class="line">                .andCommandKey(<span class="type">KEY</span>)</div><div class="line">                .andThreadPoolKey(<span class="type">HystrixThreadPoolKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"UpdateProductInfoPool"</span>))</div><div class="line">                <span class="comment">//线程池大小，一般来说用默认的10就够了</span></div><div class="line">                .andThreadPoolPropertiesDefaults(<span class="type">HystrixThreadPoolProperties</span>.<span class="type">Setter</span>().withCoreSize(<span class="number">20</span>)</div><div class="line">                        <span class="comment">//线程池缓冲队列大小</span></div><div class="line">                        .withQueueSizeRejectionThreshold(<span class="number">10</span>)));</div><div class="line">        <span class="keyword">this</span>.productId = productId;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="type">Boolean</span> run() <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</div><div class="line">        <span class="comment">//执行一次商品信息的更新</span></div><div class="line">        <span class="type">GetProductInfoCommand</span>.flushCache(productId);</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-线程池隔离技术与信号量隔离技术/" rel="next" title="线程池隔离技术与信号量隔离技术">
+                <i class="fa fa-chevron-left"></i> 线程池隔离技术与信号量隔离技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-深入理解hystrix的短路器执行原理以及模拟接口异常时的短路实验/" rel="prev" title="深入理解hystrix的短路器执行原理以及模拟接口异常时的短路实验">
+                深入理解hystrix的短路器执行原理以及模拟接口异常时的短路实验 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于request-cache请求缓存技术优化批量商品数据查询接口"><span class="nav-number">1.</span> <span class="nav-text">基于request cache请求缓存技术优化批量商品数据查询接口</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

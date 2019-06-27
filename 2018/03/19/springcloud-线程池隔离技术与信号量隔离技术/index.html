@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="springcloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="线程池隔离技术与信号量隔离技术(学习龙果学院中华石杉课程)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池隔离技术与信号量隔离技术">
+<meta property="og:url" content="http://boblwboy.github.io/2018/03/19/springcloud-线程池隔离技术与信号量隔离技术/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="线程池隔离技术与信号量隔离技术(学习龙果学院中华石杉课程)">
+<meta property="og:image" content="http://boblwboy.github.io/img/hystrix/信号量的资源隔离与限流的说明.png">
+<meta property="og:image" content="http://boblwboy.github.io/img/hystrix/线程池隔离和信号量隔离的原理以及区别.png">
+<meta property="og:image" content="http://boblwboy.github.io/img/hystrix/线程池+queue的工作原理.png">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.392Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线程池隔离技术与信号量隔离技术">
+<meta name="twitter:description" content="线程池隔离技术与信号量隔离技术(学习龙果学院中华石杉课程)">
+<meta name="twitter:image" content="http://boblwboy.github.io/img/hystrix/信号量的资源隔离与限流的说明.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2018/03/19/springcloud-线程池隔离技术与信号量隔离技术/"/>
+
+
+
+
+
+  <title>线程池隔离技术与信号量隔离技术 | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2018/03/19/springcloud-线程池隔离技术与信号量隔离技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">线程池隔离技术与信号量隔离技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T10:10:16+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  线程池隔离技术与信号量隔离技术(学习龙果学院中华石杉课程)
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="线程池隔离技术与信号量隔离技术"><a href="#线程池隔离技术与信号量隔离技术" class="headerlink" title="线程池隔离技术与信号量隔离技术"></a>线程池隔离技术与信号量隔离技术</h2><ol>
+<li>线程池隔离技术与信号量隔离技术的区别<br>hystrix里面，核心的一项功能，其实就是所谓的资源隔离，要解决的最最核心的问题，就是将多个依赖服务的调用分别隔离到各自自己的资源池内<br>避免说对某一个依赖服务的调用，因为依赖服务的接口调用的延迟或者失败，导致服务所有的线程资源全部耗费在这个服务的接口调用上<br>一旦说某个服务的线程资源全部耗尽的话，可能就导致服务就会崩溃，甚至说这种故障会不断蔓延<br>hystrix，资源隔离，两种技术，线程池的资源隔离，信号量的资源隔离<br>信号量，semaphore<br>信号量跟线程池，两种资源隔离的技术，区别到底在哪儿呢？<br><img src="http://boblwboy.github.io/img/hystrix/信号量的资源隔离与限流的说明.png" alt="信号量的资源隔离与限流的说明"></li>
+</ol>
+<p><img src="http://boblwboy.github.io/img/hystrix/线程池隔离和信号量隔离的原理以及区别.png" alt="线程池隔离和信号量隔离的原理以及区别"></p>
+<ol>
+<li>线程池隔离技术和信号量隔离技术，分别在什么样的场景下去使用呢？？<br>线程池：适合绝大多数的场景，99%的，线程池，对依赖服务的网络请求的调用和访问，timeout这种问题<br>信号量：适合，你的访问不是对外部依赖的访问，而是对内部的一些比较复杂的业务逻辑的访问，但是像这种访问，系统内部的代码，其实不涉及任何的网络请求，那么只要做信号量的普通限流就可以了，因为不需要去捕获timeout类似的问题，算法+数据结构的效率不是太高，并发量突然太高，因为这里稍微耗时一些，导致很多线程卡在这里的话，不太好，所以进行一个基本的资源隔离和访问，避免内部复杂的低效率的代码，导致大量的线程被hang住</li>
+<li>在代码中加入从本地内存获取地理位置数据的逻辑<br>业务背景里面， 比较适合信号量的是什么场景呢？<br>比如说，我们一般来说，缓存服务，可能会将部分量特别少，访问又特别频繁的一些数据，放在自己的纯内存中<br>一般我们在获取到商品数据之后，都要去获取商品是属于哪个地理位置，省，市，卖家的，可能在自己的纯内存中，比如就一个Map去获取<br>对于这种直接访问本地内存的逻辑，比较适合用信号量做一下简单的隔离<br>优点在于，不用自己管理线程池拉，不用care timeout超时了，信号量做隔离的话，性能会相对来说高一些</li>
+<li>采用信号量技术对地理位置获取逻辑进行资源隔离与限流<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">GetCityNameCommand</span> <span class="keyword">extends</span> <span class="title">HystrixCommand&lt;String&gt;</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="type">Long</span> cityId;</div><div class="line"></div><div class="line">    public <span class="type">GetCityNameCommand</span>(<span class="type">Long</span> cityId) &#123;</div><div class="line"></div><div class="line">        <span class="keyword">super</span>(<span class="type">Setter</span>.withGroupKey(<span class="type">HystrixCommandGroupKey</span>.<span class="type">Factory</span>.asKey(<span class="string">"GetCityNameGroup"</span>))</div><div class="line">                .andCommandPropertiesDefaults(<span class="type">HystrixCommandProperties</span>.<span class="type">Setter</span>()</div><div class="line">                        .withExecutionIsolationStrategy(<span class="type">HystrixCommandProperties</span>.<span class="type">ExecutionIsolationStrategy</span>.<span class="type">SEMAPHORE</span>)));</div><div class="line"></div><div class="line">        <span class="keyword">this</span>.cityId = cityId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="type">String</span> run() <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="type">LocationCache</span>.getCityName(<span class="keyword">this</span>.cityId);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="细粒度控制"><a href="#细粒度控制" class="headerlink" title="细粒度控制"></a>细粒度控制</h2><p>资源隔离，两种策略，线程池隔离，信号量隔离<br>对资源隔离这一块东西，做稍微更加深入一些的讲解，告诉你，除了可以选择隔离策略以外，对你选择的隔离策略，可以做一定的细粒度的一些控制</p>
+<ol>
+<li><p>execution.isolation.strategy<br>指定了HystrixCommand.run()的资源隔离策略，THREAD或者SEMAPHORE，一种是基于线程池，一种是信号量<br>线程池机制，每个command运行在一个线程中，限流是通过线程池的大小来控制的<br>信号量机制，command是运行在调用线程中，但是通过信号量的容量来进行限流<br>如何在线程池和信号量之间做选择？<br>默认的策略就是线程池<br>线程池其实最大的好处就是对于网络访问请求，如果有超时的话，可以避免调用线程阻塞住<br>而使用信号量的场景，通常是针对超大并发量的场景下，每个服务实例每秒都几百的QPS，那么此时你用线程池的话，线程一般不会太多，可能撑不住那么高的并发，如果要撑住，可能要耗费大量的线程资源，那么就是用信号量，来进行限流保护<br>一般用信号量常见于那种基于纯内存的一些业务逻辑服务，而不涉及到任何网络访问请求<br>netflix有100+的command运行在40+的线程池中，只有少数command是不运行在线程池中的，就是从纯内存中获取一些元数据，或者是对多个command包装起来的facacde command，是用信号量限流的</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// to use thread isolation</span></div><div class="line"><span class="selector-tag">HystrixCommandProperties</span><span class="selector-class">.Setter</span>()</div><div class="line">   <span class="selector-class">.withExecutionIsolationStrategy</span>(ExecutionIsolationStrategy.THREAD)</div><div class="line"><span class="comment">// to use semaphore isolation</span></div><div class="line"><span class="selector-tag">HystrixCommandProperties</span><span class="selector-class">.Setter</span>()</div><div class="line">   <span class="selector-class">.withExecutionIsolationStrategy</span>(ExecutionIsolationStrategy.SEMAPHORE)</div></pre></td></tr></table></figure>
+</li>
+<li><p>command名称和command组<br>线程池隔离，依赖服务-&gt;接口-&gt;线程池，如何来划分<br>你的每个command，都可以设置一个自己的名称，同时可以设置一个自己的组</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Setter cachedSetter = </div><div class="line">    Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ExampleGroup"</span>))</div><div class="line">        .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"HelloWorld"</span>));    </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">CommandHelloWorld</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>(cachedSetter);</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>command group，是一个非常重要的概念，默认情况下，因为就是通过command group来定义一个线程池的，而且还会通过command group来聚合一些监控和报警信息<br>同一个command group中的请求，都会进入同一个线程池中</p>
+<ol>
+<li>command线程池<br>threadpool key代表了一个HystrixThreadPool，用来进行统一监控，统计，缓存<br>默认的threadpool key就是command group名称<br>每个command都会跟它的threadpool key对应的thread pool绑定在一起<br>如果不想直接用command group，也可以手动设置thread pool name<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> GetProductInfoCommand(<span class="built_in">Long</span> productId) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ProductInfoService"</span>))</div><div class="line">            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"GetProductInfoCommand"</span>))</div><div class="line">            .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="string">"GetProductInfoPool"</span>)));</div><div class="line">    <span class="keyword">this</span>.productId = productId;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>command threadpool -&gt; command group -&gt; command key<br>command key，代表了一类command，一般来说，代表了底层的依赖服务的一个接口<br>command group，代表了某一个底层的依赖服务，合理，一个依赖服务可能会暴露出来多个接口，每个接口就是一个command key<br>command group，在逻辑上去组织起来一堆command key的调用，统计信息，成功次数，timeout超时次数，失败次数，可以看到某一个服务整体的一些访问情况<br>command group，一般来说，推荐是根据一个服务去划分出一个线程池，command key默认都是属于同一个线程池的<br>比如说你以一个服务为粒度，估算出来这个服务每秒的所有接口加起来的整体QPS在100左右<br>你调用那个服务的当前服务，部署了10个服务实例，每个服务实例上，其实用这个command group对应这个服务，给一个线程池，量大概在10个左右，就可以了，你对整个服务的整体的访问QPS大概在每秒100左右<br>一般来说，command group是用来在逻辑上组合一堆command的<br>举个例子，对于一个服务中的某个功能模块来说，希望将这个功能模块内的所有command放在一个group中，那么在监控和报警的时候可以放一起看<br>command group，对应了一个服务，但是这个服务暴露出来的几个接口，访问量很不一样，差异非常之大<br>你可能就希望在这个服务command group内部，包含的对应多个接口的command key，做一些细粒度的资源隔离<br>对同一个服务的不同接口，都使用不同的线程池<br>command key -&gt; command group<br>command key -&gt; 自己的threadpool key<br>逻辑上来说，多个command key属于一个command group，在做统计的时候，会放在一起统计<br>每个command key有自己的线程池，每个接口有自己的线程池，去做资源隔离和限流<br>但是对于thread pool资源隔离来说，可能是希望能够拆分的更加一致一些，比如在一个功能模块内，对不同的请求可以使用不同的thread pool<br>command group一般来说，可以是对应一个服务，多个command key对应这个服务的多个接口，多个接口的调用共享同一个线程池<br>如果说你的command key，要用自己的线程池，可以定义自己的threadpool key，就ok了</p>
+<ol>
+<li>coreSize<br>设置线程池的大小，默认是10<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> GetProductInfoCommand(<span class="built_in">Long</span> productId) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ProductInfoService"</span>))</div><div class="line">            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"GetProductInfoCommand"</span>))</div><div class="line">            .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="string">"GetProductInfoPool"</span>))</div><div class="line">            <span class="comment">//线程池大小，一般来说用默认的10就够了</span></div><div class="line">            .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(<span class="number">20</span>)));</div><div class="line">    <span class="keyword">this</span>.productId = productId;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>一般来说，用这个默认的10个线程大小就够了</p>
+<ol>
+<li><p>queueSizeRejectionThreshold<br>控制queue满后reject的threshold，因为maxQueueSize不允许热修改，因此提供这个参数可以热修改，控制队列的最大大小<br>HystrixCommand在提交到线程池之前，其实会先进入一个队列中，这个队列满了之后，才会reject<br>默认值是5<br><img src="http://boblwboy.github.io/img/hystrix/线程池+queue的工作原理.png" alt="线程池+queue的工作原理"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> GetProductInfoCommand(<span class="built_in">Long</span> productId) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ProductInfoService"</span>))</div><div class="line">            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"GetProductInfoCommand"</span>))</div><div class="line">            .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="string">"GetProductInfoPool"</span>))</div><div class="line">            <span class="comment">//线程池大小，一般来说用默认的10就够了</span></div><div class="line">            .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(<span class="number">20</span>)</div><div class="line">                    <span class="comment">//线程池缓冲队列大小</span></div><div class="line">                    .withQueueSizeRejectionThreshold(<span class="number">10</span>)));</div><div class="line">    <span class="keyword">this</span>.productId = productId;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>execution.isolation.semaphore.maxConcurrentRequests<br>设置使用SEMAPHORE隔离策略的时候，允许访问的最大并发量，超过这个最大并发量，请求直接被reject<br>这个并发量的设置，跟线程池大小的设置，应该是类似的，但是基于信号量的话，性能会好很多，而且hystrix框架本身的开销会小很多<br>默认值是10，设置的小一些，否则因为信号量是基于调用线程去执行command的，而且不能从timeout中抽离，因此一旦设置的太大，而且有延时发生，可能瞬间导致tomcat本身的线程资源本占满</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">public</span> GetCityNameCommand(Long cityId) &#123;</div><div class="line"></div><div class="line">    super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"GetCityNameGroup"</span>))</div><div class="line"><span class="meta">            .andCommandKey</span>(HystrixCommandKey.Factory.asKey(<span class="string">"GetCityNameCommand"</span>))</div><div class="line"><span class="meta">            .andThreadPoolKey</span>(HystrixThreadPoolKey.Factory.asKey(<span class="string">"GetCityNamePool"</span>))</div><div class="line"><span class="meta">            .andCommandPropertiesDefaults</span>(HystrixCommandProperties.Setter()</div><div class="line"><span class="meta">                    .withExecutionIsolationStrategy</span>(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)</div><div class="line"><span class="meta">                    .withExecutionIsolationSemaphoreMaxConcurrentRequests</span>(<span class="number">15</span>)))<span class="comment">;</span></div><div class="line"></div><div class="line">    this.cityId = cityId<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/springcloud/" rel="next" title="springcloud">
+                <i class="fa fa-chevron-left"></i> springcloud
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-基于request cache请求缓存技术优化批量商品数据查询接口/" rel="prev" title="基于request cache请求缓存技术优化批量商品数据查询接口">
+                基于request cache请求缓存技术优化批量商品数据查询接口 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池隔离技术与信号量隔离技术"><span class="nav-number">1.</span> <span class="nav-text">线程池隔离技术与信号量隔离技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#细粒度控制"><span class="nav-number">2.</span> <span class="nav-text">细粒度控制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

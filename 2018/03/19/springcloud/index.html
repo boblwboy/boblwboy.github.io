@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="springcloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="springcloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud">
+<meta property="og:url" content="http://boblwboy.github.io/2018/03/19/springcloud/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="springcloud">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springcloud">
+<meta name="twitter:description" content="springcloud">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2018/03/19/springcloud/"/>
+
+
+
+
+
+  <title>springcloud | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2018/03/19/springcloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">springcloud</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T10:10:16+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  springcloud
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="第148节：商品详情页动态渲染系统：微服务与Spring-Cloud基本介绍"><a href="#第148节：商品详情页动态渲染系统：微服务与Spring-Cloud基本介绍" class="headerlink" title="第148节：商品详情页动态渲染系统：微服务与Spring Cloud基本介绍"></a>第148节：商品详情页动态渲染系统：微服务与Spring Cloud基本介绍</h2><hr>
+<p>传统架构的问题</p>
+<p>（1）单块应用，耦合严重<br>（2）开发速度慢，新需求<br>（3）不易于扩展和重构<br>（4）不易于技术升级</p>
+<p>一个java web工程，多个工程，maven整合起来，spring mvc -&gt; spring -&gt; mybatis</p>
+<p>一个工程，可能就包含几十万行代码</p>
+<p>各种业务模块，全部耦合在一个大的工程中，公用了很多的基础代码</p>
+<p>开发速度慢，开发流程，代码管理工具，签出最新的代码副本到本地，运行一下，保证可以运行</p>
+<p>做自己的开发，你的代码跟其他人的代码都耦合在了一起，然后可能还需要涉及到跟其他的代码要做持续集成，然后放在一起统一测试，统一回归，然后统一部署和发布</p>
+<p>每次部署都非常重，因为你要考虑到别人的代码，依赖的一些基础环境是否ok，打包和部署，都特别慢</p>
+<p>很可能不小心别人的代码bug，导致你的系统部署失败，回滚，你还要通知别人，跟别人一起去调试和找到它的bug在哪儿</p>
+<p>多人写作开发一个工程，经常涉及到各种代码的冲突，解决冲突，搞出来一些bug，重新运行多大几千个，上万个单元测试，重新经历后续的所有测试环境</p>
+<p>软件迭代开发的速度很慢，可能迭代一个小功能，就要一周时间，一个模块，半个月的时间</p>
+<hr>
+<p>微服务架构的几大特征：</p>
+<p>（1）足够单一的职责与功能<br>（2）非常的微型<br>（3）面向服务的思想<br>（4）独立开发：团队，技术选型，前后端分离，存储分离，独立部署<br>（5）自动化开发流程：编码，自动化测试，持续集成，自动化部署</p>
+<p>用最简单的话来说，比如之前，可能就一个单块应用，几十个兄弟在一个代码上开发，商品模块，价格模块，库存模块，促销模块，o2o模块，全部放一起了</p>
+<p>微服务，把几十万行的单块应用，拆分出多个服务，每个服务对应一个工程，每个工程就几百行到几千行代码</p>
+<p>每个服务，职责很单一，负责一块事情，商品数据的管理，商品服务; 价格服务，管理复杂的价格变更的业务; 库存服务，管理复杂的库存变更的业务</p>
+<p>微型：几百行~几千行代码</p>
+<p>面向服务的思想：每个服务暴露出来一堆接口，然后其他人都是依赖你的服务在开发</p>
+<p>独立开发：工程上完全独立了， 那就可以给不同的服务配置不同的团队，或者工程师去开发。商品服务是3个哥儿们在维护，价格服务是1个应届生在做，库存服务是2个哥儿们在做</p>
+<p>不同的人就做不同的工程，维护自己不同的代码，spring mvc + spring + mybatis，php，go，c++</p>
+<p>技术选型：mysql，mongodb，memcached，redis，hbase</p>
+<p>每个服务都是自己的存储，单独对接自己的前端工程师，独立的部署在自己的机器上</p>
+<p>独立开发，跟其他人没关系</p>
+<hr>
+<p>微服务的强大作用：</p>
+<p>（1）迭代速度：你只要管好自己的服务就行了，跟别人没关系，随便你这么玩儿，修改代码，测试，部署，都是你自己的事情，不用考虑其他人，没有任何耦合<br>（2）复用性：拆分成一个一个服务之后，就不需要写任何重复的代码了，有一个功能别人做好了，暴露了接口出来，直接调用不就ok了么<br>（3）扩展性：独立，扩展，升级版本，重构，更换技术<br>（4）完全克服了传统单块应用的缺点</p>
+<hr>
+<p>微服务的缺点</p>
+<p>（1）服务太多，难以管理<br>（2）微服务 = 分布式系统，你本来是一个系统，现在拆分成多块，部署在不同的服务器上，一个请求要经过不同的服务器上不同的代码逻辑处理，才能完成，这不就是分布式系统<br>（3）分布式一致性，分布式事务，故障+容错</p>
+<hr>
+<p>微服务的技术栈</p>
+<p>（1）领域驱动设计：微服务建模</p>
+<p>你的任何业务系统都有自己独特的复杂的业务，但是这个时候就是有一个问题，怎么拆分服务？拆成哪些服务？拆成多大？每个服务负责哪些功能？</p>
+<p>微服务的建模，模型怎么设计</p>
+<p>领域驱动的设计思想，可以去分析系统，完成建模的设计</p>
+<p>这里不讲解了，一定是要拿超级复杂的业务来讲解，你才能听懂，业务采取的还是比较简单的，领域驱动</p>
+<p>至少如果你真的很了解你的业务的话，你大概也知道应该如何去拆分这个服务</p>
+<p>（2）Spring Cloud：基础技术架构</p>
+<p>各个服务之间怎么知道对方在哪里 -&gt; 服务的注册和发现</p>
+<p>服务之间的调用怎么处理，rpc，负载均衡</p>
+<p>服务故障的容错</p>
+<p>服务调用链条的追踪怎么做</p>
+<p>多个服务依赖的统一的配置如何管理</p>
+<p>（3）DevOps：自动化+持续集成+持续交付+自动化流水线，将迭代速度提升到极致</p>
+<p>如果要将微服务的开发效率提升到最高，DevOps，全流程标准化，自动化，大幅度提升你的开发效率</p>
+<p>（4）Docker：容器管理大量服务</p>
+<p>微服务，一个大型的系统，可以涉及到几十个，甚至是上百个服务，比较坑，怎么部署，机器怎么管理，怎么运维</p>
+<hr>
+<p>整个微服务技术架构，全部涉及到，全部结合我们的实际的项目，完成整套微服务架构的项目实战</p>
+<h2 id="第149节：商品详情页动态渲染系统：Spring-Boot与微服务的关系以及开发回顾"><a href="#第149节：商品详情页动态渲染系统：Spring-Boot与微服务的关系以及开发回顾" class="headerlink" title="第149节：商品详情页动态渲染系统：Spring Boot与微服务的关系以及开发回顾"></a>第149节：商品详情页动态渲染系统：Spring Boot与微服务的关系以及开发回顾</h2><p>第一版的内容里，spring boot也用了，但是几乎没什么介绍，主要是什么原因呢？</p>
+<p>龙果是很多课都之前都有了，spring boot专门有了一套课程去见解的，所以我当时就没多说什么</p>
+<p>spring cloud，很多人之前都说基于spring boot的微服务</p>
+<p>1、Spring Boot的特点</p>
+<p>（1）快速开发spring应用的框架</p>
+<p>spring mvc+spring+mybatis，首先配置一大堆xml配置文件，其次部署和安装tomcat，jetty等容器，跟java web打交道</p>
+<p>跟servlet，listener，filter，打交道</p>
+<p>手工部署到tomcat或者jetty等容器中，发布一个web应用</p>
+<p>spring boot，简单来说，就是看中了这种java web应用繁琐而且重复的开发流程，采用了spring之上封装的一套框架，spring boot，简化整个这个流程</p>
+<p>尽可能提升我们的开发效率，让我们专注于自己的业务逻辑即可</p>
+<p>（2）内嵌tomcat和jetty容器，不需要单独安装容器，jar包直接发布一个web应用<br>（3）简化maven配置，parent这种方式，一站式引入需要的各种依赖<br>（4）基于注解的零配置思想<br>（5）和各种流行框架，spring web mvc，mybatis，spring cloud无缝整合</p>
+<p>2、Spring Boot和微服务</p>
+<p>（1）spring boot不是微服务技术<br>（2）spring boot只是一个用于加速开发spring应用的基础框架，简化工作，开发单块应用很适合<br>（3）如果要直接基于spring boot做微服务，相当于需要自己开发很多微服务的基础设施，比如基于zookeeper来实现服务注册和发现<br>（4）spring cloud才是微服务技术</p>
+<p>3、Spring Boot的入门开发</p>
+<p>参照之前的库存服务的spring boot，整合搭建一个spring boot</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-基于request collapser请求合并技术进一步优化批量查询/" rel="next" title="基于request collapser请求合并技术进一步优化批量查询">
+                <i class="fa fa-chevron-left"></i> 基于request collapser请求合并技术进一步优化批量查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-线程池隔离技术与信号量隔离技术/" rel="prev" title="线程池隔离技术与信号量隔离技术">
+                线程池隔离技术与信号量隔离技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第148节：商品详情页动态渲染系统：微服务与Spring-Cloud基本介绍"><span class="nav-number">1.</span> <span class="nav-text">第148节：商品详情页动态渲染系统：微服务与Spring Cloud基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第149节：商品详情页动态渲染系统：Spring-Boot与微服务的关系以及开发回顾"><span class="nav-number">2.</span> <span class="nav-text">第149节：商品详情页动态渲染系统：Spring Boot与微服务的关系以及开发回顾</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

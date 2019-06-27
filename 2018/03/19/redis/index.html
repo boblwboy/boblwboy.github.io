@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis">
+<meta property="og:url" content="http://boblwboy.github.io/2018/03/19/redis/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="redis">
+<meta property="og:image" content="http://boblwboy.github.io/img/redis/redis replica最最基本的原理.png">
+<meta property="og:image" content="http://boblwboy.github.io/img/redis/redis主从复制的原理.png">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis">
+<meta name="twitter:description" content="redis">
+<meta name="twitter:image" content="http://boblwboy.github.io/img/redis/redis replica最最基本的原理.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2018/03/19/redis/"/>
+
+
+
+
+
+  <title>redis | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2018/03/19/redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T10:10:16+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  redis
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="06-从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群"><a href="#06-从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群" class="headerlink" title="06.从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群"></a>06.从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群</h2><p>课程大纲</p>
+<p>1、在虚拟机中安装CentOS<br>2、在每个CentOS中都安装Java和Perl<br>3、在4个虚拟机中安装CentOS集群<br>4、配置4台CentOS为ssh免密码互相通信</p>
+<p>从零开始，纯手工，一步一步搭建出一个4个节点的CentOS集群</p>
+<p>为我们后面的课程做准备，后面会讲解大型的分布式的redis集群架构，一步一步纯手工搭建redis集群，集群部署，主从架构，分布式集群架构</p>
+<p>我们后面的课程，会讲解一些实时计算技术的应用，包括storm，讲解一下storm的基础知识，对于java工程师来说，会用就可以了，用一些storm最基本的分布式实时计算的feature就ok了，搭建一个storm的集群</p>
+<p>部署我们整套的系统，nginx，tomcat+java web应用，mysql</p>
+<p>尽量以真实的网络拓扑的环境，去给大家演示一下整套系统的部署，不要所有东西，redis集群+storm集群+nginx+tomcat+mysql，全部放在一个节点上玩儿，也可以去试一试，但是作为课程来说，效果不是太理想</p>
+<p>redis集群，独立的一套机器<br>storm集群，独立的一套机器<br>nginx，独立部署<br>tomcat + java web应用，独立部署<br>mysql，独立部署</p>
+<p>十几个机器，去部署整套系统，我在自己的笔记本电脑上来讲课的，这么玩儿撑不住的</p>
+<p>i5，12G</p>
+<p>4台虚拟机，每台虚拟机是1G的内存，电脑基本还能撑住</p>
+<p>电脑本身就6个G内存的话，学习这种大型的系统架构的课程，是有点吃力，给大家建议，几个G的内存条，也就几百块钱，给自己最好加个内存条，至少到8G以上</p>
+<p>16G凑合</p>
+<p>纯手工，从零开始</p>
+<p>很多视频课程，里面讲师都是现成的虚拟机，自己都装好了，包括各种必要的软件</p>
+<p>讲课的时候直接基于自己的虚拟机就开始讲解了</p>
+<p>很多同学就会发现，想要做到跟讲师一样的环境都很难，自己可能照着样子装了个环境，但是发现，各种问题，各种报错，环境起不来</p>
+<p>学习课程的过程很艰难</p>
+<p>学视频课程，肯定是要跟着视频的所有的东西自己去做一做，练一练，结果你却因为环境问题，做不了，连不了，那就太惨了</p>
+<p>从centos的镜像文件，到所有的需要使用的软件，全都给你，在自己电脑上，下载一个虚拟机管理软件，virtual box，就可以跟着玩儿了</p>
+<p>如果你一步一步跟着视频做，搭建起整个环境，应该问题不大</p>
+<p>环境问题，给大家弄成傻瓜式的</p>
+<hr>
+<p>1、在虚拟机中安装CentOS</p>
+<p>启动一个virtual box虚拟机管理软件（vmware，我早些年，发现不太稳定，主要是当时搭建一个hadoop大数据的集群，发现每次休眠以后再重启，集群就挂掉了）</p>
+<p>virtual box，发现很稳定，集群从来不会随便乱挂，所以就一直用virtual box了</p>
+<p>（1）使用课程提供的CentOS 6.5镜像即可，CentOS-6.5-i386-minimal.iso。<br>（2）创建虚拟机：打开Virtual Box，点击“新建”按钮，点击“下一步”，输入虚拟机名称为eshop-cache01，选择操作系统为Linux，选择版本为Red Hat，分配1024MB内存，后面的选项全部用默认，在Virtual Disk File location and size中，一定要自己选择一个目录来存放虚拟机文件，最后点击“create”按钮，开始创建虚拟机。<br>（3）设置虚拟机网卡：选择创建好的虚拟机，点击“设置”按钮，在网络一栏中，连接方式中，选择“Bridged Adapter”。<br>（4）安装虚拟机中的CentOS 6.5操作系统：选择创建好的虚拟机，点击“开始”按钮，选择安装介质（即本地的CentOS 6.5镜像文件），选择第一项开始安装-Skip-欢迎界面Next-选择默认语言-Baisc Storage Devices-Yes, discard any data-主机名:spark2upgrade01-选择时区-设置初始密码为hadoop-Replace Existing Linux System-Write changes to disk-CentOS 6.5自己开始安装。<br>（5）安装完以后，CentOS会提醒你要重启一下，就是reboot，你就reboot就可以了。</p>
+<p>（6）配置网络</p>
+<p>vi /etc/sysconfig/network-scripts/ifcfg-eth0</p>
+<p>DEVICE=eth0<br>TYPE=Ethernet<br>ONBOOT=yes<br>BOOTPROTO=dhcp<br>service network restart<br>ifconfig</p>
+<p>BOOTPROTO=static<br>IPADDR=192.168.0.X<br>NETMASK=255.255.255.0<br>GATEWAY=192.168.0.1<br>service network restart</p>
+<p>（7）配置hosts</p>
+<p>vi /etc/hosts<br>配置本机的hostname到ip地址的映射</p>
+<p>（8）配置SecureCRT</p>
+<p>此时就可以使用SecureCRT从本机连接到虚拟机进行操作了</p>
+<p>一般来说，虚拟机管理软件，virtual box，可以用来创建和管理虚拟机，但是一般不会直接在virtualbox里面去操作，因为比较麻烦，没有办法复制粘贴</p>
+<p>比如后面我们要安装很多其他的一些东西，perl，java，redis，storm，复制一些命令直接去执行</p>
+<p>SecureCRT，在windows宿主机中，去连接virtual box中的虚拟机</p>
+<p>收费的，我这里有完美破解版，跟着课程一起给大家，破解</p>
+<p>（9）关闭防火墙</p>
+<p>service iptables stop<br>service ip6tables stop<br>chkconfig iptables off<br>chkconfig ip6tables off</p>
+<p>vi /etc/selinux/config<br>SELINUX=disabled</p>
+<p>关闭windows的防火墙</p>
+<p>后面要搭建集群，有的大数据技术的集群之间，在本地你给了防火墙的话，可能会没有办法互相连接，会导致搭建失败</p>
+<p>（10）配置yum</p>
+<p>yum clean all<br>yum makecache<br>yum install wget</p>
+<hr>
+<p>2、在每个CentOS中都安装Java和Perl</p>
+<p>WinSCP，就是在windows宿主机和linux虚拟机之间互相传递文件的一个工具</p>
+<p>（1）安装JDK</p>
+<p>1、将jdk-7u60-linux-i586.rpm通过WinSCP上传到虚拟机中<br>2、安装JDK：rpm -ivh jdk-7u65-linux-i586.rpm<br>3、配置jdk相关的环境变量<br>vi .bashrc<br>export JAVA_HOME=/usr/java/latest<br>export PATH=$PATH:$JAVA_HOME/bin<br>source .bashrc<br>4、测试jdk安装是否成功：java -version</p>
+<p>（2）安装Perl</p>
+<p>很多讲师，拿着自己之前花了很多时间调试好的虚拟机环境，去讲课，这个很不负责任</p>
+<p>yum install -y gcc</p>
+<p>wget <a href="http://www.cpan.org/src/5.0/perl-5.16.1.tar.gz" target="_blank" rel="external">http://www.cpan.org/src/5.0/perl-5.16.1.tar.gz</a><br>tar -xzf perl-5.16.1.tar.gz<br>cd perl-5.16.1<br>./Configure -des -Dprefix=/usr/local/perl<br>make &amp;&amp; make test &amp;&amp; make install<br>perl -v</p>
+<p>为什么要装perl？我们整个大型电商网站的详情页系统，复杂。java+nginx+lua，需要perl。</p>
+<p>perl，是一个基础的编程语言的安装，tomcat，跑java web应用</p>
+<hr>
+<p>3、在4个虚拟机中安装CentOS集群</p>
+<p>（1）按照上述步骤，再安装三台一模一样环境的linux机器<br>（2）另外三台机器的hostname分别设置为eshop-cache02，eshop-cache03，eshop-cache04<br>（3）安装好之后，在每台机器的hosts文件里面，配置好所有的机器的ip地址到hostname的映射关系</p>
+<p>比如说，在eshop-cache01的hosts里面</p>
+<p>192.168.31.187 eshop-cache01<br>192.168.31.xxx eshop-cache02<br>192.168.31.xxx eshop-cache03<br>192.168.31.xxx eshop-cache04</p>
+<hr>
+<p>4、配置4台CentOS为ssh免密码互相通信</p>
+<p>（1）首先在三台机器上配置对本机的ssh免密码登录<br>ssh-keygen -t rsa<br>生成本机的公钥，过程中不断敲回车即可，ssh-keygen命令默认会将公钥放在/root/.ssh目录下<br>cd /root/.ssh<br>cp id_rsa.pub authorized_keys<br>将公钥复制为authorized_keys文件，此时使用ssh连接本机就不需要输入密码了</p>
+<p>（2）接着配置三台机器互相之间的ssh免密码登录<br>使用ssh-copy-id -i hostname命令将本机的公钥拷贝到指定机器的authorized_keys文件中</p>
+<p>java，在公司里做项目，有几个人是自己去维护linux集群的啊？？？？？</p>
+<p>几乎没有，很少很少，类似这一讲要做的事情，其实都是SRE，运维的同学，去做的</p>
+<p>但是对于课程来说，我们只能自己一步一步做，才有环境去学习啊！！！</p>
+<hr>
+<p>基于虚拟机的linux集群环境，都准备好了，手上有4台机器，后面玩儿各种redis、kafka、storm、tomcat、nginx，都有机器了</p>
+<h2 id="07-单机版redis的安装以及redis生产环境启动方案"><a href="#07-单机版redis的安装以及redis生产环境启动方案" class="headerlink" title="07.单机版redis的安装以及redis生产环境启动方案"></a>07.单机版redis的安装以及redis生产环境启动方案</h2><p>课程大纲</p>
+<p>1、安装单机版redis<br>2、redis的生产环境启动方案<br>3、redis cli的使用</p>
+<hr>
+<p>1、安装单机版redis</p>
+<p>大家可以自己去官网下载，当然也可以用课程提供的压缩包</p>
+<p>wget <a href="http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz" target="_blank" rel="external">http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</a><br>tar -xzvf tcl8.6.1-src.tar.gz<br>cd  /usr/local/tcl8.6.1/unix/<br>./configure<br>make &amp;&amp; make install</p>
+<p>使用redis-3.2.8.tar.gz（截止2017年4月的最新稳定版）<br>tar -zxvf redis-3.2.8.tar.gz<br>cd redis-3.2.8<br>make &amp;&amp; make test &amp;&amp; make install</p>
+<hr>
+<p>2、redis的生产环境启动方案</p>
+<p>如果一般的学习课程，你就随便用redis-server启动一下redis，做一些实验，这样的话，没什么意义</p>
+<p>要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动</p>
+<p>（1）redis utils目录下，有个redis_init_script脚本<br>（2）将redis_init_script脚本拷贝到linux的/etc/init.d目录中，将redis_init_script重命名为redis_6379，6379是我们希望这个redis实例监听的端口号<br>（3）修改redis_6379脚本的第6行的REDISPORT，设置为相同的端口号（默认就是6379）<br>（4）创建两个目录：/etc/redis（存放redis的配置文件），/var/redis/6379（存放redis的持久化文件）<br>（5）修改redis配置文件（默认在根目录下，redis.conf），拷贝到/etc/redis目录中，修改名称为6379.conf</p>
+<p>（6）修改redis.conf中的部分配置为生产环境</p>
+<p>daemonize    yes                            让redis以daemon进程运行<br>pidfile        /var/run/redis_6379.pid     设置redis的pid文件位置<br>port        6379                        设置redis的监听端口号<br>dir         /var/redis/6379                设置持久化文件的存储位置</p>
+<p>（7）启动redis，执行cd /etc/init.d, chmod 777 redis_6379，./redis_6379 start</p>
+<p>（8）确认redis进程是否启动，ps -ef | grep redis</p>
+<p>（9）让redis跟随系统启动自动启动</p>
+<p>在redis_6379脚本中，最上面，加入两行注释</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># chkconfig:   2345 90 10</span></div><div class="line"></div><div class="line"><span class="comment"># description:  Redis is a persistent key-value database</span></div><div class="line"></div><div class="line">chkconfig redis_6379 <span class="keyword">on</span></div></pre></td></tr></table></figure>
+<hr>
+<p>3、redis cli的使用</p>
+<p>redis-cli SHUTDOWN，连接本机的6379端口停止redis进程</p>
+<p>redis-cli -h 127.0.0.1 -p 6379 SHUTDOWN，制定要连接的ip和端口号</p>
+<p>redis-cli PING，ping redis的端口，看是否正常</p>
+<p>redis-cli，进入交互式命令行</p>
+<p>SET k1 v1<br>GET k1</p>
+<p>redis的技术，包括4块</p>
+<p>redis各种数据结构和命令的使用，包括java api的使用<br>redis一些特殊的解决方案的使用，pub/sub消息系统，分布式锁，输入的自动完成，等等<br>redis日常的管理相关的命令<br>redis企业级的集群部署和架构</p>
+<p>我们这套课程，实际上是针对企业级的大型缓存架构，用得项目，真实的大型电商网站的详情页系统（缓存）</p>
+<p>我们首先讲解的第一块，其实就是企业级的大型缓存架构中的，redis集群架构（海量数据、高并发、高可用），最最流行，最最常用的分布式缓存系统</p>
+<p>后面我们做商品详情页系统的业务开发的时候，当然也会去用redis的一些命令</p>
+<p>redis基础知识：教程，书籍，视频</p>
+<p>redis持久化、主从架构、复制原理、集群架构、数据分布式存储原理、哨兵原理、高可用架构</p>
+<p>网上一些redis的教程，持久化，集群，哨兵，也讲了，都是泛泛而讲，简单带你搭建一下</p>
+<p>我会深入集群架构的底层原理，哨兵的底层原理，用一线的经验，告诉你，redis的大规模的架构师如何去支撑海量数据、高并发、高可用的</p>
+<h2 id="15-redis-replication以及master持久化对主从架构的安全意义"><a href="#15-redis-replication以及master持久化对主从架构的安全意义" class="headerlink" title="15_redis replication以及master持久化对主从架构的安全意义"></a>15_redis replication以及master持久化对主从架构的安全意义</h2><p>课程大纲</p>
+<p>1、图解redis replication基本原理<br>2、redis replication的核心机制<br>3、master持久化对于主从架构的安全保障的意义</p>
+<p>redis replication -&gt; 主从架构 -&gt; 读写分离 -&gt; 水平扩容支撑读高并发</p>
+<p>redis replication的最最基本的原理，铺垫</p>
+<hr>
+<p>1、图解redis replication基本原理</p>
+<p><img src="http://boblwboy.github.io/img/redis/redis replica最最基本的原理.png" alt="redis replica最最基本的原理"></p>
+<hr>
+<p>2、redis replication的核心机制</p>
+<p>（1）redis采用异步方式复制数据到slave节点，不过redis 2.8开始，slave node会周期性地确认自己每次复制的数据量<br>（2）一个master node是可以配置多个slave node的<br>（3）slave node也可以连接其他的slave node<br>（4）slave node做复制的时候，是不会block master node的正常工作的<br>（5）slave node在做复制的时候，也不会block对自己的查询操作，它会用旧的数据集来提供服务; 但是复制完成的时候，需要删除旧数据集，加载新数据集，这个时候就会暂停对外服务了<br>（6）slave node主要用来进行横向扩容，做读写分离，扩容的slave node可以提高读的吞吐量</p>
+<p>slave，高可用性，有很大的关系</p>
+<hr>
+<p>3、master持久化对于主从架构的安全保障的意义</p>
+<p>如果采用了主从架构，那么建议必须开启master node的持久化！</p>
+<p>不建议用slave node作为master node的数据热备，因为那样的话，如果你关掉master的持久化，可能在master宕机重启的时候数据是空的，然后可能一经过复制，salve node数据也丢了</p>
+<p>master -&gt; RDB和AOF都关闭了 -&gt; 全部在内存中</p>
+<p>master宕机，重启，是没有本地数据可以恢复的，然后就会直接认为自己IDE数据是空的</p>
+<p>master就会将空的数据集同步到slave上去，所有slave的数据全部清空</p>
+<p>100%的数据丢失</p>
+<p>master节点，必须要使用持久化机制</p>
+<p>第二个，master的各种备份方案，要不要做，万一说本地的所有文件丢失了; 从备份中挑选一份rdb去恢复master; 这样才能确保master启动的时候，是有数据的</p>
+<p>即使采用了后续讲解的高可用机制，slave node可以自动接管master node，但是也可能sentinal还没有检测到master failure，master node就自动重启了，还是可能导致上面的所有slave node数据清空故障</p>
+<h2 id="16-redis主从复制原理、断点续传、无磁盘化复制、过期key处理"><a href="#16-redis主从复制原理、断点续传、无磁盘化复制、过期key处理" class="headerlink" title="16_redis主从复制原理、断点续传、无磁盘化复制、过期key处理"></a>16_redis主从复制原理、断点续传、无磁盘化复制、过期key处理</h2><p>课程大纲</p>
+<p>1、主从架构的核心原理</p>
+<p><img src="http://boblwboy.github.io/img/redis/redis主从复制的原理.png" alt="redis主从复制的原理"></p>
+<p>当启动一个slave node的时候，它会发送一个PSYNC命令给master node</p>
+<p>如果这是slave node重新连接master node，那么master node仅仅会复制给slave部分缺少的数据; 否则如果是slave node第一次连接master node，那么会触发一次full resynchronization</p>
+<p>开始full resynchronization的时候，master会启动一个后台线程，开始生成一份RDB快照文件，同时还会将从客户端收到的所有写命令缓存在内存中。RDB文件生成完毕之后，master会将这个RDB发送给slave，slave会先写入本地磁盘，然后再从本地磁盘加载到内存中。然后master会将内存中缓存的写命令发送给slave，slave也会同步这些数据。</p>
+<p>slave node如果跟master node有网络故障，断开了连接，会自动重连。master如果发现有多个slave node都来重新连接，仅仅会启动一个rdb save操作，用一份数据服务所有slave node。</p>
+<p>2、主从复制的断点续传</p>
+<p>从redis 2.8开始，就支持主从复制的断点续传，如果主从复制过程中，网络连接断掉了，那么可以接着上次复制的地方，继续复制下去，而不是从头开始复制一份</p>
+<p>master node会在内存中常见一个backlog，master和slave都会保存一个replica offset还有一个master id，offset就是保存在backlog中的。如果master和slave网络连接断掉了，slave会让master从上次的replica offset开始继续复制</p>
+<p>但是如果没有找到对应的offset，那么就会执行一次resynchronization</p>
+<p>3、无磁盘化复制</p>
+<p>master在内存中直接创建rdb，然后发送给slave，不会在自己本地落地磁盘了</p>
+<p>repl-diskless-sync<br>repl-diskless-sync-delay，等待一定时长再开始复制，因为要等更多slave重新连接过来</p>
+<p>4、过期key处理</p>
+<p>slave不会过期key，只会等待master过期key。如果master过期了一个key，或者通过LRU淘汰了一个key，那么会模拟一条del命令发送给slave。</p>
+<h2 id="18-在项目中部署redis的读写分离架构（包含节点间认证口令）"><a href="#18-在项目中部署redis的读写分离架构（包含节点间认证口令）" class="headerlink" title="18_在项目中部署redis的读写分离架构（包含节点间认证口令）"></a>18_在项目中部署redis的读写分离架构（包含节点间认证口令）</h2><p>之前几讲都是在铺垫各种redis replication的原理，和知识，主从，读写分离，画图</p>
+<p>知道了这些东西，关键是怎么搭建呢？？？</p>
+<p>一主一从，往主节点去写，在从节点去读，可以读到，主从架构就搭建成功了</p>
+<p>1、启用复制，部署slave node</p>
+<p>在slave node上配置：slaveof 192.168.1.1 6379，即可</p>
+<p>也可以使用slaveof命令</p>
+<p>2、强制读写分离</p>
+<p>基于主从复制架构，实现读写分离</p>
+<p>redis slave node只读，默认开启，slave-read-only</p>
+<p>开启了只读的redis slave node，会拒绝所有的写操作，这样可以强制搭建成读写分离的架构</p>
+<p>3、集群安全认证</p>
+<p>master上启用安全认证，requirepass<br>master连接口令，masterauth</p>
+<p>4、读写分离架构的测试</p>
+<p>先启动主节点，eshop-cache01上的redis实例<br>再启动从节点，eshop-cache02上的redis实例</p>
+<p>刚才我调试了一下，redis slave node一直说没法连接到主节点的6379的端口</p>
+<p>在搭建生产环境的集群的时候，不要忘记修改一个配置，bind</p>
+<p>bind 127.0.0.1 -&gt; 本地的开发调试的模式，就只能127.0.0.1本地才能访问到6379的端口</p>
+<p>每个redis.conf中的bind 127.0.0.1 -&gt; bind自己的ip地址<br>在每个节点上都: iptables -A INPUT -ptcp –dport  6379 -j ACCEPT</p>
+<p>redis-cli -h ipaddr<br>info replication</p>
+<p>在主上写，在从上读</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-基于本地缓存的fallback降级机制/" rel="next" title="基于本地缓存的fallback降级机制">
+                <i class="fa fa-chevron-left"></i> 基于本地缓存的fallback降级机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/springcloud-基于request collapser请求合并技术进一步优化批量查询/" rel="prev" title="基于request collapser请求合并技术进一步优化批量查询">
+                基于request collapser请求合并技术进一步优化批量查询 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#06-从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群"><span class="nav-number">1.</span> <span class="nav-text">06.从零开始在虚拟机中一步一步搭建一个4个节点的CentOS集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#07-单机版redis的安装以及redis生产环境启动方案"><span class="nav-number">2.</span> <span class="nav-text">07.单机版redis的安装以及redis生产环境启动方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-redis-replication以及master持久化对主从架构的安全意义"><span class="nav-number">3.</span> <span class="nav-text">15_redis replication以及master持久化对主从架构的安全意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-redis主从复制原理、断点续传、无磁盘化复制、过期key处理"><span class="nav-number">4.</span> <span class="nav-text">16_redis主从复制原理、断点续传、无磁盘化复制、过期key处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-在项目中部署redis的读写分离架构（包含节点间认证口令）"><span class="nav-number">5.</span> <span class="nav-text">18_在项目中部署redis的读写分离架构（包含节点间认证口令）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

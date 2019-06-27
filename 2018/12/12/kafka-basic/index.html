@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="kafka," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Kafka基本概念与术语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka基本概念与术语">
+<meta property="og:url" content="http://boblwboy.github.io/2018/12/12/kafka-basic/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="Kafka基本概念与术语">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka基本概念与术语">
+<meta name="twitter:description" content="Kafka基本概念与术语">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2018/12/12/kafka-basic/"/>
+
+
+
+
+
+  <title>Kafka基本概念与术语 | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2018/12/12/kafka-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kafka基本概念与术语</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-12T10:15:16+08:00">
+                2018-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Kafka基本概念与术语
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Kafka基本概念与术语</p>
+<p>来自于 知识星球 圣思园 张龙</p>
+<h2 id="Kafka基本概念与术语"><a href="#Kafka基本概念与术语" class="headerlink" title="Kafka基本概念与术语"></a>Kafka基本概念与术语</h2><p>之前，我们完成了Zookeeper与Kafka的基本配置，并且成功启动了Zookeeper与Kafka，还完成了Hello World 示例。</p>
+<p>kafka到底是什么？<br>kafka本质上是一款分布式、基于发布/订阅机制的消息系统，主要使用Scala语言开发而成。概括起来如图所示:</p>
+<font color="#DC143C">生产者—&gt;消息队列&lt;—消费者</font>
+
+<p>从这个简单的示意图中可以看到，所谓消息队列，本质上就是由生产者向消息队列不断发送消息，而消费者则不断从消息队列拉取消息。虽然，这个图看起来很简单，但它却能很好地说明一个消息队列产品所能完成的主要核心功能。</p>
+<p>对于不同的消息队列产品来说，底层实现机制都是不尽相同的，但总体来说，其大体流程都如上图所示。</p>
+<p>kafka的底层实际上是非常复杂的，里面涉及到大量的模式、算法、并发处理逻辑；当然，还涉及到很多Java NIO(如Selector、Channel、Buffer等)、零拷贝、异步通信等模块，要想正确把握好kafka这样一个重要的消息队列产品，对于它的一些重要且核心概念应有一个准确的认识。</p>
+<p>kafka的重要概念：</p>
+<h3 id="生产者-Producer"><a href="#生产者-Producer" class="headerlink" title="生产者(Producer)"></a>生产者(Producer)</h3><p>生产者就是生产消息的组件，它的主要工作就是源源不断地生产处消息，然后发送给消息队列。生产者可以向消息队列发送各种类型的消息，如狭义的字符串消息，也可以发送二进制消息。</p>
+<h3 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者(Consumer)"></a>消费者(Consumer)</h3><p>所谓消费者，指的是不断消费（获取）消息的组件，它获取消息的来源就是消息队列（即kafka本身）。换句话说，生产者不断向消息队列发送消息，而消费者则不断从消息队列中获取消息。这里面的消息队列（即kafka）则充当了一个中介角色，连接了生产者与消费者这两大功能组件。正是从这个意义上来说，借助于消息队列，我们实现了生产者系统与消费者系统之间的解耦，使得原本需要两个系统之间有紧密联系的状况变成了两个系统可以各自针对kafka进行编程（只要提前约定好一些契约即可），这可以使得生产者系统完全不需要了解消费者系统的各种信息（比如说消费者系统的地址、端口号、URL、使用的是REST接口还是RPC等等；反之亦然）。这正是消息队列所提供的另外一个绝佳的好处：极大降低了系统之间的耦合度。</p>
+<h3 id="代理-Broker"><a href="#代理-Broker" class="headerlink" title="代理(Broker)"></a>代理(Broker)</h3><p>代理这个概念是消息队列领域中一个常见的概念。在消息队列领域中，它指的其实就是消息队列产品本身，比如说在kafka这个领域下，broker其实指的就是一台kafka server。换句话说，我们可以将部署的一台kafka server看作是一个broker，就是这样简单。那么从流程上来说，生产者会将消息发送给broker，然后消费者再从broker中拉取消息。</p>
+<h3 id="主题-Topic"><a href="#主题-Topic" class="headerlink" title="主题(Topic)"></a>主题(Topic)</h3><p>主题是kafka中一个极为重要的概念。首先，主题是一个逻辑上的概念，它用于从逻辑上来归类于存储消息本身。多个生产者可以向一个topic发送消息，同时也可以有多个消费者消费一个topic中的消息。topic还有分区与副本的概念，这个比较复杂后续再说，现在你需要理解的是，topic与消息这两个概念之间密切相关，kafka中的每一条消息都会归属于某一个topic，而一个topic下面可以有任意数量的消息。正是借助与topic这个逻辑上的概念，kafka将各种各样的消息进行了分门别类，使得不同的消息归属于不同的topic，这样就可以很好地实现不同系统的生产者可以向同一个broker发送消息，而不同系统的消费者则可以根据topic的名字从broker中拉取消息。topic是一个字符串。实际上，在上节课中，生产者发送消息时就指定了将消息发送给哪个topic，在那个实例中，我们将消息发送给了名为mytest的主题，而消费者在拉取消息时也指定了拉取topic名为mytest的消息。通过topic这样一个逻辑上的概念，我们就很好地实现了生产者与消费者之间有针对性的发送与拉取。</p>
+<h3 id="消息-Record"><a href="#消息-Record" class="headerlink" title="消息(Record)"></a>消息(Record)</h3><p>消息是整个消息队列中最为基本的一个概念，也是最为原子的一个概念。它指的是生产者发送与消费者拉取的一个原子事物。一个消息需要关联到一个topic上，表示该消息从属于哪个topic。消息由一串字节所构成，其中主要由key和value两部分内容，key与value本质上都是字节数组。在发送消息时，我们可以省略掉key部分，而直接使用value部分。正如hello world示例那样，生产者在发送消息时，发送的内容是hello world。实际上，他们都是消息的value，即消息真正的内容本身；key的重要作用则是根据一定的策略，将此消息发送到指定的分区中，这样就可以确保包含同一key值的消息全部都写入到同一个分区中。因此，我们可以得出这样一个结论：对于kafka的消息来说，真正的消息内容本身是由value所承载的。为了提升消息发送的消息和存储效率，生产者会批量将消息发送给broker，并根据响应的压缩算法在发送前对消息进行压缩。</p>
+<h3 id="集群-Cluster"><a href="#集群-Cluster" class="headerlink" title="集群(Cluster)"></a>集群(Cluster)</h3><p>集群指的是由多个broker所共同构成的一个整体，对外提供统一的服务，这类似于我们在部署系统时都会采用集群的方式来进行。借助于集群的方式，kafka消息队列系统可以实现高可用与容错，即一台broker挂掉了也不影响整个消息系统的正确运行。集群中的各台broker之间是通过心跳（heartbeat）的方式来监测其他机器是否还存活。</p>
+<h3 id="控制器-Controller"><a href="#控制器-Controller" class="headerlink" title="控制器(Controller)"></a>控制器(Controller)</h3><p>控制器是集群中的概念。每个集群中会选择出一个broker担任控制器的角色，控制器是kafka集群的中心。一个kafka集群中，控制器这台broker之外的其他broker会根据控制器的指挥来实现相应的功能。控制器负责管理kafka分区的状态、管理每个分区的副本状态、监听zookeeper中数据的变化并作出响应的反馈等功能。此外，控制器也类似于主从的概念（比如说redis的主从概念），所有的broker都会监听控制器leader的状态，当leader控制器出现问题或是故障时则重新选择新的控制器leader，这里面涉及到一个选举算法的问题。</p>
+<h3 id="消费者组-Consumer-Group"><a href="#消费者组-Consumer-Group" class="headerlink" title="消费者组(Consumer Group)"></a>消费者组(Consumer Group)</h3><p>这又是kafka中的一个核心的概念。消费者组与消费者之间密切相关。在kafka中，多个消费者可以共同构成一个消费者组，而一个消费者只能从属于一个消费者组。消费者组最为重要的一个功能是实现广播与单播的功能。一个消费者组可以确保其所订阅的topic的每个分区只能被从属于该消费者组中的唯一一个消费者所消费；如果不同的消费者组订阅了同一个topic，那么这些消费者组之间是彼此独立的，不会受到相互的干扰。因此，如果我们希望一条消息可以被多个消费者所消费，那就可以将这些消费者放置到不同的消费者组中，这实际上就是广播的效果；如果希望一条消息只能被一个消费者所消费，那么就可以将这些消费者放置到同一个消费组中，这实际上就是单播的效果。</p>
+<p>这里我们主要介绍了kafka的关键且重要的概念。对于这些概念的准确理解，是后续学习好kafka框架的关键所在。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/30/FFmpeg/" rel="next" title="FFmpeg">
+                <i class="fa fa-chevron-left"></i> FFmpeg
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/12/clean-code-basic/" rel="prev" title="整洁代码">
+                整洁代码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka基本概念与术语"><span class="nav-number">1.</span> <span class="nav-text">Kafka基本概念与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生产者-Producer"><span class="nav-number">1.1.</span> <span class="nav-text">生产者(Producer)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费者-Consumer"><span class="nav-number">1.2.</span> <span class="nav-text">消费者(Consumer)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理-Broker"><span class="nav-number">1.3.</span> <span class="nav-text">代理(Broker)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题-Topic"><span class="nav-number">1.4.</span> <span class="nav-text">主题(Topic)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息-Record"><span class="nav-number">1.5.</span> <span class="nav-text">消息(Record)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群-Cluster"><span class="nav-number">1.6.</span> <span class="nav-text">集群(Cluster)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制器-Controller"><span class="nav-number">1.7.</span> <span class="nav-text">控制器(Controller)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费者组-Consumer-Group"><span class="nav-number">1.8.</span> <span class="nav-text">消费者组(Consumer Group)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

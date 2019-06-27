@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="plugins," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Introduce tag plugins in freemind.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tag Plugins">
+<meta property="og:url" content="http://boblwboy.github.io/2014/03/16/tag-plugins/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="Introduce tag plugins in freemind.">
+<meta property="og:updated_time" content="2019-03-28T16:28:33.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tag Plugins">
+<meta name="twitter:description" content="Introduce tag plugins in freemind.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2014/03/16/tag-plugins/"/>
+
+
+
+
+
+  <title>Tag Plugins | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2014/03/16/tag-plugins/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tag Plugins</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-16T10:17:16+08:00">
+                2014-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docs/" itemprop="url" rel="index">
+                    <span itemprop="name">Docs</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Introduce tag plugins in freemind.
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The freemind theme offers several new tag plugins, so as to fully take advantages of Bootstrap.</p>
+<p>To use these tag plugins, you need to install <a href="https://github.com/boblwboy/hexo-tag-bootstrap" target="_blank" rel="external">hexo-tag-bootstrap</a> first. In your blog root folder, execute the following command:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm <span class="keyword">install </span>hexo-tag-<span class="keyword">bootstrap </span>--save</div></pre></td></tr></table></figure>
+<p>Then you can use these tag plugins in your blog, as easily as you normally do using hexo tag plugins. </p>
+<a id="more"></a>
+<h2 id="Text-Color"><a href="#Text-Color" class="headerlink" title="Text Color"></a>Text Color</h2><p>Convey meaning through color with a handful of emphasis utility classes. These may also be applied to links and will darken on hover just like our default link styles.</p>
+<h3 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">textcolor</span> [style] %&#125;</span><span class="xml"></span></div><div class="line">  text string</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">textcolor</span> muted %&#125;</span><span class="xml"></span></div><div class="line">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">textcolor</span> primary %&#125;</span><span class="xml"></span></div><div class="line">Nullam id dolor id nibh ultricies vehicula ut id elit.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">textcolor</span> success %&#125;</span><span class="xml"></span></div><div class="line">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">textcolor</span> info %&#125;</span><span class="xml"></span></div><div class="line">Maecenas sed diam eget risus varius blandit sit amet non magna.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">textcolor</span> warning %&#125;</span><span class="xml"></span></div><div class="line">Etiam porta sem malesuada magna mollis euismod.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">textcolor</span> danger %&#125;</span><span class="xml"></span></div><div class="line">Donec ullamcorper nulla non metus auctor fringilla.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endtextcolor</span> %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><p class="text-muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+
+<p class="text-primary">Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+<p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+
+<p class="text-info">Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+<p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
+
+<p class="text-danger">Donec ullamcorper nulla non metus auctor fringilla.</p>
+<h2 id="Buttons"><a href="#Buttons" class="headerlink" title="Buttons"></a>Buttons</h2><p>Inserts a button with target links, text and specified color.</p>
+<h3 id="Syntax-1"><a href="#Syntax-1" class="headerlink" title="Syntax"></a>Syntax</h3><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% btn url text [style] %&#125;</div></pre></td></tr></table></figure>
+<h3 id="Examples-1"><a href="#Examples-1" class="headerlink" title="Examples"></a>Examples</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack primary %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack success %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack warning %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack danger %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">btn</span> http://hahack.com hahack info %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Results-1"><a href="#Results-1" class="headerlink" title="Results"></a>Results</h3><a class="btn" href="http://hahack.com hahack" target="_blank" rel="external"></a>
+<a class="btn" href="http://hahack.com hahack primary" target="_blank" rel="external"></a>
+<a class="btn" href="http://hahack.com hahack success" target="_blank" rel="external"></a>
+<a class="btn" href="http://hahack.com hahack warning" target="_blank" rel="external"></a>
+<a class="btn" href="http://hahack.com hahack danger" target="_blank" rel="external"></a>
+<a class="btn" href="http://hahack.com hahack info" target="_blank" rel="external"></a>
+<h2 id="Labels"><a href="#Labels" class="headerlink" title="Labels"></a>Labels</h2><p>Inserts a label with text and specified color.</p>
+<h3 id="Syntax-2"><a href="#Syntax-2" class="headerlink" title="Syntax"></a>Syntax</h3><figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% label text [style] %&#125;</div></pre></td></tr></table></figure>
+<h3 id="Examples-2"><a href="#Examples-2" class="headerlink" title="Examples"></a>Examples</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> default %&#125;</span></div><div class="line"></div><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> warinng warning %&#125;</span></div><div class="line"></div><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> success success %&#125;</span></div><div class="line"></div><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> danger danger %&#125;</span></div><div class="line"></div><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> primary primary %&#125;</span></div><div class="line"></div><div class="line">&#123;% <span class="keyword">label</span><span class="bash"> info info %&#125;</span></div></pre></td></tr></table></figure>
+<h3 id="Results-2"><a href="#Results-2" class="headerlink" title="Results"></a>Results</h3><span class="label default"></span>
+<span class="label warinng warning"></span>
+<span class="label success success"></span>
+<span class="label danger danger"></span>
+<span class="label primary primary"></span>
+<span class="label info info"></span>
+<h2 id="Badges"><a href="#Badges" class="headerlink" title="Badges"></a>Badges</h2><p>Inserts a badge with text.</p>
+<h3 id="Syntax-3"><a href="#Syntax-3" class="headerlink" title="Syntax"></a>Syntax</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">badge</span> text %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Examples-3"><a href="#Examples-3" class="headerlink" title="Examples"></a>Examples</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">badge</span> 42 %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Results-3"><a href="#Results-3" class="headerlink" title="Results"></a>Results</h3><span class="badge">42</span>
+<h2 id="Alerts"><a href="#Alerts" class="headerlink" title="Alerts"></a>Alerts</h2><p>Inserts alert messages with text and specified color.</p>
+<h3 id="Syntax-4"><a href="#Syntax-4" class="headerlink" title="Syntax"></a>Syntax</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">alert</span> [style] %&#125;</span><span class="xml"></span></div><div class="line">   Alert string</div><div class="line"><span class="template-tag">&#123;% <span class="name">endalert</span> %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Examples-4"><a href="#Examples-4" class="headerlink" title="Examples"></a>Examples</h3><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-tag">&#123;% <span class="name">alert</span> warning %&#125;</span><span class="xml"></span></div><div class="line">Best check yo self, you're not looking too good.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endalert</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">alert</span> danger %&#125;</span><span class="xml"></span></div><div class="line">Change a few things up and try submitting again.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endalert</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">alert</span> success %&#125;</span><span class="xml"></span></div><div class="line">You successfully read this important alert message.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endalert</span> %&#125;</span><span class="xml"></span></div><div class="line"></div><div class="line"><span class="template-tag">&#123;% <span class="name">alert</span> info %&#125;</span><span class="xml"></span></div><div class="line">This alert needs your attention, but it's not super important.</div><div class="line"><span class="template-tag">&#123;% <span class="name">endalert</span> %&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
+<h3 id="Results-4"><a href="#Results-4" class="headerlink" title="Results"></a>Results</h3><div class="alert alert-warning"><i class="fa fa-bell"></i>  Best check yo self, you're not looking too good.</div>
+<div class="alert alert-danger"><i class="fa fa-bug"></i>  Change a few things up and try submitting again.</div>
+<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  You successfully read this important alert message.</div>
+<div class="alert alert-info"><i class="fa fa-info"></i>  This alert needs your attention, but it's not super important.</div>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/plugins/" rel="tag"># plugins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/16/tag-plugins-cn/" rel="next" title="Tag Plugins（中文）">
+                <i class="fa fa-chevron-left"></i> Tag Plugins（中文）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/16/qna-cn/" rel="prev" title="Questions and Answers（中文）">
+                Questions and Answers（中文） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-Color"><span class="nav-number">1.</span> <span class="nav-text">Text Color</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Syntax"><span class="nav-number">1.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples"><span class="nav-number">1.2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results"><span class="nav-number">1.3.</span> <span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buttons"><span class="nav-number">2.</span> <span class="nav-text">Buttons</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Syntax-1"><span class="nav-number">2.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples-1"><span class="nav-number">2.2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-1"><span class="nav-number">2.3.</span> <span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Labels"><span class="nav-number">3.</span> <span class="nav-text">Labels</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Syntax-2"><span class="nav-number">3.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples-2"><span class="nav-number">3.2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-2"><span class="nav-number">3.3.</span> <span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Badges"><span class="nav-number">4.</span> <span class="nav-text">Badges</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Syntax-3"><span class="nav-number">4.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples-3"><span class="nav-number">4.2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-3"><span class="nav-number">4.3.</span> <span class="nav-text">Results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Alerts"><span class="nav-number">5.</span> <span class="nav-text">Alerts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Syntax-4"><span class="nav-number">5.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples-4"><span class="nav-number">5.2.</span> <span class="nav-text">Examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Results-4"><span class="nav-number">5.3.</span> <span class="nav-text">Results</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
