@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://boblwboy.github.io/2019/07/03/java-thread-new/index.html">
 <meta property="og:site_name" content="Bob's blog">
 <meta property="og:description" content="多线程">
-<meta property="og:updated_time" content="2019-07-03T04:55:34.016Z">
+<meta property="og:updated_time" content="2019-07-09T10:13:29.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thread">
 <meta name="twitter:description" content="多线程">
@@ -346,7 +346,30 @@
       
         <a id="more"></a>
 <h2 id="Thread与Runnable"><a href="#Thread与Runnable" class="headerlink" title="Thread与Runnable"></a>Thread与Runnable</h2><p>A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently.<br>Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.</p>
-<p>一个thread指的是程序当中执行的一个线程。java虚拟机允许一个应用拥有多个并发执行的线程。每个线程都会有一个优先级。拥有更高优先级的线程他们执行的情况要优先于优先级低的线程。每个线程可以也可以不标记为一个后台线程。运行在一些线程中的代码创建了一个线程对象，</p>
+<p>一个thread指的是程序当中执行的一个线程。java虚拟机允许一个应用拥有多个并发执行的线程。每个线程都会有一个优先级。拥有更高优先级的线程他们执行的情况要优先于优先级低的线程。每个线程可以也可以不被标记为一个后台线程。运行在一些线程中的代码创建了一个新的线程对象，这个新的线程对象的优先级被设置为与创建它的线程的优先级相同，并且只有当创建它的线程为后台线程的话被创建的线程才是后台线程。</p>
+<p>When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:</p>
+<ul>
+<li>The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.</li>
+<li>All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method.</li>
+</ul>
+<p>当一个java虚拟机启动时，通常会有一个非后台线程（这个线程通常会调用所指定类的一个main方法），java虚拟机会继续的去执行这个线程直到下面这两种情况发生：</p>
+<ul>
+<li>类Runtime的exit方法被调用，并且安全管理器允许推出操作发生。</li>
+<li>所有的非后台线程已经消亡了，消亡的原因要么是通过run方法返回了，或者是抛出了一个异常，异常进行传播，传播到了run方法外。</li>
+</ul>
+<p>There are two ways to create a new thread of execution. One is to declare a class to be a subclass of Thread. This subclass should override the run method of class Thread. An instance of the subclass can then be allocated and started. For example, a thread that computes primes larger than a stated value could be written as follows:</p>
+<p>有两种方式去创建一个心的执行线程。第一种是申明一个类，让这个类成为Thread的子类。这个子类应该重写Thead的run方法。子类的实例接下来可以被分配去启动。比如一个线程去计算大于指定值的质数可以用如下写法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrimeRun</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="keyword">long</span> minPrime;</div><div class="line">    PrimeRun(<span class="keyword">long</span> minPrime) &#123;</div><div class="line">        <span class="keyword">this</span>.minPrime = minPrime;</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// compute primes larger than minPrime</span></div><div class="line">         . . .</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The following code would then create a thread and start it running:</p>
+<p>以下代码将创建一个线程并且启动它：</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="type">PrimeThread</span> p = <span class="function"><span class="keyword">new</span> <span class="title">PrimeThread</span>(<span class="number">143</span>);</span></div><div class="line"><span class="title">p</span>.<span class="title">start</span>();</div></pre></td></tr></table></figure>
+<p>The other way to create a thread is to declare a class that implements the Runnable interface. That class then implements the run method. An instance of the class can then be allocated, passed as an argument when creating Thread, and started. The same example in this other style looks like the following:</p>
+<p>另外一种方法创建一个线程是申明一个类实现Runable接口。然后实现run方法。子类的实例接下来可以被分配，当创建线程时做一个参数传递并且去启动。同样的例子用另外一种风格看起来如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrimeRun</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="keyword">long</span> minPrime;</div><div class="line">    PrimeRun(<span class="keyword">long</span> minPrime) &#123;</div><div class="line">        <span class="keyword">this</span>.minPrime = minPrime;</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// compute primes larger than minPrime</span></div><div class="line">         . . .</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The following code would then create a thread and start it running:</p>
+<p>以下代码将创建一个线程并且启动它：</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="type">PrimeRun</span> p = <span class="function"><span class="keyword">new</span> <span class="title">PrimeRun</span>(<span class="number">143</span>);</span></div><div class="line"><span class="title">new</span> <span class="title">Thread</span>(p).<span class="title">start</span>();</div></pre></td></tr></table></figure>
+<p>Every thread has a name for identification purposes. More than one thread may have the same name. If a name is not specified when a thread is created, a new name is generated for it.<br>Unless otherwise noted, passing a null argument to a constructor or method in this class will cause a NullPointerException to be thrown.</p>
+<p>每一个线程都有一个名字用于表示目的。有多个线程可以有相同的名字。当一个线程被创建的时候如果没有去指定名字，那么一个新的名字将会被其产生出来。除非做了其他说明，否则将一个null参数传递给构造方法或者是这个类的其他方法里将会导致一个空指针异常</p>
 
       
     </div>
