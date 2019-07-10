@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://boblwboy.github.io/2019/07/03/java-thread-new/index.html">
 <meta property="og:site_name" content="Bob's blog">
 <meta property="og:description" content="多线程">
-<meta property="og:updated_time" content="2019-07-09T10:13:29.332Z">
+<meta property="og:updated_time" content="2019-07-10T06:49:09.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thread">
 <meta name="twitter:description" content="多线程">
@@ -345,7 +345,7 @@
 
       
         <a id="more"></a>
-<h2 id="Thread与Runnable"><a href="#Thread与Runnable" class="headerlink" title="Thread与Runnable"></a>Thread与Runnable</h2><p>A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently.<br>Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.</p>
+<h2 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h2><p>A thread is a thread of execution in a program. The Java Virtual Machine allows an application to have multiple threads of execution running concurrently.<br>Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.</p>
 <p>一个thread指的是程序当中执行的一个线程。java虚拟机允许一个应用拥有多个并发执行的线程。每个线程都会有一个优先级。拥有更高优先级的线程他们执行的情况要优先于优先级低的线程。每个线程可以也可以不被标记为一个后台线程。运行在一些线程中的代码创建了一个新的线程对象，这个新的线程对象的优先级被设置为与创建它的线程的优先级相同，并且只有当创建它的线程为后台线程的话被创建的线程才是后台线程。</p>
 <p>When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:</p>
 <ul>
@@ -370,6 +370,25 @@
 <figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="type">PrimeRun</span> p = <span class="function"><span class="keyword">new</span> <span class="title">PrimeRun</span>(<span class="number">143</span>);</span></div><div class="line"><span class="title">new</span> <span class="title">Thread</span>(p).<span class="title">start</span>();</div></pre></td></tr></table></figure>
 <p>Every thread has a name for identification purposes. More than one thread may have the same name. If a name is not specified when a thread is created, a new name is generated for it.<br>Unless otherwise noted, passing a null argument to a constructor or method in this class will cause a NullPointerException to be thrown.</p>
 <p>每一个线程都有一个名字用于表示目的。有多个线程可以有相同的名字。当一个线程被创建的时候如果没有去指定名字，那么一个新的名字将会被其产生出来。除非做了其他说明，否则将一个null参数传递给构造方法或者是这个类的其他方法里将会导致一个空指针异常</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> start()</div></pre></td></tr></table></figure>
+<p>Causes this thread to begin execution; the Java Virtual Machine calls the run method of this thread.</p>
+<p>调用了start方法后导致这个线程开始执行；java虚拟机会调用线程的run方法。</p>
+<p>The result is that two threads are running concurrently: the current thread (which returns from the call to the start method) and the other thread (which executes its run method).</p>
+<p>结果是两个线程会并发的运行：当前线程（从对于start调用返回来的线程）以及另外线程（执行run方法的调用）</p>
+<p>It is never legal to start a thread more than once. In particular, a thread may not be restarted once it has completed execution.</p>
+<p>启动一个线程超过一次是不合法的。特别的，一个线程不能被重新启动一旦它已经执行完成之后。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">target</span> != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">target</span>.run();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>If this thread was constructed using a separate Runnable run object, then that Runnable object’s run method is called; otherwise, this method does nothing and returns.<br>Subclasses of Thread should override this method.</p>
+<p>如果这个线程是通过单独的Runnable对象来去构建的，那么Runnable对象的run方法将被调用；否则这个方法是什么都不做直接返回的。<br>线程的子类必须重写这个方法。</p>
+<h2 id="Runnable"><a href="#Runnable" class="headerlink" title="Runnable"></a>Runnable</h2><p>The Runnable interface should be implemented by any class whose instances are intended to be executed by a thread. The class must define a method of no arguments called run.</p>
+<p>Runnable接口应该被任何一个实例打算被线程执行的类所实现。这个类必须要定义一个无参的名字是run的方法。</p>
+<p>This interface is designed to provide a common protocol for objects that wish to execute code while they are active. For example, Runnable is implemented by class Thread. Being active simply means that a thread has been started and has not yet been stopped.</p>
+<p>这个接口被设计成提供一个公用的协议针对于当他们激活的时候希望去执行代码的对象。比如说，Runnable被Thread实现出来了。处于激活状态只是简单的表示一个线程被启动了但是还尚未被停止。</p>
+<p>In addition, Runnable provides the means for a class to be active while not subclassing Thread. A class that implements Runnable can run without subclassing Thread by instantiating a Thread instance and passing itself in as the target. In most cases, the Runnable interface should be used if you are only planning to override the run() method and no other Thread methods. This is important because classes should not be subclassed unless the programmer intends on modifying or enhancing the fundamental behavior of the class.</p>
+<p>此外，Runnable提供了一种方式一个类被激活同时没有继承Thread。一个类实现了Runnable接口可以不用继承Thread类而是通过实例化一个线程实例然后将它自己作为目标传进去，大多数时候应当使用Runnable在你只打算重写run方法并不打算重写Tread类的其他方法的时候。这是重要的因为除非程序员打算去修改或者增强这个类的一些基础行为否则类是不应该被子类化的。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> abstract <span class="keyword">void</span> <span class="built_in">run</span>()</div></pre></td></tr></table></figure>
+<p>When an object implementing interface Runnable is used to create a thread, starting the thread causes the object’s run method to be called in that separately executing thread.<br>The general contract of the method run is that it may take any action whatsoever.</p>
+<p>当一个对象实现Runnable接口被用作创建一个线程时，启动线程会导致对象的run方法将在那个独立的执行线程中被调用。<br>方法run的一种通用契约就是它可以接受任何动作。</p>
 
       
     </div>
@@ -540,7 +559,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread与Runnable"><span class="nav-number">1.</span> <span class="nav-text">Thread与Runnable</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread"><span class="nav-number">1.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Runnable"><span class="nav-number">2.</span> <span class="nav-text">Runnable</span></a></li></ol></div>
             
 
           </div>
