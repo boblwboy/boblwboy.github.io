@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring cloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SOA理论与概念">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SOA理论与概念">
+<meta property="og:url" content="http://boblwboy.github.io/2019/07/11/spring-boot-cloud-2/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="SOA理论与概念">
+<meta property="og:updated_time" content="2019-07-12T09:11:08.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SOA理论与概念">
+<meta name="twitter:description" content="SOA理论与概念">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2019/07/11/spring-boot-cloud-2/"/>
+
+
+
+
+
+  <title>SOA理论与概念 | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/07/11/spring-boot-cloud-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SOA理论与概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-11T17:27:16+08:00">
+                2019-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  SOA理论与概念
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="Service-oriented-architecture"><a href="#Service-oriented-architecture" class="headerlink" title="Service-oriented architecture"></a>Service-oriented architecture</h2><p><a href="https://en.wikipedia.org/wiki/Service-oriented_architecture" target="_blank" rel="external">维基百科</a></p>
+<p>Service-oriented architecture (SOA) is a style of software design where services are provided to the other components by application components, through a communication protocol over a network. The basic principles of service-oriented architecture are independent of vendors, products and technologies.[1] A service is a discrete unit of functionality that can be accessed remotely and acted upon and updated independently, such as retrieving a credit card statement online.</p>
+<p>面向服务架构SOA是一种软件设计风格,那么在这种风格下我们通过应用组件的方式向其他组件去提供服务，提供服务的方式是基于网络的一种通信协议。SOA的基本原则是独立于厂商、产品和技术。服务是一种功能的离散单元，他们可以通过远程的方式被访问可以进行独立的操作和更新，例如在线获取一个信用卡账单。</p>
+<p>A service has four properties according to one of many definitions of SOA:[2]</p>
+<ul>
+<li>It logically represents a business activity with a specified outcome.</li>
+<li>It is self-contained.</li>
+<li>It is a black box for its consumers.</li>
+<li>It may consist of other underlying services.[3]</li>
+</ul>
+<p>一个服务有四个属性根据soa诸多定义的一种来看</p>
+<ul>
+<li>从逻辑上来看，它会代表着一个业务活动会有指定的一个特定的结果</li>
+<li>服务是自包含的</li>
+<li>对于服务的消费者来说，它是黑盒</li>
+<li>一个服务可能包含其他的底层服务</li>
+</ul>
+<p>Different services can be used in conjunction to provide the functionality of a large software application,[4] a principle SOA shares with modular programming. Service-oriented architecture integrates distributed, separately-maintained and -deployed software components. It is enabled by technologies and standards that facilitate components’ communication and cooperation over a network, especially over an IP network.</p>
+<p>不通的服务可以联合起来被使用以提供一个大型的软件应用功能，一个SOA原则会共享模块化的编程，SOA集成了分布式的、单独去维护的以及单独部署的软件组件。它是由技术与标准来驱动的，使得组件基于网络的通信和协作成为可能，特别是通过IP网络。</p>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>In SOA, services use protocols that describe how they pass and parse messages using description metadata. This metadata describes both the functional characteristics of the service and quality-of-service characteristics. Service-oriented architecture aims to allow users to combine large chunks of functionality to form applications which are built purely from existing services and combining them in an ad hoc manner. A service presents a simple interface to the requester that abstracts away the underlying complexity acting as a black box. Further users can also access these independent services without any knowledge of their internal implementation.[5]</p>
+<p>在SOA中，服务使用协议，这种协议描述了服务如何通过使用描述元数据传输和解析消息。元数据描述了两部分内容，一是服务功能特性二是服务质量特性。SOA旨在允许用户将一些大块的功能组合到一起，形成纯粹由现有服务构建的应用程序，并以特定的方式组合他们。服务向请求者提供一个简单接口，该接口以一种黑盒的形式抽象了底层的复杂性。此外，用户还可以访问这些独立的服务，而不需要知道它们的内部实现。</p>
+<h3 id="Defining-concepts"><a href="#Defining-concepts" class="headerlink" title="Defining concepts"></a>Defining concepts</h3><p>The related buzzword service-orientation promotes loose coupling between services. SOA separates functions into distinct units, or services,[6] which developers make accessible over a network in order to allow users to combine and reuse them in the production of applications. These services and their corresponding consumers communicate with each other by passing data in a well-defined, shared format, or by coordinating an activity between two or more services.[7]</p>
+<p>相关时髦的词语面向服务提倡服务之间松耦合。SOA将功能分离为不同的单元(或服务)，开发人员可以通过网络访问这些单元或服务，以便允许用户在应用程序的生产中组合和重用它们。这些服务及其对应的消费者通过以定义良好的共享格式传递数据，或通过协调两个或多个服务之间的活动来彼此通信。</p>
+<h3 id="Principles"><a href="#Principles" class="headerlink" title="Principles"></a>Principles</h3><p>There are no industry standards relating to the exact composition of a service-oriented architecture, although many industry sources have published their own principles. Some of these[11][12][13][14] include the following:</p>
+<p>面向服务的体系结构的确切组成目前还没有相关的行业标准，尽管许多行业来源已经发布了自己的原则。其中一些[11][12][13][14]包括以下内容:</p>
+<ul>
+<li>Standardized service contract<br>Services adhere to a standard communications agreements, as defined collectively by one or more service-description documents within a given set of services.</li>
+</ul>
+<p>标准化的服务契约<br>服务遵循标准通信协议，由给定服务集合中的一个或多个服务描述文档共同定义。</p>
+<ul>
+<li>Service reference autonomy (an aspect of loose coupling)<br>The relationship between services is minimized to the level that they are only aware of their existence.</li>
+</ul>
+<p>服务应用自治（松耦合的一个方面）<br>服务之间的关系被最小化到它们只知道它们的存在</p>
+<ul>
+<li>Service location transparency (an aspect of loose coupling)<br>Services can be called from anywhere within the network that it is located no matter where it is present.</li>
+</ul>
+<p>服务定位透明化（松耦合的一个方面）<br>服务可以从网络中它所在的任何位置调用，无论它在哪里。</p>
+<ul>
+<li>Service longevity<br>Services should be designed to be long lived. Where possible services should avoid forcing consumers to change if they do not require new features, if you call a service today you should be able to call the same service tomorrow.</li>
+</ul>
+<p>服务长寿<br>服务的设计应该是长期的。在可能的情况下，如果服务不需要新特性，就应该避免强制消费者进行更改，如果您今天调用服务，那么明天就应该能够调用相同的服务。</p>
+<ul>
+<li>Service abstraction<br>The services act as black boxes, that is their inner logic is hidden from the consumers.</li>
+</ul>
+<p>服务抽象<br>服务充当黑盒，即它们的内部逻辑对消费者隐藏。</p>
+<ul>
+<li>Service autonomy<br>Services are independent and control the functionality they encapsulate, from a Design-time and a run-time perspective.</li>
+</ul>
+<p>服务的自主权<br>服务是独立的，并且可以控制它们封装的功能，从设计期和运行期的角度来看。</p>
+<ul>
+<li>Service statelessness<br>Services are stateless, that is either return the requested value or give an exception hence minimizing resource use.</li>
+</ul>
+<p>服务无状态<br>服务是无状态的，即要么返回请求的值，要么提供异常，从而最小化资源的使用。</p>
+<ul>
+<li>Service granularity<br>A principle to ensure services have an adequate size and scope. The functionality provided by the service to the user must be relevant.</li>
+</ul>
+<p>服务粒度<br>确保服务具有足够大小和范围的原则。服务提供给用户的功能必须是相关的。</p>
+<ul>
+<li>Service normalization<br>Services are decomposed or consolidated (normalized) to minimize redundancy. In some, this may not be done, These are the cases where performance optimization, access, and aggregation are required.[15]</li>
+</ul>
+<p>服务标准化<br>服务被分解或合并(规范化)以最小化冗余。在某些情况下，可能不需要这样做，这些情况下需要性能优化、访问和聚合</p>
+<ul>
+<li>Service composability<br>Services can be used to compose other services.</li>
+</ul>
+<p>服务的可组合性<br>服务可用于组合其他服务。</p>
+<ul>
+<li>Service discovery<br>Services are supplemented with communicative meta data by which they can be effectively discovered and interpreted.</li>
+</ul>
+<p>服务发现<br>服务由交流元数据补充，通过这些元数据可以有效地发现和解释服务。</p>
+<ul>
+<li>Service reusability<br>Logic is divided into various services, to promote reuse of code.</li>
+</ul>
+<p>服务可重用性<br>逻辑被划分为各种服务，以促进代码的重用。</p>
+<ul>
+<li>Service encapsulation<br>Many services which were not initially planned under SOA, may get encapsulated or become a part of SOA.</li>
+</ul>
+<p>服务封装<br>许多最初没有在SOA下计划的服务可能被封装或成为SOA的一部分</p>
+<h3 id="Patterns"><a href="#Patterns" class="headerlink" title="Patterns"></a>Patterns</h3><p>Each SOA building block can play any of the three roles:</p>
+<p>每个SOA构建块都可以扮演以下三个角色之一：</p>
+<p>Service provider</p>
+<p>服务提供者</p>
+<p>It creates a web service and provides its information to the service registry. Each provider debates upon a lot of hows and whys like which service to expose, which to give more importance: security or easy availability, what price to offer the service for and many more. The provider also has to decide what category the service should be listed in for a given broker service[16] and what sort of trading partner agreements are required to use the service.</p>
+<p>它创建一个web服务并将其信息提供给服务注册中心。每个提供者都在争论如何公开和为什么公开哪个服务，以及提供更多的重要性:安全性还是简单可用性，提供服务的价格等等。提供者还必须决定为给定的代理服务[16]列出哪些类别的服务，以及为了使用服务消费者需要哪种协议。</p>
+<p>Service broker, service registry or service repository<br>服务代理</p>
+<p>Its main functionality is to make the information regarding the web service available to any potential requester. Whoever implements the broker decides the scope of the broker. Public brokers are available anywhere and everywhere but private brokers are only available to a limited amount of public. UDDI was an early, no longer actively supported attempt to provide Web services discovery.</p>
+<p>它的主要功能是使任何潜在的请求者都可以获得关于web服务的信息。无论谁实现这个broker都必须决定broker的范围。公共代理在任何地方都是可用的，但是私有代理只对有限数量的公众可用。UDDI是提供Web服务发现的早期尝试，不再受到积极支持。</p>
+<p>Service requester/consumer<br>服务消费者</p>
+<p>It locates entries in the broker registry using various find operations and then binds to the service provider in order to invoke one of its web services. Whichever service the service-consumers need, they have to take it into the brokers, bind it with respective service and then use it. They can access multiple services if the service provides multiple services.</p>
+<p>它使用各种find操作定位到代理的入口，然后绑定到服务提供者上，以便调用其中一个web服务。无论服务消费者需要哪个服务，他们都必须将其纳入代理中，将其与相应的服务绑定，然后使用它。如果服务提供多个服务，则可以访问多个服务。</p>
+<p>The service consumer–provider relationship is governed by a standardized service contract,[17] which has a business part, a functional part and a technical part.</p>
+<p>服务消费者-提供者关系由标准化服务契约[17]控制，该契约包含业务部分、功能部分和技术部分。</p>
+<p>Service composition patterns have two broad, high-level architectural styles: choreography and orchestration. Lower level enterprise integration patterns that are not bound to a particular architectural style continue to be relevant and eligible in SOA design.[18][19][20]</p>
+<p>服务组合模式有两种广泛的高级体系结构样式:编排和编制。低层企业集成模式没有绑定到特定架构风格上可以继续在SOA设计中进行演化。</p>
+<h3 id="Implementation-approaches"><a href="#Implementation-approaches" class="headerlink" title="Implementation approaches"></a>Implementation approaches</h3><p>Service-oriented architecture can be implemented with web services.[21] This is done to make the functional building-blocks accessible over standard Internet protocols that are independent of platforms and programming languages. These services can represent either new applications or just wrappers around existing legacy systems to make them network-enabled.[22]</p>
+<p>面向服务的体系结构可以用web service实现。这样做是为了使功能构建块可以通过标准Internet协议进行访问，它是独立于平台和编程语言的。这些服务可以表示成新的应用，或者只是现有遗留系统的包装器，以使它们通过网络访问。</p>
+<p>Implementers commonly build SOAs using web services standards. One example is SOAP, which has gained broad industry acceptance after recommendation of Version 1.2 from the W3C[23] (World Wide Web Consortium) in 2003. These standards (also referred to as web service specifications) also provide greater interoperability and some protection from lock-in to proprietary vendor software. One can, however, also implement SOA using any other service-based technology, such as Jini, CORBA or REST.</p>
+<p>实现者通常使用web service标准构建soa。SOAP就是一个例子，在W3C[23] (World Wide Web Consortium)于2003年推荐了1.2版之后，它获得了广泛的行业接受。这些标准(也称为web servie规范)还提供了更好的互操作性，并提供了对专有供应商软件的一些保护。但是，也可以使用任何其他基于服务的技术(如Jini、CORBA或REST)来实现SOA。</p>
+<p>Architectures can operate independently of specific technologies and can therefore be implemented using a wide range of technologies, including:</p>
+<p>架构者可以独立于特定的技术运行，因此可以使用广泛的技术来实现，包括:</p>
+<p>Web services based on WSDL and SOAP<br>Messaging, e.g., with ActiveMQ, JMS, RabbitMQ<br>RESTful HTTP, with Representational state transfer (REST) constituting its own constraints-based architectural style<br>OPC-UA<br>WCF (Microsoft’s implementation of Web services, forming a part of WCF)<br>Apache Thrift<br>gRPC<br>SORCER</p>
+<p>Implementations can use one or more of these protocols and, for example, might use a file-system mechanism to communicate data following a defined interface specification between processes conforming to the SOA concept. The key is independent services with defined interfaces that can be called to perform their tasks in a standard way, without a service having foreknowledge of the calling application, and without the application having or needing knowledge of how the service actually performs its tasks. SOA enables the development of applications that are built by combining loosely coupled and interoperable services.</p>
+<p>实现可以使用这些协议中的一个或多个，例如，可以遵循符合SOA概念定义好的一个接口规范使用文件系统机制进行数据通信。关键是这些独立的服务拥有定义好的接口可以被调用以一种标准化的方式执行他们的任务，而不需要服务预先了解调用应用，也不需要应用知道或需要知道服务实际如何执行其任务。SOA支持通过组合松散耦合和互操作的服务来构建应用程序的开发。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/11/spring-boot-cloud-1/" rel="next" title="微服务基础">
+                <i class="fa fa-chevron-left"></i> 微服务基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Service-oriented-architecture"><span class="nav-number">1.</span> <span class="nav-text">Service-oriented architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Defining-concepts"><span class="nav-number">1.2.</span> <span class="nav-text">Defining concepts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Principles"><span class="nav-number">1.3.</span> <span class="nav-text">Principles</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Patterns"><span class="nav-number">1.4.</span> <span class="nav-text">Patterns</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-approaches"><span class="nav-number">1.5.</span> <span class="nav-text">Implementation approaches</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
