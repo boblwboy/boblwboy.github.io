@@ -87,7 +87,7 @@
 <meta property="og:description" content="soa-versus-microservices">
 <meta property="og:image" content="http://boblwboy.github.io/img/spring-cloud/spring-cloud-07.png">
 <meta property="og:image" content="http://boblwboy.github.io/img/spring-cloud/spring-cloud-08.png">
-<meta property="og:updated_time" content="2019-07-25T06:40:54.295Z">
+<meta property="og:updated_time" content="2019-07-25T07:08:41.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="soa-versus-microservices">
 <meta name="twitter:description" content="soa-versus-microservices">
@@ -442,52 +442,75 @@
 <thead>
 <tr>
 <th style="text-align:left">SERVICE-ORIENTED ARCHITECTURE</th>
-<th style="text-align:right">MICROSERVICES ARCHITECTURE</th>
+<th style="text-align:left">MICROSERVICES ARCHITECTURE</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left">最大化应用程序服务的可重用性</td>
-<td style="text-align:right">专注于解耦</td>
+<td style="text-align:left">专注于解耦</td>
 </tr>
 <tr>
 <td style="text-align:left">系统化的改变需要修改整体</td>
-<td style="text-align:right">系统化的改变是创建一个新的服务</td>
+<td style="text-align:left">系统化的改变是创建一个新的服务</td>
 </tr>
 <tr>
 <td style="text-align:left">DevOps和持续交付正在变得流行，但并不是主流</td>
-<td style="text-align:right">专注于DevOps和持续交付</td>
+<td style="text-align:left">专注于DevOps和持续交付</td>
 </tr>
 <tr>
 <td style="text-align:left">关注业务功能重用</td>
-<td style="text-align:right">更加强调“边界上下文”</td>
+<td style="text-align:left">更加强调“边界上下文”</td>
 </tr>
 <tr>
 <td style="text-align:left">对于通信，它使用企业服务总线(ESB)</td>
-<td style="text-align:right">对于通信使用不那么复杂和简单的消息传递系统</td>
+<td style="text-align:left">对于通信使用不那么复杂和简单的消息传递系统</td>
 </tr>
 <tr>
 <td style="text-align:left">支持多种消息协议</td>
-<td style="text-align:right">使用轻量级协议，如HTTP、REST或Thrift api</td>
+<td style="text-align:left">使用轻量级协议，如HTTP、REST或Thrift api</td>
 </tr>
 <tr>
 <td style="text-align:left">使用一个公共平台让所有的服务部署到上面去</td>
-<td style="text-align:right">应用服务器并不是实际被使用的, 通常使用云平台</td>
+<td style="text-align:left">应用服务器并不是实际被使用的, 通常使用云平台</td>
 </tr>
 <tr>
 <td style="text-align:left">使用容器(如Docker)就不那么流行了</td>
-<td style="text-align:right">容器与微服务配合得非常好</td>
+<td style="text-align:left">容器与微服务配合得非常好</td>
 </tr>
 <tr>
 <td style="text-align:left">SOA服务共享数据存储</td>
-<td style="text-align:right">每个微服务都有独立的数据存储</td>
+<td style="text-align:left">每个微服务都有独立的数据存储</td>
 </tr>
 <tr>
 <td style="text-align:left">共同治理和标准</td>
-<td style="text-align:right">放松管理，更加注重团队协作和选择的自由</td>
+<td style="text-align:left">放松管理，更加注重团队协作和选择的自由</td>
 </tr>
 </tbody>
 </table>
+<p>I’ll get into more detail in some of the aspects shown in the table above and further explain the differences:</p>
+<ul>
+<li>Development – In both architectures, services can be developed in different programming languages and tools, which brings technology diversity into the development team. The development can be organized within multiple teams, however, in SOA, each team needs to know about the common communication mechanism. On the other hand, with microservices, the services can operate and be deployed independently of other services. So, it is easier to deploy new versions of microservices frequently or scale a service independently. You can read further about these benefits of microservices here.</li>
+</ul>
+<p>开发-在这两种体系结构中，服务都可以用不同的编程语言和工具开发，这为开发团队带来了技术多样性。开发可以在多个团队中组织，但是在SOA中，每个团队都需要了解公共通信机制。另一方面，使用微服务，服务可以独立于其他服务进行操作和部署。因此，更容易频繁地部署微服务的新版本或独立地扩展服务。您可以在这里进一步了解微服务的这些好处。</p>
+<ul>
+<li>“Bounded Context” - SOA encourages sharing of components, whereas microservices try to minimize on sharing through “bounded context.” A bounded context refers to the coupling of a component and its data as a single unit with minimal dependencies. As SOA relies on multiple services to fulfill a business request, systems built on SOA are likely to be slower than microservices.</li>
+</ul>
+<p>“绑定上下文”——SOA鼓励组件共享，而微服务则尽量减少通过“有界上下文”的共享。有界上下文指的是组件与其数据之间的耦合，它是一个具有最小依赖关系的单一单元。由于SOA依赖于多个服务来满足业务请求，基于SOA构建的系统可能比微服务慢。</p>
+<ul>
+<li>Communication - In SOA, the ESB could become a single point of failure which impacts the entire system. Since every service is communicating through the ESB, if one of the services slows down, it could clog up the ESB with requests for that service. On the other hand, microservices are much better in error tolerance. For example, if one microservice has a memory fault, then only that microservice will be affected. All the other microservices will continue to handle requests regularly.</li>
+</ul>
+<p>通信-在SOA中，ESB可能成为影响整个系统的单一故障点。由于每个服务都是通过ESB进行通信的，如果其中一个服务的速度变慢，它可能会用对该服务的请求阻塞ESB。另一方面，微服务的容错性要好得多。例如，如果一个微服务有内存错误，那么只会影响该微服务。所有其他微服务将继续定期处理请求。</p>
+<ul>
+<li>Interoperability - SOA promotes the use of multiple heterogeneous protocols through its messaging middleware component. Microservices attempt to simplify the architecture pattern by reducing the number of choices for integration. So, if you want to integrate several systems using different protocols in a heterogeneous environment, you need to consider SOA. If all your services could be accessed through the same remote access protocol, then microservices are a better option for you.</li>
+</ul>
+<p>互操作性- SOA通过其消息传递中间件组件促进了多种异构协议的使用。微服务试图通过减少集成选择的数量来简化体系结构模式。因此，如果希望在异构环境中集成使用不同协议的多个系统，需要考虑SOA。如果所有服务都可以通过相同的远程访问协议访问，那么微服务是更好的选择。</p>
+<ul>
+<li>Size - Last but not least, the main difference between SOA and microservices lies in the size and scope. The prefix “micro” in microservices refers to the granularity of the internal components, meaning they have to be significantly smaller than what SOA tends to be. Service components within microservices generally have a single purpose and they do that one thing really well. On the other hand, in SOA services usually include much more business functionality, and they are often implemented as complete subsystems.</li>
+</ul>
+<p>最后但并非最不重要的一点，SOA和微服务之间的主要区别在于大小和范围。微服务中的前缀“micro”指的是内部组件的粒度，这意味着它们必须比SOA的粒度小得多。微服务中的服务组件通常只有一个目的，而且它们在这一点上做得非常好。另一方面，在SOA中，服务通常包含更多的业务功能，并且它们通常作为完整的子系统实现。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>One cannot simply say that one architecture is better than the other. It mainly depends on the purpose of the application you are building. SOA is better suited for larger, complex enterprise application environments that require integration with many other applications. That being said, smaller applications are not a good fit for SOA as they don’t need a messaging middleware component. Microservices, on the other hand, are better suited for smaller and well-partitioned, web-based systems. Also, if you are developing a mobile or web application, then microservices give you much greater control as a developer. Finally, we can conclude that since they serve different purposes – microservices and SOA are indeed distinct types of architectures.</p>
+<p>不能简单地说一种架构优于另一种架构。这主要取决于您正在构建的应用程序的目的。SOA更适合于需要与许多其他应用程序集成的大型、复杂的企业应用程序环境。也就是说，较小的应用程序并不适合SOA，因为它们不需要消息传递中间件组件。另一方面，微服务更适合较小的、分区良好的基于web的系统。此外，如果您正在开发移动或web应用程序，那么微服务将为开发人员提供更大的控制权。最后，我们可以得出这样的结论，因为它们服务于不同的目的——微服务和SOA确实是不同类型的体系结构。</p>
 
       
     </div>
@@ -658,7 +681,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#soa-versus-microservices"><span class="nav-number">1.</span> <span class="nav-text">soa-versus-microservices</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SOA-versus-microservices-What’s-the-difference"><span class="nav-number">1.1.</span> <span class="nav-text">SOA versus microservices: What’s the difference?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-this-difference-matters"><span class="nav-number">1.2.</span> <span class="nav-text">Why this difference matters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Microservices-vs-SOA-–-Is-There-Any-Difference-at-All"><span class="nav-number">2.</span> <span class="nav-text">Microservices vs. SOA – Is There Any Difference at All?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-Oriented-Architecture-SOA"><span class="nav-number">2.1.</span> <span class="nav-text">Service-Oriented Architecture (SOA)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Microservices"><span class="nav-number">2.2.</span> <span class="nav-text">Microservices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#So-Where’s-the-Difference"><span class="nav-number">2.3.</span> <span class="nav-text">So, Where’s the Difference?</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#soa-versus-microservices"><span class="nav-number">1.</span> <span class="nav-text">soa-versus-microservices</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SOA-versus-microservices-What’s-the-difference"><span class="nav-number">1.1.</span> <span class="nav-text">SOA versus microservices: What’s the difference?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-this-difference-matters"><span class="nav-number">1.2.</span> <span class="nav-text">Why this difference matters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Microservices-vs-SOA-–-Is-There-Any-Difference-at-All"><span class="nav-number">2.</span> <span class="nav-text">Microservices vs. SOA – Is There Any Difference at All?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-Oriented-Architecture-SOA"><span class="nav-number">2.1.</span> <span class="nav-text">Service-Oriented Architecture (SOA)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Microservices"><span class="nav-number">2.2.</span> <span class="nav-text">Microservices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#So-Where’s-the-Difference"><span class="nav-number">2.3.</span> <span class="nav-text">So, Where’s the Difference?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusion"><span class="nav-number">2.4.</span> <span class="nav-text">Conclusion</span></a></li></ol></li></ol></div>
             
 
           </div>
