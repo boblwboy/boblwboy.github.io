@@ -85,10 +85,12 @@
 <meta property="og:url" content="http://boblwboy.github.io/2018/12/29/docker-dockerfile/index.html">
 <meta property="og:site_name" content="Bob's blog">
 <meta property="og:description" content="Dockerfile详解">
-<meta property="og:updated_time" content="2019-08-28T13:26:17.043Z">
+<meta property="og:image" content="http://boblwboy.github.io/img/docker/dockerfile-01.jpg">
+<meta property="og:updated_time" content="2019-09-05T12:24:16.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dockerfile详解">
 <meta name="twitter:description" content="Dockerfile详解">
+<meta name="twitter:image" content="http://boblwboy.github.io/img/docker/dockerfile-01.jpg">
 
 
 
@@ -347,7 +349,96 @@
         <p>Dockerfile详解</p>
 <h2 id="Dockerfile详解"><a href="#Dockerfile详解" class="headerlink" title="Dockerfile详解"></a>Dockerfile详解</h2><h3 id="Dockerfile介绍"><a href="#Dockerfile介绍" class="headerlink" title="Dockerfile介绍"></a>Dockerfile介绍</h3><p>Dockerfile是一个文本格式的配置文件，用户可以使用Dockerfile来快速创建自定义的镜像。<br>Docker通过读取Dockerfile里面的内容可以自动build image，Dockerfile是一个包含了build过程中需要执行的所有命令的文本文件。也可以理解为Dockerfile是一种被Docker程序解释的脚本，由一条一条的指令组成，每条指令对应Linux系统下面的一条命令，由Docker程序将这些Dockerfile指令翻译成真正的Linux命令。Dockerfile有自己的书写格式和支持的命令，Docker程序解决这些一来关系，类似于Makefile。<br>Docker程序将读取Dockerfile，根据指令生成定制的image。相比image这种黑盒子，Dockerfile这种显而易见的脚本更容易被使用者接受，它明确的表明image是怎么产生的。有了Dockerfile，当我们需要定制自己额外的需求时，只需在Dockerfile上添加或者修改指令，重新生成image即可，省去敲命令的麻烦。</p>
 <h3 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h3><p>Dockerfile由一行行命令语句组成，并且支持以#开头的注释行。<br>一般而言， Dockerfile主体内容分为四部分： 基础镜像信息、维护者信息、镜像操作指令和容器启动时执行指令。</p>
-<h4 id="指令说明"><a href="#指令说明" class="headerlink" title="指令说明"></a>指令说明</h4><p>Dockerfile的指令是忽略大小写的，建议使用大写，使用#作为注释，每一行只支持一条指令，每条指令可以携带多个参数。<br>Dockerfile的指令根据作用可以分为两种：构建指令和设置指令。构建指令用于构建image，其指定的操作不会在运行image的容器上执行；设置指令用于设置image的属性，其指定的操作将在运行image的容器中执行。</p>
+<h4 id="指令说明"><a href="#指令说明" class="headerlink" title="指令说明"></a>指令说明</h4><p>Dockerfile的指令是忽略大小写的，建议使用大写，使用#作为注释，每一行只支持一条指令，每条指令可以携带多个参数。<br>Dockerfile的指令根据作用可以分为两种：操作指令和配置指令。构建指令用于构建image，其指定的操作不会在运行image的容器上执行；设置指令用于设置image的属性，其指定的操作将在运行image的容器中执行。</p>
+<h5 id="配置指令"><a href="#配置指令" class="headerlink" title="配置指令"></a>配置指令</h5><ul>
+<li>FROM 指定所创建镜像的基础镜像</li>
+</ul>
+<p>该指令有两种格式：<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>指定基础image为该image的最后修改的版本。或者：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FROM &lt;image&gt;<span class="symbol">:&lt;tag&gt;</span></div></pre></td></tr></table></figure></p>
+<p>指定基础image为该image的一个tag版本。</p>
+<ul>
+<li><p>ARG 定义创建镜像过程中使用的变量</p>
+</li>
+<li><p>LABEL 为生成的镜像添加元数据标签信息</p>
+</li>
+<li><p>EXPOSE 申明镜像内服务监听的端口<br>EXPOSE可以用来暴露端口，或者在docker run时指定 –expose=1234，这两种方式作用相同。但是， –expose可以接受端口范围作为参数，比如 –expose=2000-3000。但是，EXPOSE和 –expose都不依赖于宿主机器。默认状态下，这些规则并不会使这些端口可以通过宿主机来访问。</p>
+</li>
+</ul>
+<p>基于EXPOSE指令的上述限制，Dockerfile的作者一般在包含EXPOSE规则时都只将其作为哪个端口提供哪个服务的提示。使用时，还要依赖于容器的操作人员进一步指定网络规则，需要配合 docker run -p PORT:EXPORT使用，这样EXPOSE设置的端口号会被指定需要映射到宿主机器的端口，这时要确保宿主机器上的端口号没有被使用。如果直接指定 docker run-p EXPORT，这样EXPOSE设置的端口号会被随机映射成宿主机器中的一个端口号。不过通过EXPOSE命令文档化端口的方式十分有用。</p>
+<p>本质上说，EXPOSE或者 –expose只是为其他命令提供所需信息的元数据（比如容器间link操作就依赖EXPOSE元数据），或者只是告诉容器操作人员有哪些已知选择。</p>
+<p>格式：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EXPOSE <span class="tag">&lt;<span class="name">port</span>&gt;</span> [<span class="tag">&lt;<span class="name">port</span>&gt;</span>...]</div></pre></td></tr></table></figure></p>
+<p>EXPOSE指令可以一次设置多个端口号，相应的运行容器的时候，可以配套的多次使用-p选项。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 暴露一个端口;</span></div><div class="line"><span class="keyword">EXPOSE</span> port1</div><div class="line"></div><div class="line"><span class="comment"># 如果想代理EXPOSE端口, 相应的运行容器使用的命令;</span></div><div class="line">docker <span class="keyword">run</span><span class="bash"> -p port1 image</span></div><div class="line"></div><div class="line"><span class="comment"># 暴露多个端口;</span></div><div class="line"><span class="keyword">EXPOSE</span> port1 port2 port3</div><div class="line"></div><div class="line"><span class="comment"># 如果想代理EXPOSE端口, 相应的运行容器使用的命令;</span></div><div class="line">docker <span class="keyword">run</span><span class="bash"> -p port1 -p port2 -p port3 image</span></div><div class="line"></div><div class="line"><span class="comment"># 还可以指定需要映射到宿主机器上的某个端口号;</span></div><div class="line">docker <span class="keyword">run</span><span class="bash"> -p host_port1:port1 -p host_port2:port2 -p host_port3:port3 image</span></div></pre></td></tr></table></figure>
+<p>注意，EXPOSE仅仅是暴露一个端口，一个标识，在没有定义任何端口映射时，外部是无法访问到容器提供的服务。而端口映射（-p）是docker比较重要的一个功能，原因在于我们每次运行容器的时候容器的IP地址不能指定，而是在桥接网卡的地址范围内随机生成的。宿主机器的IP地址是固定的，我们可以将容器的端口的映射到宿主机器上的一个端口，免去每次访问容器中的某个服务时都要查看容器的IP的地址。对于一个运行的容器，可以使用docker port加上容器ID和EXPOSE暴露的端口来查看该端口号在宿主机器上的映射端口。</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker port redis <span class="number">6379</span></div><div class="line"><span class="number">0.0</span><span class="meta">.0</span><span class="meta">.0</span>:<span class="number">6380</span></div></pre></td></tr></table></figure>
+<ul>
+<li>ENV 指定环境变量<br>在image中设置一个环境变量。格式:<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ENV <span class="tag">&lt;<span class="name">key</span>&gt;</span> <span class="tag">&lt;<span class="name">value</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>设置了后，后续的RUN命令都可以使用，container启动后，可以通过docker inspect查看这个环境变量，也可以通过在docker run –env key=value时设置或修改环境变量。</p>
+<p>假如你安装了JAVA程序，需要设置JAVA_HOME，那么可以在Dockerfile中这样写<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ENV JAVA_HOME <span class="regexp">/path/</span>to<span class="regexp">/java/</span>dirent</div></pre></td></tr></table></figure></p>
+<ul>
+<li>ENTRYPOINT 指定镜像的默认入口命令<br>container启动时执行的命令，但是一个Dockerfile中只能有一条ENTRYPOINT命令，如果多条，则只执行最后一条。ENTRYPOINT没有CMD的可替换特性。两种格式：<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"executable"</span>, <span class="string">"param1"</span>, <span class="string">"param2"</span>] (like an <span class="built_in">exec</span>, the preferred form)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> <span class="built_in">command</span> param1 param2 (as a shell)</span></div></pre></td></tr></table></figure>
+<p>该指令的使用分为两种情况，一种是独自使用，另一种和CMD指令配合使用。<br>当独自使用时，如果你还使用了CMD命令且CMD是一个完整的可执行的命令，那么CMD指令和ENTRYPOINT会互相覆盖只有最后一个CMD或者ENTRYPOINT有效。<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># CMD指令将不会被执行,只有ENTRYPOINT指令被执行;</span></div><div class="line"><span class="keyword">CMD</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"Hello, World!"</span></span></div><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> ls <span class="_">-l</span></span></div></pre></td></tr></table></figure></p>
+<p>另一种用法和CMD指令配合使用来指定ENTRYPOINT的默认参数，这时CMD指令不是一个完整的可执行命令，仅仅是参数部分；ENTRYPOINT指令只能使用JSON方式指定执行命令，而不能指定参数。<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> ubuntu</div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"-l"</span>]</span></div><div class="line"></div><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"/usr/bin/ls"</span>]</span></div></pre></td></tr></table></figure></p>
+<ul>
+<li>VOLUME 创建一个数据卷挂载点<br>使容器中的一个目录具有持久化存储数据的功能，该目录可以被容器本身使用，也可以共享给其他容器使用。我们知道容器使用的是AUFS，这种文件系统不能持久化数据，当容器关闭后，所有的更改都会丢失。当容器中的应用有持久化数据的需求时可以在Dockerfile中使用该指令。格式:<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">VOLUME</span><span class="bash"> [<span class="string">"&amp;lt;mountpoint&amp;gt;"</span>]</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> base</div><div class="line"></div><div class="line"><span class="keyword">VOLUME</span><span class="bash"> [<span class="string">"/tmp/data"</span>]</span></div></pre></td></tr></table></figure>
+<p>运行通过该Dockerfile生成image的容器，/tmp/data目录中的数据在容器关闭后，里面的数据还存在。例如另一个容器也有持久化数据的需求，且想使用上面容器共享的/tmp/data目录，那么可以运行下面的命令启动一个容器：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker <span class="built_in">run</span> -t -i -rm -volumes-<span class="keyword">from</span> container1 image2 bash</div></pre></td></tr></table></figure>
+<p>container1为第一个容器的ID，image2为第二个容器运行image的名字。</p>
+<ul>
+<li>USER 指定运行容器时的用户名或UID<br>设置启动容器的用户，默认是root用户。<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 指定memcached的运行用户;</span></div><div class="line"></div><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"memcached"</span>]</span></div><div class="line"></div><div class="line"><span class="keyword">USER</span> daemon</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>或<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"memcached"</span>, <span class="string">"-u"</span>, <span class="string">"daemon"</span>]</span></div></pre></td></tr></table></figure></p>
+<ul>
+<li>WORKDIR 配置工作目录</li>
+</ul>
+<p>可以多次切换(相当于cd命令)，对RUN,CMD,ENTRYPOINT生效。格式:<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">WORKDIR</span><span class="bash"> /path/to/workdir</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 在/<span class="built_in">p1</span>/<span class="built_in">p2</span>下执行vim a.txt<span class="comment">;</span></div><div class="line"><span class="symbol">WORKDIR</span> /<span class="built_in">p1</span> WORKDIR <span class="built_in">p2</span> RUN vim a.txt</div></pre></td></tr></table></figure>
+<ul>
+<li>ONBUILD 创建子镜像时指定自动执行的操作指令<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ONBUILD <span class="tag">&lt;<span class="name">Dockerfile关键字</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>ONBUILD指定的命令在构建镜像时并不执行，而是在它的子镜像中执行。</p>
+<ul>
+<li><p>STOPSIGNAL 指定退出的信号值</p>
+</li>
+<li><p>HEALTHCHECK 配置所启动容器如何进行健康检查</p>
+</li>
+<li><p>SHELL 指定默认shell类型</p>
+</li>
+</ul>
+<h5 id="操作指令"><a href="#操作指令" class="headerlink" title="操作指令"></a>操作指令</h5><ul>
+<li>RUN 运行指定命令<br>构建指令，RUN可以运行任何被基础image支持的命令。如基础image选择了centos，那么软件管理部分只能使用centos的命令。该指令有两种格式：<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> &lt;<span class="built_in">command</span>&gt; (the <span class="built_in">command</span> is run <span class="keyword">in</span> a shell - `/bin/sh -c`)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">"executable"</span>, <span class="string">"param1"</span>, <span class="string">"param2"</span> ... ] (<span class="built_in">exec</span> form)</span></div></pre></td></tr></table></figure>
+<ul>
+<li>CMD 启动容器时指定默认执行的命令<br>用于container启动时指定的操作。该操作可以是执行自定义脚本，也可以是执行系统命令。该指令只能在文件中存在一次，如果有多个，则只执行最后一条。该指令有三种格式：<figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CMD [<span class="string">"executable"</span>,<span class="string">"param1"</span>,<span class="string">"param2"</span>] <span class="comment">(like an exec, this is the preferred form)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CMD</span><span class="bash"> <span class="built_in">command</span> param1 param2 (as a shell)</span></div></pre></td></tr></table></figure>
+<p>CMD主要用于container时启动指定的服务，当Docker run command的命令匹配到CMD command时，会替换CMD执行的命令。<br>当Dockerfile指定了ENTRYPOINT，那么使用下面的格式：<br><figure class="highlight fsharp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CMD [<span class="string">"param1"</span>,<span class="string">"param2"</span>] (<span class="keyword">as</span> <span class="keyword">default</span> parameters <span class="keyword">to</span> ENTRYPOINT)</div></pre></td></tr></table></figure></p>
+<p>ENTRYPOINT指定的是一个可执行的脚本或者程序的路径，该指定的脚本或者程序将会以param1和param2作为参数执行。所以如果CMD指令使用上面的形式，那么Dockerfile中必须要有配套的ENTRYPOINT。</p>
+<ul>
+<li>ADD 添加内容到镜像</li>
+</ul>
+<p>所有拷贝到container中的文件和文件夹权限为0755，uid和gid为0；如果是一个目录，那么会将该目录下的所有文件添加到container中，不包括目录；如果文件是可识别的压缩格式，则docker会帮忙解压缩（注意压缩格式）；如果<src>是文件且<dest>中不使用斜杠结束，则会将<dest>视为文件，<src>的内容会写入<dest>；如果<src>是文件且<dest>中使用斜杠结束，则会<src>文件拷贝到<dest>目录下。<br>格式:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ADD <span class="tag">&lt;<span class="name">src</span>&gt;</span> <span class="tag">&lt;<span class="name">dest</span>&gt;</span></div></pre></td></tr></table></figure></dest></src></dest></src></dest></src></dest></dest></src></p>
+<p><src>：是相对被构建的源目录的相对路径，可以是文件或目录的路径，也可以是一个远程的文件url。</src></p>
+<p><dest>：是container中的绝对路径。</dest></p>
+<ul>
+<li>COPY 复制内容到镜像</li>
+</ul>
+<p>最后，网上有哥们提供了一张通俗易懂的构建Dockerfile文件用到的指令先后逻辑顺序及其含义，还挺有意思。</p>
+<p><img src="http://boblwboy.github.io/img/docker/dockerfile-01.jpg" alt="dockerfile"></p>
+<p>这篇转载至：<a href="https://blog.csdn.net/tang06211015/article/details/79955149" target="_blank" rel="external">https://blog.csdn.net/tang06211015/article/details/79955149</a></p>
 
       
     </div>
@@ -378,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/29/docker-basic/" rel="next" title="核心概念与安装配置">
-                <i class="fa fa-chevron-left"></i> 核心概念与安装配置
+              <a href="/2018/12/12/clean-code-basic/" rel="next" title="整洁代码">
+                <i class="fa fa-chevron-left"></i> 整洁代码
               </a>
             
           </div>
@@ -388,8 +479,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/29/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/29/docker-basic/" rel="prev" title="核心概念与安装配置">
+                核心概念与安装配置 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -522,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile详解"><span class="nav-number">1.</span> <span class="nav-text">Dockerfile详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile介绍"><span class="nav-number">1.1.</span> <span class="nav-text">Dockerfile介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本结构"><span class="nav-number">1.2.</span> <span class="nav-text">基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#指令说明"><span class="nav-number">1.2.1.</span> <span class="nav-text">指令说明</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile详解"><span class="nav-number">1.</span> <span class="nav-text">Dockerfile详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile介绍"><span class="nav-number">1.1.</span> <span class="nav-text">Dockerfile介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本结构"><span class="nav-number">1.2.</span> <span class="nav-text">基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#指令说明"><span class="nav-number">1.2.1.</span> <span class="nav-text">指令说明</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置指令"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">配置指令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#操作指令"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">操作指令</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
