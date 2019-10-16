@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://boblwboy.github.io/2016/10/26/linux-tar/index.html">
 <meta property="og:site_name" content="Bob's blog">
 <meta property="og:description" content="档案与文件系统的压缩与打包 摘至《鸟哥的私房菜》">
-<meta property="og:updated_time" content="2019-03-28T16:28:33.365Z">
+<meta property="og:updated_time" content="2019-10-15T12:52:26.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="档案与文件系统的压缩与打包">
 <meta name="twitter:description" content="档案与文件系统的压缩与打包 摘至《鸟哥的私房菜》">
@@ -357,6 +357,37 @@
 <h2 id="打包指令：tar"><a href="#打包指令：tar" class="headerlink" title="打包指令：tar"></a>打包指令：tar</h2><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar <span class="string">[-j|-z]</span> <span class="string">[cv]</span> <span class="string">[-f 建立的檔名]</span> filename... &lt;==打包不压缩</div><div class="line">tar <span class="string">[-j|-z]</span> <span class="string">[tv]</span> <span class="string">[-f 建立的檔名]</span> &lt;==察看檔名</div><div class="line">tar <span class="string">[-j|-z]</span> <span class="string">[xv]</span> <span class="string">[-f 建立的檔名]</span> <span class="string">[-C 目录]</span> &lt;==解压缩</div></pre></td></tr></table></figure>
 <p>选项与参数：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby">c ：建立打包档案，可搭配 </span></div><div class="line">-<span class="ruby">v 来察看过程中被打包的档名(filename) </span></div><div class="line">-<span class="ruby">t ：察看打包档案的内容吨有哪些档名，重点在察看『档名』就是了； </span></div><div class="line">-<span class="ruby">x ：解打包戒解压缩的功能，可以搭配 -C (大写) 在特定目录解开 特别留意的是， -c, -t, -x 不可同时出现在一串挃令列中。 </span></div><div class="line">-<span class="ruby">j ：透过 bzip2 的支持迚行压缩/解压缩：此时档名最好为 *.tar.bz2 </span></div><div class="line">-<span class="ruby">z ：透过 gzip 的支持迚行压缩/解压缩：此时档名最好为 *.tar.gz </span></div><div class="line">-<span class="ruby">v ：在压缩/解压缩的过程中，将正在处理的文件名显示出来！ </span></div><div class="line">-<span class="ruby">f filename：-f 后面要立刻接要被处理的档名！建议 -f 单独写一个选顷啰！ </span></div><div class="line">-<span class="ruby">C 目录 ：这个选顷用在解压缩，若要在特定目录解压缩，可以使用这个选顷。</span></div></pre></td></tr></table></figure></p>
 <p>其实最简单的使用 tar 就只要记忆底下的方式即可：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">压 缩：tar -jcv -f filename<span class="selector-class">.tar</span><span class="selector-class">.bz2</span> 要被压缩的档案戒目录名称</div><div class="line">查 询：tar -jtv -f filename<span class="selector-class">.tar</span><span class="selector-class">.bz2</span></div><div class="line">解压缩：tar -jxv -f filename<span class="selector-class">.tar</span><span class="selector-class">.bz2</span> -C 欲解压缩的目录</div></pre></td></tr></table></figure></p>
+<h2 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h2><p>语法：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unzip [<span class="string">-cflptuvz</span>][<span class="symbol">-agCjLMnoqsVX</span>][<span class="string">-P &lt;密码&gt;</span>][<span class="symbol">.zip文件</span>][<span class="string">文件</span>][<span class="symbol">-d &lt;目录&gt;</span>][<span class="string">-x &lt;文件&gt;</span>] 或 unzip [-Z]</div></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>-c 将解压缩的结果显示到屏幕上，并对字符做适当的转换。</li>
+<li>-f 更新现有的文件。</li>
+<li>-l 显示压缩文件内所包含的文件。</li>
+<li>-p 与-c参数类似，会将解压缩的结果显示到屏幕上，但不会执行任何的转换。</li>
+<li>-t 检查压缩文件是否正确。</li>
+<li>-u 与-f参数类似，但是除了更新现有的文件外，也会将压缩文件中的其他文件解压缩到目录中。</li>
+<li>-v 执行是时显示详细的信息。</li>
+<li>-z 仅显示压缩文件的备注文字。</li>
+<li>-a 对文本文件进行必要的字符转换。</li>
+<li>-b 不要对文本文件进行字符转换。</li>
+<li>-C 压缩文件中的文件名称区分大小写。</li>
+<li>-j 不处理压缩文件中原有的目录路径。</li>
+<li>-L 将压缩文件中的全部文件名改为小写。</li>
+<li>-M 将输出结果送到more程序处理。</li>
+<li>-n 解压缩时不要覆盖原有的文件。</li>
+<li>-o 不必先询问用户，unzip执行后覆盖原有文件。</li>
+<li>-P&lt;密码&gt; 使用zip的密码选项。</li>
+<li>-q 执行时不显示任何信息。</li>
+<li>-s 将文件名中的空白字符转换为底线字符。</li>
+<li>-V 保留VMS的文件版本信息。</li>
+<li>-X 解压缩时同时回存文件原来的UID/GID。</li>
+<li>[.zip文件] 指定.zip压缩文件。</li>
+<li>[文件] 指定要处理.zip压缩文件中的哪些文件。</li>
+<li>-d&lt;目录&gt; 指定文件解压缩后所要存储的目录。</li>
+<li>-x&lt;文件&gt; 指定不要处理.zip压缩文件中的哪些文件。</li>
+<li>-Z unzip -Z等于执行zipinfo指令。</li>
+</ul>
+<p>实例：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unzip spring_lecture-<span class="number">1.0</span>-SNAPSHOT<span class="selector-class">.jar</span> -d ./spring_lecture</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -397,8 +428,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/14/linux-vim/" rel="prev" title="vim">
-                vim <i class="fa fa-chevron-right"></i>
+              <a href="/2016/11/14/jdk8-functionalinterface/" rel="prev" title="FunctionalInterface">
+                FunctionalInterface <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -476,7 +507,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -531,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#打包指令：tar"><span class="nav-number">1.</span> <span class="nav-text">打包指令：tar</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#打包指令：tar"><span class="nav-number">1.</span> <span class="nav-text">打包指令：tar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unzip"><span class="nav-number">2.</span> <span class="nav-text">unzip</span></a></li></ol></div>
             
 
           </div>
