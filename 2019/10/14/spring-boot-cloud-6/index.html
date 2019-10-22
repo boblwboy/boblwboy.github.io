@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring cloud," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SpringBootApplication注解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBootApplication注解">
+<meta property="og:url" content="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-6/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="SpringBootApplication注解">
+<meta property="og:updated_time" content="2019-10-22T00:51:48.434Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBootApplication注解">
+<meta name="twitter:description" content="SpringBootApplication注解">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-6/"/>
+
+
+
+
+
+  <title>SpringBootApplication注解 | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBootApplication注解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T22:35:16+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  SpringBootApplication注解
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h2><p>Indicates a configuration class that declares one or more @Bean methods and also triggers auto-configuration and component scanning. This is a convenience annotation that is equivalent to declaring @Configuration, @EnableAutoConfiguration and @ComponentScan.</p>
+<p>指示一个配置类，该类声明一个或多个@Bean方法，并触发自动配置和组件扫描。这是一个方便的注释，相当于声明@Configuration、@EnableAutoConfiguration和@ComponentScan。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Target</span>(ElementType.TYPE)</div><div class="line"><span class="variable">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="variable">@Documented</span></div><div class="line"><span class="variable">@Inherited</span></div><div class="line"><span class="variable">@SpringBootConfiguration</span></div><div class="line"><span class="variable">@EnableAutoConfiguration</span></div><div class="line"><span class="variable">@ComponentScan</span>(excludeFilters = &#123;</div><div class="line">		<span class="variable">@Filter</span>(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),</div><div class="line">		<span class="variable">@Filter</span>(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) &#125;)</div><div class="line">public <span class="variable">@interface</span> SpringBootApplication &#123;</div><div class="line">	......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="SpringBootConfiguration"><a href="#SpringBootConfiguration" class="headerlink" title="@SpringBootConfiguration"></a>@SpringBootConfiguration</h2><p>Indicates that a class provides Spring Boot application @Configuration. Can be used as an alternative to the Spring’s standard @Configuration annotation so that configuration can be found automatically (for example in tests).<br>Application should only ever include one @SpringBootConfiguration and most idiomatic Spring Boot applications will inherit it from @SpringBootApplication.</p>
+<p>指示类提供了Spring启动应用程序@Configuration。可以作为Spring的标准@Configuration注释的替代，以便自动找到配置(例如在测试中)。<br>应用程序应该只包含一个@SpringBootConfiguration，大多数惯用的Spring引导应用程序将从@SpringBootApplication继承它。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Target</span>(ElementType.TYPE)</div><div class="line"><span class="variable">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="variable">@Documented</span></div><div class="line"><span class="variable">@Configuration</span></div><div class="line">public <span class="variable">@interface</span> SpringBootConfiguration &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Configuration"><a href="#Configuration" class="headerlink" title="@Configuration"></a>@Configuration</h2><p>Indicates that a class declares one or more @Bean methods and may be processed by the Spring container to generate bean definitions and service requests for those beans at runtime, for example:</p>
+<p>表示一个类声明了一个或多个@Bean方法，并且可能被Spring容器处理以在运行时为这些bean生成bean定义和服务请求，例如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MyBean <span class="title">myBean</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// instantiate, configure and return bean ...</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Via AnnotationConfigApplicationContext</p>
+<p>@Configuration classes are typically bootstrapped using either AnnotationConfigApplicationContext or its web-capable variant, AnnotationConfigWebApplicationContext. A simple example with the former follows</p>
+<p>@Configuration类通常是使用AnnotationConfigApplicationContext或其支持web的变体AnnotationConfigWebApplicationContext引导的。下面是关于前者的一个简单示例</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="type">AnnotationConfigApplicationContext</span> ctx = <span class="function"><span class="keyword">new</span> <span class="title">AnnotationConfigApplicationContext</span>();</span></div><div class="line"><span class="title">ctx</span>.<span class="title">register</span>(<span class="type">AppConfig</span>.class);</div><div class="line"><span class="title">ctx</span>.<span class="title">refresh</span>();</div><div class="line"><span class="title">MyBean</span> <span class="title">myBean</span> = <span class="title">ctx</span>.<span class="title">getBean</span>(<span class="type">MyBean</span>.class);</div><div class="line"><span class="comment">// use myBean ...</span></div></pre></td></tr></table></figure>
+<p>Via component scanning</p>
+<p>@Configuration is meta-annotated with @Component, therefore @Configuration classes are candidates for component scanning (typically using Spring XML’s <context:component-scan> element) and therefore may also take advantage of @Autowired/@Inject like any regular @Component. In particular, if a single constructor is present autowiring semantics will be applied transparently for that constructor:</context:component-scan></p>
+<p>@Configuration使用@Component进行元注释，因此@Configuration类是组件扫描的候选类(通常使用Spring XML的<context:component-scan>元素)，因此也可以像使用任何常规的@Component一样利用@Autowired/@Inject。特别是，如果有一个单独的构造函数存在，自动装配语义将被透明地应用于该构造函数:</context:component-scan></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> SomeBean someBean;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AppConfig</span><span class="params">(SomeBean someBean)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.someBean = someBean;</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="comment">// @Bean definition using "SomeBean"</span></div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Configuration classes may not only be bootstrapped using component scanning, but may also themselves configure component scanning using the @ComponentScan annotation:</p>
+<p>@Configuration类不仅可以使用组件扫描来引导，还可以自己使用@ComponentScan注释来配置组件扫描:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Configuration</span></div><div class="line"><span class="variable">@ComponentScan</span>(<span class="string">"com.acme.app.services"</span>)</div><div class="line">public class AppConfig &#123;</div><div class="line">    <span class="comment">// various @Bean definitions ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Working-with-externalized-values"><a href="#Working-with-externalized-values" class="headerlink" title="Working with externalized values"></a>Working with externalized values</h3><p>Using the Environment API</p>
+<p>Externalized values may be looked up by injecting the Spring org.springframework.core.env.Environment into a @Configuration class — for example, using the @Autowired annotation:<br>外部化的值可以通过注入Spring org.springframe.core.env.Environment来查找。例如，使用@Autowired注解:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="meta">@Autowired</span> Environment env;</div><div class="line">  </div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MyBean <span class="title">myBean</span><span class="params">()</span> </span>&#123;</div><div class="line">        MyBean myBean = <span class="keyword">new</span> MyBean();</div><div class="line">        myBean.setName(env.getProperty(<span class="string">"bean.name"</span>));</div><div class="line">        <span class="keyword">return</span> myBean;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Properties resolved through the Environment reside in one or more “property source” objects, and @Configuration classes may contribute property sources to the Environment object using the @PropertySource annotation:</p>
+<p>通过环境解析的属性驻留在一个或多个“属性源”对象中，而@Configuration类可以使用@PropertySource注释将属性源贡献给环境对象:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Configuration</span></div><div class="line"><span class="variable">@PropertySource</span>(<span class="string">"classpath:/com/acme/app.properties"</span>)</div><div class="line">public class AppConfig &#123;</div><div class="line">  </div><div class="line">    <span class="variable">@Inject</span> Environment env;</div><div class="line">  </div><div class="line">    <span class="variable">@Bean</span></div><div class="line">    public MyBean myBean() &#123;</div><div class="line">        <span class="selector-tag">return</span> <span class="selector-tag">new</span> <span class="selector-tag">MyBean</span>(env.getProperty(<span class="string">"bean.name"</span>));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Using the @Value annotation<br>Externalized values may be injected into @Configuration classes using the @Value annotation:</p>
+<p>外部化的值可以使用@Value注释注入到@Configuration类中:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Configuration</span></div><div class="line"><span class="variable">@PropertySource</span>(<span class="string">"classpath:/com/acme/app.properties"</span>)</div><div class="line">public class AppConfig &#123;</div><div class="line">  </div><div class="line">    <span class="variable">@Value</span>(<span class="string">"$&#123;bean.name&#125;"</span>) String beanName;</div><div class="line">  </div><div class="line">    <span class="variable">@Bean</span></div><div class="line">    public MyBean myBean() &#123;</div><div class="line">        <span class="selector-tag">return</span> <span class="selector-tag">new</span> <span class="selector-tag">MyBean</span>(beanName);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Composing-Configuration-classes"><a href="#Composing-Configuration-classes" class="headerlink" title="Composing @Configuration classes"></a>Composing @Configuration classes</h3><p>With the @Import annotation</p>
+<p>@Configuration classes may be composed using the @Import annotation, similar to the way that <import> works in Spring XML. Because @Configuration objects are managed as Spring beans within the container, imported configurations may be injected — for example, via constructor injection:</import></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DatabaseConfig</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// instantiate, configure and return DataSource</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">  </div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@Import</span>(DatabaseConfig.class)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DatabaseConfig dataConfig;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AppConfig</span><span class="params">(DatabaseConfig dataConfig)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.dataConfig = dataConfig;</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MyBean <span class="title">myBean</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// reference the dataSource() bean method</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MyBean(dataConfig.dataSource());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now both AppConfig and the imported DatabaseConfig can be bootstrapped by registering only AppConfig against the Spring context:<br>   new AnnotationConfigApplicationContext(AppConfig.class);</p>
+<p>@Configuration classes may be marked with the @Profile annotation to indicate they should be processed only if a given profile or profiles are active:<br>@Configuration类可能被@Profile注解标记，以指示只有在给定的配置文件或配置文件处于活动状态时才应该处理它们:</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/01/spring-boot-cloud-0/" rel="next" title="spring boot 注解">
+                <i class="fa fa-chevron-left"></i> spring boot 注解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">78</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBootApplication"><span class="nav-number">1.</span> <span class="nav-text">@SpringBootApplication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBootConfiguration"><span class="nav-number">2.</span> <span class="nav-text">@SpringBootConfiguration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration"><span class="nav-number">3.</span> <span class="nav-text">@Configuration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Working-with-externalized-values"><span class="nav-number">3.1.</span> <span class="nav-text">Working with externalized values</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Composing-Configuration-classes"><span class="nav-number">3.2.</span> <span class="nav-text">Composing @Configuration classes</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
