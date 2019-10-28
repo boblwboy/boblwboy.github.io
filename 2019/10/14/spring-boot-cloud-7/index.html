@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="spring cloud," />
 
 
 
@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="NIO">
+<meta name="description" content="SpringApplication源码分析与作用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NIO">
-<meta property="og:url" content="http://boblwboy.github.io/2017/08/30/java-nio/index.html">
+<meta property="og:title" content="SpringApplication源码分析与作用">
+<meta property="og:url" content="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-7/index.html">
 <meta property="og:site_name" content="Bob's blog">
-<meta property="og:description" content="NIO">
-<meta property="og:updated_time" content="2019-03-28T16:28:33.341Z">
+<meta property="og:description" content="SpringApplication源码分析与作用">
+<meta property="og:updated_time" content="2019-10-28T13:26:56.622Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NIO">
-<meta name="twitter:description" content="NIO">
+<meta name="twitter:title" content="SpringApplication源码分析与作用">
+<meta name="twitter:description" content="SpringApplication源码分析与作用">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://boblwboy.github.io/2017/08/30/java-nio/"/>
+  <link rel="canonical" href="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-7/"/>
 
 
 
 
 
-  <title>NIO | Bob's blog</title>
+  <title>SpringApplication源码分析与作用 | Bob's blog</title>
   
 
 
@@ -251,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2017/08/30/java-nio/">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/10/14/spring-boot-cloud-7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BOB">
@@ -268,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">NIO</h1>
+          <h1 class="post-title" itemprop="name headline">SpringApplication源码分析与作用</h1>
         
 
         <div class="post-meta">
@@ -280,8 +280,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-30T10:10:16+08:00">
-                2017-08-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T22:35:16+08:00">
+                2019-10-14
               </time>
             
 
@@ -327,7 +327,7 @@
 
           
               <div class="post-description">
-                  NIO
+                  SpringApplication源码分析与作用
               </div>
           
 
@@ -344,29 +344,44 @@
       
 
       
-        <p>NIO<br><a id="more"></a></p>
-<h2 id="IO-NIO对比"><a href="#IO-NIO对比" class="headerlink" title="IO NIO对比"></a>IO NIO对比</h2><p>java.io中最为核心的一个概念是流(Stream)，面向流的编程。Java中，一个流要么是输入流，要么是输出流，不可能同时既是输入流又是输出流。</p>
-<p>java.nio中有三个核心概念：Selector，Channel和Buffer。在java.nio中，我们是面向块（block）或是缓冲区（Buffer）编程的。Buffer本身就是一块内存，底层实现上，它实际上是个数组。数据的读、写都是通过Buffer来实现的。</p>
-<p>除了数组之外，Buffer还提供了对于数据的结构化访问方式，并且可以追踪到系统的读写过程。</p>
-<p>Java中的八种原生数据类型都有对应的Buffer类型，如IntBuffer，LongBuffer，ByteBuffer和CharBuffer等等。</p>
-<p>Channel指的是可以向其写入数据或是从中读取数据的对象，它类似于java.io中的Stream</p>
-<p>所有数据的读写都是通过Buffer来进行的，永远不会出现直接想Channel写入数据的情况，或者直接从Channel读取数据的情况。</p>
-<p>与Stream不同的是，Channel是双向的，一个流只可能是InputStream或者是OutputStream，Channel打开后则可以进行读取、写入或者读写。</p>
-<p>由于Channel是双向的，因此它能更好地反映出底层操作系统的真实情况；在Linux系统中，底层操作系统的通道是双向的。</p>
-<p>##Nio Buffer##</p>
-<p>关于Nio Buffer中的三个重要状态属性的含义：position，limit与capacity。</p>
-<p>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</p>
-<p>通过NIO读取文件涉及到3个步骤：</p>
+        <a id="more"></a>
+<h2 id="SpringApplication"><a href="#SpringApplication" class="headerlink" title="SpringApplication"></a>SpringApplication</h2><p>Class that can be used to bootstrap and launch a Spring application from a Java main method. By default class will perform the following steps to bootstrap your application:</p>
 <ul>
-<li>从FileInputStream获取到FileChannel对象。</li>
-<li>创建Buffer。</li>
-<li>将数据从Channel读取到Buffer中。</li>
+<li>Create an appropriate ApplicationContext instance (depending on your classpath)</li>
+<li>Register a CommandLinePropertySource to expose command line arguments as Spring properties</li>
+<li>Refresh the application context, loading all singleton beans</li>
+<li>Trigger any CommandLineRunner beans</li>
 </ul>
-<p>绝对方法和相对方法的含义：</p>
+<p>可用于从Java main方法引导和启动Spring应用程序的一个类。默认情况下，类将执行以下步骤来引导您的应用程序:</p>
 <ul>
-<li>相对方法：limit值与position值会在操作时被考虑到。</li>
-<li>绝对方法：完全忽略掉limit值与position值。</li>
+<li>创建一个适当的ApplicationContext实例(取决于您的类路径)</li>
+<li>注册一个CommandLinePropertySource，将命令行参数暴露为Spring属性</li>
+<li>刷新应用程序上下文，刷新所有单例bean</li>
+<li>触发任何CommandLineRunner beans</li>
 </ul>
+<p>In most circumstances the static run(Class, String[]) method can be called directly from your main method to bootstrap your application:</p>
+<p>在大多数情况下，静态运行(类，字符串[])方法可以直接从你的主方法调用，以引导你的应用程序:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Configuration</span></div><div class="line"><span class="variable">@EnableAutoConfiguration</span></div><div class="line">public class MyApplication  &#123;</div><div class="line">  </div><div class="line">  <span class="comment">// ... Bean definitions</span></div><div class="line">  </div><div class="line">  <span class="selector-tag">public</span> <span class="selector-tag">static</span> <span class="selector-tag">void</span> <span class="selector-tag">main</span>(String[] args) &#123;</div><div class="line">    <span class="selector-tag">SpringApplication</span><span class="selector-class">.run</span>(MyApplication.class, args);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>For more advanced configuration a SpringApplication instance can be created and customized before being run:</p>
+<p>对于更高级的配置，可以在运行之前创建和定制一个SpringApplication实例:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) &#123;</div><div class="line">  SpringApplication application = <span class="keyword">new</span> SpringApplication(MyApplication.<span class="keyword">class</span>);</div><div class="line">  <span class="comment">// ... customize application settings here</span></div><div class="line">  application.<span class="built_in">run</span>(args)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>SpringApplications can read beans from a variety of different sources. It is generally recommended that a single @Configuration class is used to bootstrap your application, however, you may also set sources from:</p>
+<ul>
+<li>The fully qualified class name to be loaded by AnnotatedBeanDefinitionReader</li>
+<li>The location of an XML resource to be loaded by XmlBeanDefinitionReader, or a groovy script to be loaded by GroovyBeanDefinitionReader</li>
+<li>The name of a package to be scanned by ClassPathBeanDefinitionScanner</li>
+</ul>
+<p>SpringApplications可以从各种不同的来源读取bean。一般建议使用单一的@Configuration类来引导你的应用程序，但是，你也可以设置来源:</p>
+<ul>
+<li><p>由AnnotatedBeanDefinitionReader加载的完全限定类名</p>
+</li>
+<li><p>由XmlBeanDefinitionReader加载的XML资源的位置，或由GroovyBeanDefinitionReader加载的groovy脚本的位置</p>
+</li>
+<li><p>要被ClassPathBeanDefinitionScanner扫描的包的名称</p>
+</li>
+</ul>
+<p>Configuration properties are also bound to the SpringApplication. This makes it possible to set SpringApplication properties dynamically, like additional sources (“spring.main.sources” - a CSV list) the flag to indicate a web environment (“spring.main.web-application-type=none”) or the flag to switch off the banner (“spring.main.banner-mode=off”).</p>
+<p>配置属性也绑定到SpringApplication。这使得动态设置SpringApplication属性成为可能，就像其他的资源一样(“spring.main”)。这个标志表示一个web环境(“spring.main.web-application-type=none”)或者关闭这个标志(“spring.main.banner-mode=off”)。</p>
 
       
     </div>
@@ -384,7 +399,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
           
         </div>
       
@@ -397,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/30/java-thread/" rel="next" title="多线程(Multi-Thread)">
-                <i class="fa fa-chevron-left"></i> 多线程(Multi-Thread)
+              <a href="/2019/10/14/spring-boot-cloud-6/" rel="next" title="SpringBootApplication注解">
+                <i class="fa fa-chevron-left"></i> SpringBootApplication注解
               </a>
             
           </div>
@@ -406,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/06/java-nio-server-client/" rel="prev" title="NIO Server Client">
-                NIO Server Client <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -541,7 +552,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-NIO对比"><span class="nav-number">1.</span> <span class="nav-text">IO NIO对比</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringApplication"><span class="nav-number">1.</span> <span class="nav-text">SpringApplication</span></a></li></ol></div>
             
 
           </div>
