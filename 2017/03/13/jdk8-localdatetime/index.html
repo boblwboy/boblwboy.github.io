@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jdk8," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="新的日期和时间API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新的日期和时间API">
+<meta property="og:url" content="http://boblwboy.github.io/2017/03/13/jdk8-localdatetime/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="新的日期和时间API">
+<meta property="og:updated_time" content="2019-12-05T13:06:06.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="新的日期和时间API">
+<meta name="twitter:description" content="新的日期和时间API">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2017/03/13/jdk8-localdatetime/"/>
+
+
+
+
+
+  <title>新的日期和时间API | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2017/03/13/jdk8-localdatetime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">新的日期和时间API</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-13T20:15:16+08:00">
+                2017-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  新的日期和时间API
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="LocalDate、-LocalTime、-Instant、-Duration-以及-Period"><a href="#LocalDate、-LocalTime、-Instant、-Duration-以及-Period" class="headerlink" title="LocalDate、 LocalTime、 Instant、 Duration 以及 Period"></a>LocalDate、 LocalTime、 Instant、 Duration 以及 Period</h2><h3 id="使用-LocalDate-和-LocalTime"><a href="#使用-LocalDate-和-LocalTime" class="headerlink" title="使用 LocalDate 和 LocalTime"></a>使用 LocalDate 和 LocalTime</h3><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//2019-12-04</span></div><div class="line">LocalDate <span class="keyword">date</span> = LocalDate.of(<span class="number">2019</span>, <span class="number">12</span>, <span class="number">4</span>);</div><div class="line"></div><div class="line"><span class="comment">//2019</span></div><div class="line"><span class="keyword">int</span> year = <span class="keyword">date</span>.getYear();</div><div class="line"></div><div class="line"><span class="comment">//DECEMBER</span></div><div class="line">Month month = <span class="keyword">date</span>.getMonth();</div><div class="line"></div><div class="line"><span class="comment">//4</span></div><div class="line"><span class="keyword">int</span> day = <span class="keyword">date</span>.getDayOfMonth();</div><div class="line"></div><div class="line"><span class="comment">//WEDNESDAY</span></div><div class="line">DayOfWeek dayOfWeek = <span class="keyword">date</span>.getDayOfWeek();</div><div class="line"></div><div class="line"><span class="comment">//31</span></div><div class="line"><span class="keyword">int</span> len = <span class="keyword">date</span>.lengthOfMonth();</div><div class="line"></div><div class="line"><span class="comment">//false</span></div><div class="line"><span class="keyword">boolean</span> leap = <span class="keyword">date</span>.isLeapYear();</div><div class="line"></div><div class="line">LocalDate today = LocalDate.now();</div><div class="line"><span class="comment">//2019</span></div><div class="line"><span class="keyword">int</span> year1 = today.get(ChronoField.YEAR);</div><div class="line"></div><div class="line"><span class="comment">//12</span></div><div class="line"><span class="keyword">int</span> month1 = today.get(ChronoField.MONTH_OF_YEAR);</div><div class="line"></div><div class="line"><span class="comment">//5</span></div><div class="line"><span class="keyword">int</span> day1 = today.get(ChronoField.DAY_OF_MONTH);</div></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">LocalTime <span class="keyword">time</span> = LocalTime<span class="variable">.of</span>(<span class="number">14</span>, <span class="number">56</span>, <span class="number">30</span>);</div><div class="line"></div><div class="line"> <span class="comment">//14</span></div><div class="line"> <span class="keyword">int</span> hour = <span class="keyword">time</span><span class="variable">.getHour</span>();</div><div class="line"></div><div class="line"> <span class="comment">//56</span></div><div class="line"> <span class="keyword">int</span> minute = <span class="keyword">time</span><span class="variable">.getMinute</span>();</div><div class="line"></div><div class="line"> <span class="comment">//30</span></div><div class="line"> <span class="keyword">int</span> second = <span class="keyword">time</span><span class="variable">.getSecond</span>();</div><div class="line"></div><div class="line"> <span class="comment">//2019-12-04</span></div><div class="line"> LocalDate date2 = LocalDate<span class="variable">.parse</span>(<span class="string">"2019-12-04"</span>);</div><div class="line"></div><div class="line"> <span class="comment">//14:56:30</span></div><div class="line"> LocalTime time2 = LocalTime<span class="variable">.parse</span>(<span class="string">"14:56:30"</span>);</div></pre></td></tr></table></figure>
+<h3 id="LocalDateTime"><a href="#LocalDateTime" class="headerlink" title="LocalDateTime"></a>LocalDateTime</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//2014-03-18 13:45:20</span></div><div class="line">LocalDateTime dt1 = LocalDateTime.of(<span class="number">2014</span>, Month.MARCH, <span class="number">18</span>, <span class="number">13</span>, <span class="number">45</span>, <span class="number">20</span>);</div><div class="line"><span class="keyword">System</span>.out.println(dt1.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//2014-03-18 13:45:20</span></div><div class="line">LocalDateTime dt2 = LocalDateTime.of(LocalDate.<span class="built_in">parse</span>(<span class="string">"2014-03-18"</span>), LocalTime.<span class="built_in">parse</span>(<span class="string">"13:45:20"</span>));</div><div class="line"><span class="keyword">System</span>.out.println(dt2.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//2014-03-18 13:45:20</span></div><div class="line">LocalDate <span class="built_in">date</span> = LocalDate.<span class="built_in">parse</span>(<span class="string">"2014-03-18"</span>);</div><div class="line">LocalDateTime dt3 = <span class="built_in">date</span>.atTime(LocalTime.<span class="built_in">parse</span>(<span class="string">"13:45:20"</span>));</div><div class="line"><span class="keyword">System</span>.out.println(dt3.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//2014-03-18 13:45:20</span></div><div class="line">LocalDateTime dt4 = <span class="built_in">date</span>.atTime(<span class="number">13</span>, <span class="number">45</span>, <span class="number">20</span>);</div><div class="line"><span class="keyword">System</span>.out.println(dt4.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//2014-03-18 13:45:20</span></div><div class="line">LocalTime <span class="built_in">time</span> = LocalTime.of(<span class="number">13</span>, <span class="number">45</span>, <span class="number">20</span>);</div><div class="line">LocalDateTime dt5 = <span class="built_in">time</span>.atDate(<span class="built_in">date</span>);</div><div class="line"><span class="keyword">System</span>.out.println(dt5.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//2019-12-04 14:56:30</span></div><div class="line">LocalDateTime dateTime = LocalDateTime.<span class="built_in">parse</span>(<span class="string">"2019-12-04 14:56:30"</span>,DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>));</div><div class="line"><span class="keyword">System</span>.out.println(dateTime.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>)));</div><div class="line"></div><div class="line"><span class="comment">//提取LocalDate或者LocalTime组件：</span></div><div class="line">LocalDate date1 = dt1.toLocalDate();</div><div class="line">LocalTime time1 = dt1.toLocalTime();</div></pre></td></tr></table></figure>
+<h3 id="Instant-机器的日期和时间格式"><a href="#Instant-机器的日期和时间格式" class="headerlink" title="Instant 机器的日期和时间格式"></a>Instant 机器的日期和时间格式</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Instant.ofEpochSecond(<span class="number">3</span>);</div><div class="line">Instant.ofEpochSecond(<span class="number">3</span>, <span class="number">0</span>);</div><div class="line"><span class="comment">//2秒之后再加上100万纳秒(1秒)</span></div><div class="line">Instant.ofEpochSecond(<span class="number">2</span>, <span class="number">1</span>_000_000_000);</div><div class="line"><span class="comment">//4秒之前的100万纳秒(1秒)</span></div><div class="line">Instant.ofEpochSecond(<span class="number">4</span>, <span class="number">1</span>_000_000_000);</div><div class="line"><span class="comment">//获取当前时刻的时间戳</span></div><div class="line">System.out.println(Instant.now().getEpochSecond());</div></pre></td></tr></table></figure>
+<h3 id="定义-Duration-或-Period"><a href="#定义-Duration-或-Period" class="headerlink" title="定义 Duration 或 Period"></a>定义 Duration 或 Period</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">LocalTime time1 = LocalTime.parse(<span class="string">"11:27:01"</span>);</div><div class="line">LocalTime time2 = LocalTime.parse(<span class="string">"11:27:02"</span>);</div><div class="line"></div><div class="line"><span class="comment">//1</span></div><div class="line">Duration d1 = Duration.between(time1, time2);</div><div class="line">System.out.println(d1.getSeconds());</div><div class="line"></div><div class="line"><span class="comment">//-86400</span></div><div class="line">LocalDateTime dateTime1 = LocalDateTime.parse(<span class="string">"2019-12-05 13:37:04"</span>, DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>));</div><div class="line">LocalDateTime dateTime2 = LocalDateTime.parse(<span class="string">"2019-12-04 13:37:04"</span>, DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>));</div><div class="line">Duration d2 = Duration.between(dateTime1,dateTime2);</div><div class="line">System.out.println(d2.getSeconds());</div><div class="line"></div><div class="line"><span class="comment">//1</span></div><div class="line">Period period = Period.between(LocalDate.of(<span class="number">2019</span>, <span class="number">12</span>, <span class="number">5</span>), LocalDate.of(<span class="number">2020</span>, <span class="number">1</span>, <span class="number">25</span>));</div><div class="line">System.out.println(period.getMonths());</div><div class="line"></div><div class="line"><span class="comment">//创建Duration Period对象</span></div><div class="line">Duration threeMinutes = Duration.ofMinutes(<span class="number">3</span>);</div><div class="line">Duration threeMinutes1 = Duration.of(<span class="number">3</span>, ChronoUnit.MINUTES);</div><div class="line"></div><div class="line">Period tenDays = Period.ofDays(<span class="number">10</span>);</div><div class="line">Period threeWeeks = Period.ofWeeks(<span class="number">3</span>);</div><div class="line">Period twoYearsSixMonthsOneDay = Period.of(<span class="number">2</span>, <span class="number">6</span>, <span class="number">1</span>);</div></pre></td></tr></table></figure>
+<p>Duration类和Period类共享了很多相似的方法，参见表所示。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名</th>
+<th style="text-align:right">是否是静态方法</th>
+<th style="text-align:center">方法描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">between</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">创建两个时间点之间的interval</td>
+</tr>
+<tr>
+<td style="text-align:left">from</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">由一个临时时间点创建interval</td>
+</tr>
+<tr>
+<td style="text-align:left">of</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">由它的组成部分创建interval的实例</td>
+</tr>
+<tr>
+<td style="text-align:left">parse</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">由字符串创建interval的实例</td>
+</tr>
+<tr>
+<td style="text-align:left">addTo</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">创建该interval的副本，并将其叠加到某个指定的temporal对象</td>
+</tr>
+<tr>
+<td style="text-align:left">get</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">读取该interval的状态</td>
+</tr>
+<tr>
+<td style="text-align:left">isNegative</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">检查该interval是否为负值，不包含零</td>
+</tr>
+<tr>
+<td style="text-align:left">isZero</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">检查该interval的时长是否为零</td>
+</tr>
+<tr>
+<td style="text-align:left">minus</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">通过减去一定的时间创建该interval的副本</td>
+</tr>
+<tr>
+<td style="text-align:left">multipliedBy</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">将interval的值乘以某个标量创建该interval的副本</td>
+</tr>
+<tr>
+<td style="text-align:left">negated</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">以忽略某个时长的方式创建该interval的副本</td>
+</tr>
+<tr>
+<td style="text-align:left">plus</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">以增加某个指定的时长的方式创建该interval的副本</td>
+</tr>
+<tr>
+<td style="text-align:left">subtractFrom</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">从指定的temporal对象中减去该interval</td>
+</tr>
+</tbody>
+</table>
+<h3 id="操纵、-解析-和-格式化-日期"><a href="#操纵、-解析-和-格式化-日期" class="headerlink" title="操纵、 解析 和 格式化 日期"></a>操纵、 解析 和 格式化 日期</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//2014-03-18</span></div><div class="line">LocalDate date1 = LocalDate.of(<span class="number">2014</span>, <span class="number">3</span>, <span class="number">18</span>);</div><div class="line"><span class="comment">//以比 较 直观 的 方式 操纵 LocalDate 的 属性</span></div><div class="line"><span class="comment">//2011-03-18</span></div><div class="line">LocalDate date2 = date1.withYear(<span class="number">2011</span>);</div><div class="line"><span class="comment">//2011-03-25</span></div><div class="line">LocalDate date3 = date2.withDayOfMonth(<span class="number">25</span>);</div><div class="line"><span class="comment">//2011-09-25</span></div><div class="line">LocalDate date4 = date3.with(ChronoField.MONTH_OF_YEAR, <span class="number">9</span>);</div><div class="line"><span class="comment">//以相对方式修改LocalDate对象的属性</span></div><div class="line"><span class="comment">//2014-03-18</span></div><div class="line">LocalDate localDate1 = LocalDate.of(<span class="number">2014</span>, <span class="number">3</span>, <span class="number">18</span>);</div><div class="line"><span class="comment">//2014-03-25</span></div><div class="line">LocalDate localDate2 = localDate1.plusWeeks(<span class="number">1</span>);</div><div class="line"><span class="comment">//2011-03-25</span></div><div class="line">LocalDate localDate3 = localDate2.minusYears(<span class="number">3</span>);</div><div class="line"><span class="comment">//2011-09-25</span></div><div class="line">LocalDate localDate4 = localDate3.plus(<span class="number">6</span>, ChronoUnit.MONTHS);</div></pre></td></tr></table></figure>
+<p>像LocalDate、LocalTime、LocalDateTime以及Instant这样表示时间点的日期-时间类提供了大量通用的方法，表对这些通用的方法进行了总结。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名</th>
+<th style="text-align:right">是否是静态方法</th>
+<th style="text-align:center">方法描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">from</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">依据传入的Temporal对象创建对象实例now是依据系统时钟创建Temporal对象</td>
+</tr>
+<tr>
+<td style="text-align:left">of</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">由Temporal对象的某个部分创建该对象的实例</td>
+</tr>
+<tr>
+<td style="text-align:left">parse</td>
+<td style="text-align:right">是</td>
+<td style="text-align:center">由字符串创建Temporal对象的实例</td>
+</tr>
+<tr>
+<td style="text-align:left">atOffset</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">将Temporal对象和某个时区偏移相结合</td>
+</tr>
+<tr>
+<td style="text-align:left">atZone</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">将Temporal对象和某个时区相结合</td>
+</tr>
+<tr>
+<td style="text-align:left">format</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">使用某个指定的格式器将Temporal对象转换为字符串（Instant类不提供该方法）</td>
+</tr>
+<tr>
+<td style="text-align:left">get</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">读取Temporal对象的某一部分的值minus否创建Temporal对象的一个副本，通过将当前Temporal对象的值减去一定的时长创建该副本</td>
+</tr>
+<tr>
+<td style="text-align:left">plus</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">创建Temporal对象的一个副本，通过将当前Temporal对象的值加上一定的时长创建该副本</td>
+</tr>
+<tr>
+<td style="text-align:left">with</td>
+<td style="text-align:right">否</td>
+<td style="text-align:center">以该Temporal对象为模板，对某些状态进行修改创建该对象的副本</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-TemporalAdjuster"><a href="#使用-TemporalAdjuster" class="headerlink" title="使用 TemporalAdjuster"></a>使用 TemporalAdjuster</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//2014-03-18</span></div><div class="line">LocalDate date1 = LocalDate.of(<span class="number">2014</span>, <span class="number">3</span>, <span class="number">18</span>);</div><div class="line"><span class="comment">//创建一个新的日期，并将其值设定为日期调整后或者调整前，第一个符合指定星期几要求的日期，如果该日期已经符合要求，直接返回该对象</span></div><div class="line"><span class="comment">//2014-03-23</span></div><div class="line">LocalDate date2 = date1.with(TemporalAdjusters.nextOrSame(<span class="built_in">DayOfWeek</span>.SATURDAY));</div><div class="line"><span class="comment">//2014-03-31</span></div><div class="line">LocalDate date3 = date2.with(TemporalAdjusters.lastDayOfMonth());</div><div class="line"></div><div class="line"><span class="comment">//定制的TemporalAdjuster</span></div><div class="line"><span class="comment">//能够计算明天的日期，同时过滤掉周六和周日这些节假日。</span></div><div class="line">LocalDate date4 = date3.with(temporal -&gt; &#123;</div><div class="line">    <span class="built_in">DayOfWeek</span> dow = <span class="built_in">DayOfWeek</span>.of(temporal.get(ChronoField.DAY_OF_WEEK));</div><div class="line">    int dayToAdd = <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (dow == <span class="built_in">DayOfWeek</span>.FRIDAY) &#123;</div><div class="line">        dayToAdd = <span class="number">3</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (dow == <span class="built_in">DayOfWeek</span>.SATURDAY) &#123;</div><div class="line">        dayToAdd = <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> temporal.plus(dayToAdd, ChronoUnit.DAYS);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//2014-04-01</span></div><div class="line"><span class="keyword">System</span>.out.println(date4.<span class="keyword">format</span>(DateTimeFormatter.ofPattern(<span class="string">"yyyy-MM-dd"</span>)));</div></pre></td></tr></table></figure>
+<p>TemporalAdjuster类中的工厂方法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方法名</th>
+<th style="text-align:center">方法描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">dayOfWeekInMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为同一个月中每一周的第几天</td>
+</tr>
+<tr>
+<td style="text-align:left">firstDayOfMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为当月的第一天</td>
+</tr>
+<tr>
+<td style="text-align:left">firstDayOfNextMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为下月的第一天</td>
+</tr>
+<tr>
+<td style="text-align:left">firstDayOfNextYear</td>
+<td style="text-align:center">创建一个新的日期，它的值为明年的第一天</td>
+</tr>
+<tr>
+<td style="text-align:left">firstDayOfYear</td>
+<td style="text-align:center">创建一个新的日期，它的值为当年的第一天</td>
+</tr>
+<tr>
+<td style="text-align:left">firstInMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为同一个月中，第一个符合星期几要求的值</td>
+</tr>
+<tr>
+<td style="text-align:left">lastDayOfMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为当月的最后一天</td>
+</tr>
+<tr>
+<td style="text-align:left">lastDayOfNextMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为下月的最后一天</td>
+</tr>
+<tr>
+<td style="text-align:left">lastDayOfNextYear</td>
+<td style="text-align:center">创建一个新的日期，它的值为明年的最后一天</td>
+</tr>
+<tr>
+<td style="text-align:left">lastDayOfYear</td>
+<td style="text-align:center">创建一个新的日期，它的值为今年的最后一天</td>
+</tr>
+<tr>
+<td style="text-align:left">lastInMonth</td>
+<td style="text-align:center">创建一个新的日期，它的值为同一个月中，最后一个符合星期几要求的值next/previous创建一个新的日期，并将其值设定为日期调整后或者调整前，第一个符合指定星期几要求的日期</td>
+</tr>
+<tr>
+<td style="text-align:left">nextOrSame/previousOrSame</td>
+<td style="text-align:center">创建一个新的日期，并将其值设定为日期调整后或者调整前，第一个符合指定星期几要求的日期，如果该日期已经符合要求，直接返回该对象</td>
+</tr>
+</tbody>
+</table>
+<h3 id="打印输出及解析日期-时间对象"><a href="#打印输出及解析日期-时间对象" class="headerlink" title="打印输出及解析日期-时间对象"></a>打印输出及解析日期-时间对象</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">字符</th>
+<th style="text-align:center">含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">y</td>
+<td style="text-align:center">年</td>
+<td>yyyy-1996</td>
+</tr>
+<tr>
+<td style="text-align:left">M</td>
+<td style="text-align:center">月</td>
+<td>MM-07</td>
+</tr>
+<tr>
+<td style="text-align:left">d</td>
+<td style="text-align:center">月中的天数</td>
+<td>dd-02</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:center">年中的天数</td>
+<td>121</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:center">星期几</td>
+<td>星期四</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td style="text-align:center">小时数（0-23）</td>
+<td>HH-23</td>
+</tr>
+<tr>
+<td style="text-align:left">h</td>
+<td style="text-align:center">小时数（1-12）</td>
+<td>hh-11</td>
+</tr>
+<tr>
+<td style="text-align:left">m</td>
+<td style="text-align:center">分钟数</td>
+<td>mm-02</td>
+</tr>
+<tr>
+<td style="text-align:left">s</td>
+<td style="text-align:center">秒数</td>
+<td>ss-03</td>
+</tr>
+<tr>
+<td style="text-align:left">Z</td>
+<td style="text-align:center">时区</td>
+<td>+0800</td>
+</tr>
+</tbody>
+</table>
+<h2 id="处理不同的时区和历法"><a href="#处理不同的时区和历法" class="headerlink" title="处理不同的时区和历法"></a>处理不同的时区和历法</h2><h2 id="Convert-between-LocalDateTime-to-Date"><a href="#Convert-between-LocalDateTime-to-Date" class="headerlink" title="Convert between LocalDateTime to Date"></a>Convert between LocalDateTime to Date</h2><h3 id="Date-to-LocalDateTime"><a href="#Date-to-LocalDateTime" class="headerlink" title="Date to LocalDateTime"></a>Date to LocalDateTime</h3><figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="type">Date</span> todayDate = <span class="function"><span class="keyword">new</span> <span class="title">Date</span>();</span></div><div class="line"> </div><div class="line"><span class="title">LocalDateTime</span> <span class="title">ldt</span> = <span class="title">Instant</span>.<span class="title">ofEpochMilli</span>( todayDate.getTime() )</div><div class="line">                            .<span class="title">atZone</span>( <span class="type">ZoneId</span>.systemDefault() )</div><div class="line">                            .<span class="title">toLocalDateTime</span>();</div><div class="line"> </div><div class="line"><span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span>(ldt);    <span class="comment">//2018-07-15T11:53:31.863</span></div></pre></td></tr></table></figure>
+<h3 id="LocalDateTime-to-Date"><a href="#LocalDateTime-to-Date" class="headerlink" title="LocalDateTime to Date"></a>LocalDateTime to Date</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">LocalDateTime localDateTime = LocalDateTime.now();</div><div class="line"> </div><div class="line"><span class="built_in">Date</span> <span class="built_in">date</span> = <span class="built_in">Date</span>.from( localDateTime.atZone( ZoneId.systemDefault()).toInstant());</div><div class="line"> </div><div class="line"><span class="keyword">System</span>.out.println(<span class="built_in">date</span>);   <span class="comment">//Sun Jul 15 11:58:26 IST 2018</span></div></pre></td></tr></table></figure>
+<h3 id="DateUtils-Class"><a href="#DateUtils-Class" class="headerlink" title="DateUtils Class"></a>DateUtils Class</h3><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.time.Instant;</span></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.time.LocalDate;</span></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.time.LocalDateTime;</span></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.time.ZoneId;</span></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.Date;</span></div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DateUtils</span> </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Date asDate(LocalDate localDate) &#123;</div><div class="line">        <span class="keyword">return</span> Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Date asDate(LocalDateTime localDateTime) &#123;</div><div class="line">        <span class="keyword">return</span> Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LocalDate asLocalDate(Date date) &#123;</div><div class="line">        <span class="keyword">return</span> Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LocalDateTime asLocalDateTime(Date date) &#123;</div><div class="line">        <span class="keyword">return</span> Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="How-to-use"><a href="#How-to-use" class="headerlink" title="How to use"></a>How to use</h3><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.time.LocalDateTime;</span></div><div class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.Date;</span></div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) </div><div class="line">    &#123;</div><div class="line">        Date date = DateUtils.asDate(LocalDateTime.now());</div><div class="line"> </div><div class="line">        System.out.println(date);   <span class="comment">//Sun Jul 15 12:08:44 IST 2018</span></div><div class="line"> </div><div class="line">        LocalDateTime today = DateUtils.asLocalDateTime(<span class="keyword">new</span> Date());</div><div class="line"> </div><div class="line">        System.out.println(today);  <span class="comment">//2018-07-15T12:08:44.492</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jdk8/" rel="tag"># jdk8</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/13/jdk8-stream/" rel="next" title="Stream">
+                <i class="fa fa-chevron-left"></i> Stream
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/13/jdk8-methodreference/" rel="prev" title="Method Reference">
+                Method Reference <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalDate、-LocalTime、-Instant、-Duration-以及-Period"><span class="nav-number">1.</span> <span class="nav-text">LocalDate、 LocalTime、 Instant、 Duration 以及 Period</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-LocalDate-和-LocalTime"><span class="nav-number">1.1.</span> <span class="nav-text">使用 LocalDate 和 LocalTime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocalDateTime"><span class="nav-number">1.2.</span> <span class="nav-text">LocalDateTime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Instant-机器的日期和时间格式"><span class="nav-number">1.3.</span> <span class="nav-text">Instant 机器的日期和时间格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-Duration-或-Period"><span class="nav-number">1.4.</span> <span class="nav-text">定义 Duration 或 Period</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操纵、-解析-和-格式化-日期"><span class="nav-number">1.5.</span> <span class="nav-text">操纵、 解析 和 格式化 日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-TemporalAdjuster"><span class="nav-number">1.6.</span> <span class="nav-text">使用 TemporalAdjuster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印输出及解析日期-时间对象"><span class="nav-number">1.7.</span> <span class="nav-text">打印输出及解析日期-时间对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理不同的时区和历法"><span class="nav-number">2.</span> <span class="nav-text">处理不同的时区和历法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Convert-between-LocalDateTime-to-Date"><span class="nav-number">3.</span> <span class="nav-text">Convert between LocalDateTime to Date</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Date-to-LocalDateTime"><span class="nav-number">3.1.</span> <span class="nav-text">Date to LocalDateTime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocalDateTime-to-Date"><span class="nav-number">3.2.</span> <span class="nav-text">LocalDateTime to Date</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DateUtils-Class"><span class="nav-number">3.3.</span> <span class="nav-text">DateUtils Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-use"><span class="nav-number">3.4.</span> <span class="nav-text">How to use</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
