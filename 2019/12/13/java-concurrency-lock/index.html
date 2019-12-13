@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="并发," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Lock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lock">
+<meta property="og:url" content="http://boblwboy.github.io/2019/12/13/java-concurrency-lock/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="Lock">
+<meta property="og:updated_time" content="2019-12-13T09:01:31.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lock">
+<meta name="twitter:description" content="Lock">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2019/12/13/java-concurrency-lock/"/>
+
+
+
+
+
+  <title>Lock | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/12/13/java-concurrency-lock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Lock</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T08:47:16+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Lock
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><p>Lock implementations provide more extensive locking operations than can be obtained using synchronized methods and statements. They allow more flexible structuring, may have quite different properties, and may support multiple associated Condition objects.</p>
+<p>锁实现提供了比使用同步方法和语句更广泛的锁操作。它们允许更灵活的结构，具有完全不同的属性，并且可能支持多个关联的条件对象。</p>
+<p>A lock is a tool for controlling access to a shared resource by multiple threads. Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. However, some locks may allow concurrent access to a shared resource, such as the read lock of a ReadWriteLock.</p>
+<p>锁是一种工具，用于控制多个线程对共享资源的访问。通常，锁提供对共享资源的独占访问:一次只有一个线程可以获得锁，而对共享资源的所有访问都要求首先获得锁。但是，有些锁可能允许并发访问共享资源，比如读写锁的读锁。</p>
+<p>The use of synchronized methods or statements provides access to the implicit monitor lock associated with every object, but forces all lock acquisition and release to occur in a block-structured way: when multiple locks are acquired they must be released in the opposite order, and all locks must be released in the same lexical scope in which they were acquired.</p>
+<p>使用synchronized方法或语句块提供与每个对象关联的隐式监视器锁,但所有锁获取和释放都发生在块结构方式:在获得多个锁时,它们必须以相反的顺序来释放,和所有的锁都必须在相同的词法作用域。</p>
+<p>While the scoping mechanism for synchronized methods and statements makes it much easier to program with monitor locks, and helps avoid many common programming errors involving locks, there are occasions where you need to work with locks in a more flexible way. For example, some algorithms for traversing concurrently accessed data structures require the use of “hand-over-hand” or “chain locking”: you acquire the lock of node A, then node B, then release A and acquire C, then release B and acquire D and so on. Implementations of the Lock interface enable the use of such techniques by allowing a lock to be acquired and released in different scopes, and allowing multiple locks to be acquired and released in any order.</p>
+<p>虽然synchronized方法和语句块的作用域机制使使用监视器锁进行编程变得更容易，并有助于避免许多涉及锁的常见编程错误，但是在某些情况下，您需要以更灵活的方式使用锁。例如，一些遍历并发访问的数据结构的算法需要使用“hand-over-hand”或“chain locked”:先获取节点A的锁，然后是节点B，然后释放A并获取C，然后释放B并获取D，等等。Lock接口的实现允许在不同的范围内获取和释放锁，并允许以任意顺序获取和释放多个锁，从而支持使用这些技术。</p>
+<p>With this increased flexibility comes additional responsibility. The absence of block-structured locking removes the automatic release of locks that occurs with synchronized methods and statements. In most cases, the following idiom should be used:</p>
+<p>这种灵活性的增加带来了额外的责任。块结构锁的缺失消除了同步方法和语句块发生时锁的自动释放。在大多数情况下，应该使用以下习语:</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">Lock</span> <span class="keyword">l</span> = ...<span class="comment">;</span></div><div class="line"><span class="keyword">l</span>.<span class="keyword">lock</span>()<span class="comment">;</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">  <span class="comment">// access the resource protected by this lock</span></div><div class="line">&#125; finally &#123;</div><div class="line">  <span class="keyword">l</span>.unlock()<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>When locking and unlocking occur in different scopes, care must be taken to ensure that all code that is executed while the lock is held is protected by try-finally or try-catch to ensure that the lock is released when necessary.</p>
+<p>当锁定和解锁发生在不同的作用域时，必须注意确保持有锁时执行的所有代码都受到try-finally或try-catch的保护，以确保在必要时释放锁。</p>
+<p>Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (tryLock()), an attempt to acquire the lock that can be interrupted (lockInterruptibly, and an attempt to acquire the lock that can timeout (tryLock(long, TimeUnit)).</p>
+<p>Lock的实现比使用同步方法和语句块提供额外的功能在通过提供一个非阻塞的尝试获得一个锁(tryLock()),企图获得锁,可以打断(lockInterruptibly,企图获得锁可以超时(tryLock(long,TimeUnit))。</p>
+<p>A Lock class can also provide behavior and semantics that is quite different from that of the implicit monitor lock, such as guaranteed ordering, non-reentrant usage, or deadlock detection. If an implementation provides such specialized semantics then the implementation must document those semantics.</p>
+<p>Lock类还可以提供与隐式监视器锁完全不同的行为和语义，如保证顺序、不可重入使用或死锁检测。如果实现提供了这种专门的语义，那么实现必须记录这些语义。</p>
+<p>Note that Lock instances are just normal objects and can themselves be used as the target in a synchronized statement. Acquiring the monitor lock of a Lock instance has no specified relationship with invoking any of the lock methods of that instance. It is recommended that to avoid confusion you never use Lock instances in this way, except within their own implementation.</p>
+<p>请注意，Lock实例只是普通对象，它们本身可以用作synchronized语句中的目标。获取Lock实例的监视器锁与调用该实例的任何Lock方法没有指定的关系。为了避免混淆，建议您永远不要以这种方式使用锁实例，除非在它们自己的实现中。</p>
+<p>Except where noted, passing a null value for any parameter will result in a NullPointerException being thrown.</p>
+<p>除非特别指出，为任何参数传递null值都会导致抛出NullPointerException。</p>
+<p>Memory Synchronization</p>
+<p>内存同步</p>
+<p>All Lock implementations must enforce the same memory synchronization semantics as provided by the built-in monitor lock, as described in The Java Language Specification (17.4 Memory Model) :</p>
+<p>所有的Lock实现都必须执行与内置监视器锁提供的相同的内存同步语义，如Java语言规范(17.4内存模型)中所述:</p>
+<p>A successful lock operation has the same memory synchronization effects as a successful Lock action.</p>
+<p>成功的Lock操作与成功的锁动作具有相同的内存同步效果。</p>
+<p>A successful unlock operation has the same memory synchronization effects as a successful Unlock action.</p>
+<p>成功的解锁操作与成功的解锁动作具有相同的内存同步效果。</p>
+<p>Unsuccessful locking and unlocking operations, and reentrant locking/unlocking operations, do not require any memory synchronization effects.</p>
+<p>不成功的锁定和解锁操作以及重入锁定/和解锁操作不需要任何内存同步效果。</p>
+<p>Implementation Considerations</p>
+<p>实现注意事项</p>
+<p>The three forms of lock acquisition (interruptible, non-interruptible, and timed) may differ in their performance characteristics, ordering guarantees, or other implementation qualities. Further, the ability to interrupt the ongoing acquisition of a lock may not be available in a given Lock class. Consequently, an implementation is not required to define exactly the same guarantees or semantics for all three forms of lock acquisition, nor is it required to support interruption of an ongoing lock acquisition. An implementation is required to clearly document the semantics and guarantees provided by each of the locking methods. It must also obey the interruption semantics as defined in this interface, to the extent that interruption of lock acquisition is supported: which is either totally, or only on method entry.</p>
+<p>三种形式的锁获取(可中断续、不可中断续和定时)在性能特征、顺序保证或其他实现质量方面可能有所不同。此外，中断正在进行的锁获取的能力可能在给定的锁类中不可用。因此，实现不需要为所有三种形式的锁获取定义完全相同的保证或语义，也不需要支持正在进行的锁获取的中断。需要一个实现来清楚地记录每个锁定方法提供的语义和保证。它还必须遵守这个接口中定义的中断语义，前提是支持锁获取的中断:要么完全支持，要么只支持方法入口。</p>
+<p>As interruption generally implies cancellation, and checks for interruption are often infrequent, an implementation can favor responding to an interrupt over normal method return. This is true even if it can be shown that the interrupt occurred after another action may have unblocked the thread. An implementation should document this behavior.</p>
+<p>由于中断通常意味着取消，而且对中断的检查通常不频繁，所以实现可能更倾向于响应中断，而不是正常的方法返回。即使可以显示在另一个操作之后发生的中断可能已经解除了线程阻塞，这也是正确的。实现应该记录这种行为。</p>
+<h3 id="lock"><a href="#lock" class="headerlink" title="lock()"></a>lock()</h3><p>Acquires the lock.</p>
+<p>获得锁。</p>
+<p>If the lock is not available then the current thread becomes disabled for thread scheduling purposes and lies dormant until the lock has been acquired.</p>
+<p>如果锁不可用，则当前线程将出于线程调度目的而禁用，并处于休眠状态，直到获得锁为止。</p>
+<p>Implementation Considerations</p>
+<p>实现注意事项</p>
+<p>A Lock implementation may be able to detect erroneous use of the lock, such as an invocation that would cause deadlock, and may throw an (unchecked) exception in such circumstances. The circumstances and the exception type must be documented by that Lock implementation.</p>
+<p>锁实现可能能够检测锁的错误使用，例如导致死锁的调用，并可能在这种情况下抛出(未选中的)异常。该锁实现必须记录环境和异常类型。</p>
+<h3 id="lockInterruptibly"><a href="#lockInterruptibly" class="headerlink" title="lockInterruptibly()"></a>lockInterruptibly()</h3><p>Acquires the lock unless the current thread is interrupted.</p>
+<p>除非当前线程中断，否则获取锁。</p>
+<p>Acquires the lock if it is available and returns immediately.</p>
+<p>如果锁可用，则获取锁并立即返回。</p>
+<p>If the lock is not available then the current thread becomes disabled for thread scheduling purposes and lies dormant until one of two things happens:</p>
+<p>如果锁不可用，那么当前线程将出于线程调度的目的被禁用，并处于休眠状态，直到发生以下两种情况之一:</p>
+<ul>
+<li>The lock is acquired by the current thread; or</li>
+<li>Some other thread interrupts the current thread, and interruption of lock acquisition is supported.</li>
+</ul>
+<p>锁被当前线程获取;或</p>
+<p>其他一些线程中断当前线程，支持中断锁获取。</p>
+<p>If the current thread:</p>
+<ul>
+<li>has its interrupted status set on entry to this method; or</li>
+<li>is interrupted while acquiring the lock, and interruption of lock acquisition is supported,</li>
+</ul>
+<p>then InterruptedException is thrown and the current thread’s interrupted status is cleared.</p>
+<p>如果当前线程:</p>
+<ul>
+<li><p>在进入此方法时已设置其中断状态;或</p>
+</li>
+<li><p>获取锁时中断，支持锁获取中断，</p>
+</li>
+</ul>
+<p>然后抛出InterruptedException，并清除当前线程的中断状态。</p>
+<h3 id="tryLock"><a href="#tryLock" class="headerlink" title="tryLock()"></a>tryLock()</h3><p>Acquires the lock only if it is free at the time of invocation.<br>Acquires the lock if it is available and returns immediately with the value true. If the lock is not available then this method will return immediately with the value false.<br>A typical usage idiom for this method would be:</p>
+<p>仅当锁在调用时处于空闲状态时才获取锁。</p>
+<p>如果锁可用，则获取锁并立即返回值true。如果锁不可用，则此方法将立即返回值false。</p>
+<p>这种方法的典型用法是:</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="keyword">Lock</span> <span class="keyword">lock</span> = ...<span class="comment">;</span></div><div class="line"><span class="keyword">if</span> (<span class="keyword">lock</span>.tryLock()) &#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="comment">// manipulate protected state</span></div><div class="line">  &#125; finally &#123;</div><div class="line">    <span class="keyword">lock</span>.unlock()<span class="comment">;</span></div><div class="line">  &#125;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">  <span class="comment">// perform alternative actions</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This usage ensures that the lock is unlocked if it was acquired, and doesn’t try to unlock if the lock was not acquired.</p>
+<p>Returns:<br>true if the lock was acquired and false otherwise</p>
+<p>这种用法确保锁在被获取时被解锁，而在未被获取时不会尝试解锁。</p>
+<p>返回:</p>
+<p>如果锁被获取，则为真，否则为假</p>
+<h3 id="tryLock-long-time-NotNull-TimeUnit-unit"><a href="#tryLock-long-time-NotNull-TimeUnit-unit" class="headerlink" title="tryLock(long time,@NotNull TimeUnit unit)"></a>tryLock(long time,@NotNull TimeUnit unit)</h3><p>Acquires the lock if it is free within the given waiting time and the current thread has not been interrupted.</p>
+<p>如果在给定的等待时间内是空闲的并且当前线程没有被中断，则获取锁。</p>
+<p>If the lock is available this method returns immediately with the value true. If the lock is not available then the current thread becomes disabled for thread scheduling purposes and lies dormant until one of three things happens:</p>
+<p>如果锁可用，则此方法立即返回值true。如果锁不可用，那么当前线程将出于线程调度的目的而被禁用，并处于休眠状态，直到发生以下三种情况之一:</p>
+<ul>
+<li>The lock is acquired by the current thread; or</li>
+<li>Some other thread interrupts the current thread, and interruption of lock acquisition is supported; or</li>
+<li><p>The specified waiting time elapses</p>
+</li>
+<li><p>锁被当前线程获取;或</p>
+</li>
+<li>其他线程中断当前线程，支持锁获取中断;或</li>
+<li>指定的等待时间已经过了</li>
+</ul>
+<p>If the lock is acquired then the value true is returned.</p>
+<p>如果获得锁，则返回true值。</p>
+<p>If the current thread:</p>
+<p>如果当前线程:</p>
+<ul>
+<li>has its interrupted status set on entry to this method; or</li>
+<li><p>is interrupted while acquiring the lock, and interruption of lock acquisition is supported,</p>
+</li>
+<li><p>在进入此方法时已设置其中断状态;或</p>
+</li>
+<li>获取锁时中断，支持锁获取中断，</li>
+</ul>
+<p>then InterruptedException is thrown and the current thread’s interrupted status is cleared.</p>
+<p>然后抛出InterruptedException，并清除当前线程的中断状态。</p>
+<p>If the specified waiting time elapses then the value false is returned. If the time is less than or equal to zero, the method will not wait at all.</p>
+<p>如果指定的等待时间过期，则返回false值。如果时间小于或等于0，则该方法根本不会等待。</p>
+<h3 id="unlock"><a href="#unlock" class="headerlink" title="unlock()"></a>unlock()</h3><p>Releases the lock.</p>
+<p>释放锁。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/12/java-concurrency-deadlock/" rel="next" title="deadlock">
+                <i class="fa fa-chevron-left"></i> deadlock
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lock"><span class="nav-number">1.</span> <span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lock"><span class="nav-number">1.1.</span> <span class="nav-text">lock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lockInterruptibly"><span class="nav-number">1.2.</span> <span class="nav-text">lockInterruptibly()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock"><span class="nav-number">1.3.</span> <span class="nav-text">tryLock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock-long-time-NotNull-TimeUnit-unit"><span class="nav-number">1.4.</span> <span class="nav-text">tryLock(long time,@NotNull TimeUnit unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unlock"><span class="nav-number">1.5.</span> <span class="nav-text">unlock()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
