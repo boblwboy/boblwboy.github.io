@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://boblwboy.github.io/2019/12/13/java-concurrency-lock/index.html">
 <meta property="og:site_name" content="Bob's blog">
 <meta property="og:description" content="Lock">
-<meta property="og:updated_time" content="2019-12-13T09:01:31.715Z">
+<meta property="og:updated_time" content="2019-12-16T08:00:38.837Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lock">
 <meta name="twitter:description" content="Lock">
@@ -458,7 +458,35 @@
 <p>如果指定的等待时间过期，则返回false值。如果时间小于或等于0，则该方法根本不会等待。</p>
 <h3 id="unlock"><a href="#unlock" class="headerlink" title="unlock()"></a>unlock()</h3><p>Releases the lock.</p>
 <p>释放锁。</p>
-
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<h3 id="newCondition"><a href="#newCondition" class="headerlink" title="newCondition()"></a>newCondition()</h3><p>Returns a new Condition instance that is bound to this Lock instance.</p>
+<p>返回绑定到此Lock实例的新Condition实例。</p>
+<p>Before waiting on the condition the lock must be held by the current thread. </p>
+<p>在等待condition之前，lock必须由当前线程持有。</p>
+<p>=======</p>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>cd5e525a1e5dff253b35ecddf2d8e771229733ad</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>关于Lock与synchronized关键字在锁的处理上的重要差别</p>
+<ol>
+<li>锁的获取方式：前者是通过程序代码的方式由开发者手工获取，后者是通过JVM来获取(无需开发者干预)</li>
+<li>具体实现方式：前者是通过Java代码的方式来实现，后者是通过JVM底层来实现(无需开发者关注)</li>
+<li>锁的释放方式：前者务必通过unlock()方法在finally块中手工释放，后者通过JVM来释放(无需开发者关注)</li>
+<li>锁的具体类型：前者提供了多种，入公平锁、非公平锁，后者与前者均提供了可重入锁</li>
+</ol>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 关于Lock与synchronized关键字在锁的处理上的重要差别</div><div class="line"> * 1. 锁的获取方式：前者是通过程序代码的方式由开发者手工获取，后者是通过JVM来获取(无需开发者干预)</div><div class="line"> * 2. 具体实现方式：前者是通过Java代码的方式来实现，后者是通过JVM底层来实现(无需开发者关注)</div><div class="line"> * 3. 锁的释放方式：前者务必通过unlock()方法在finally块中手工释放，后者通过JVM来释放(无需开发者关注)</div><div class="line"> * 4. 锁的具体类型：前者提供了多种，入公平锁、非公平锁，后者与前者均提供了可重入锁</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyTest1</span> &#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">this</span>.<span class="keyword">lock</span>.<span class="keyword">lock</span>();</div><div class="line">            System.<span class="keyword">out</span>.println(<span class="string">"method1 invoked"</span>);</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">this</span>.<span class="keyword">lock</span>.unlock();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">this</span>.<span class="keyword">lock</span>.<span class="keyword">lock</span>();</div><div class="line">            System.<span class="keyword">out</span>.println(<span class="string">"method2 invoked"</span>);</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">this</span>.<span class="keyword">lock</span>.unlock();</div><div class="line">        &#125;</div><div class="line"></div><div class="line"><span class="comment">//        boolean result = false;</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//        try &#123;</span></div><div class="line"><span class="comment">//            result = lock.tryLock(800, TimeUnit.MILLISECONDS);</span></div><div class="line"><span class="comment">//        &#125; catch (InterruptedException e) &#123;</span></div><div class="line"><span class="comment">//            e.printStackTrace();</span></div><div class="line"><span class="comment">//        &#125;</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//        if (result) &#123;</span></div><div class="line"><span class="comment">//            System.out.println("get the lock");</span></div><div class="line"><span class="comment">//        &#125; else &#123;</span></div><div class="line"><span class="comment">//            System.out.println("can't get the lock");</span></div><div class="line"><span class="comment">//        &#125;</span></div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>&#123;</div><div class="line"></div><div class="line">        MyTest1 myTest1 = <span class="keyword">new</span> MyTest1();</div><div class="line"></div><div class="line">        Thread thread1 = <span class="keyword">new</span> Thread(()-&gt;&#123;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">                myTest1.method1();</div><div class="line"></div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    Thread.sleep(<span class="number">2000</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        Thread thread2 = <span class="keyword">new</span> Thread(()-&gt;&#123;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">                myTest1.method2();</div><div class="line"></div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    Thread.sleep(<span class="number">300</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        thread1.start();</div><div class="line">        thread2.start();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -497,6 +525,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/13/java-concurrency-Condition/" rel="prev" title="Condition">
+                Condition <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -573,7 +605,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">85</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -628,7 +660,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lock"><span class="nav-number">1.</span> <span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lock"><span class="nav-number">1.1.</span> <span class="nav-text">lock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lockInterruptibly"><span class="nav-number">1.2.</span> <span class="nav-text">lockInterruptibly()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock"><span class="nav-number">1.3.</span> <span class="nav-text">tryLock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock-long-time-NotNull-TimeUnit-unit"><span class="nav-number">1.4.</span> <span class="nav-text">tryLock(long time,@NotNull TimeUnit unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unlock"><span class="nav-number">1.5.</span> <span class="nav-text">unlock()</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lock"><span class="nav-number">1.</span> <span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lock"><span class="nav-number">1.1.</span> <span class="nav-text">lock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lockInterruptibly"><span class="nav-number">1.2.</span> <span class="nav-text">lockInterruptibly()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock"><span class="nav-number">1.3.</span> <span class="nav-text">tryLock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryLock-long-time-NotNull-TimeUnit-unit"><span class="nav-number">1.4.</span> <span class="nav-text">tryLock(long time,@NotNull TimeUnit unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unlock"><span class="nav-number">1.5.</span> <span class="nav-text">unlock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#newCondition"><span class="nav-number">1.6.</span> <span class="nav-text">newCondition()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock</span></a></li></ol></div>
             
 
           </div>

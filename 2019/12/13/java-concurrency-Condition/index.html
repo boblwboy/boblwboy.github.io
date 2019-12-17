@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="并发," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Condition">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Condition">
+<meta property="og:url" content="http://boblwboy.github.io/2019/12/13/java-concurrency-Condition/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="Condition">
+<meta property="og:updated_time" content="2019-12-17T02:32:06.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Condition">
+<meta name="twitter:description" content="Condition">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2019/12/13/java-concurrency-Condition/"/>
+
+
+
+
+
+  <title>Condition | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/12/13/java-concurrency-Condition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Condition</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T08:47:16+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Condition
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h2><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>传统上，我们可以通过synchronized关键字 + wait + notify/notifyAll来实现多个线程之间的协调与通信，整个过程都是由JVM来帮助<br>我们实现的;开发者无需（也是无法）了解底层的实现细节。</p>
+<p>从JDK5开始并发包提供了Lock，Condition（await与signal/signalAll）来实现多个线程之间的协调与通信，整个过程都是由开发者来<br>控制的，而且相比于传统方式，更加灵活，功能也更加强大。</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.Arrays;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</div><div class="line"><span class="keyword">import</span> java.util.stream.IntStream;</div><div class="line"></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyTest2</span> &#123;</span></div><div class="line"></div><div class="line">    public static <span class="literal">void</span> main(String[] args) &#123;</div><div class="line">        BoundedContainer boundedContainer = <span class="keyword">new</span> BoundedContainer();</div><div class="line"></div><div class="line">        IntStream.range<span class="function"><span class="params">(<span class="number">0</span>, <span class="number">20</span>)</span>.<span class="title">forEach</span><span class="params">(i -&gt; <span class="keyword">new</span> Thread(()-&gt;&#123;</span></span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                boundedContainer.take();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;).start());</div><div class="line"></div><div class="line">        <span class="title">IntStream</span>.<span class="title">range</span><span class="params">(<span class="number">0</span>, <span class="number">20</span>)</span>.<span class="title">forEach</span><span class="params">(i -&gt; <span class="keyword">new</span> Thread(()-&gt;&#123;</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                boundedContainer.put(<span class="string">"hello"</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;).start());</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="title">class</span> <span class="title">BoundedContainer</span> &#123;</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">String</span>[] <span class="title">elements</span> = <span class="title">new</span> <span class="title">String</span>[10];</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">Lock</span> <span class="title">lock</span> = <span class="title">new</span> <span class="title">ReentrantLock</span><span class="params">()</span>;</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">Condition</span> <span class="title">notEmpty</span> = <span class="title">lock</span>.<span class="title">newCondition</span><span class="params">()</span>;</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">Condition</span> <span class="title">notFull</span> = <span class="title">lock</span>.<span class="title">newCondition</span><span class="params">()</span>;</div><div class="line"></div><div class="line">    //<span class="title">elements</span>数组中已有的元素数量</div><div class="line">    <span class="title">private</span> <span class="title">int</span> <span class="title">elementCount</span>;</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">int</span> <span class="title">putIndex</span>;</div><div class="line"></div><div class="line">    <span class="title">private</span> <span class="title">int</span> <span class="title">takeIndex</span>;</div><div class="line"></div><div class="line">    <span class="title">public</span> <span class="title">void</span> <span class="title">put</span><span class="params">(String element)</span> <span class="title">throws</span> <span class="title">InterruptedException</span> &#123;</div><div class="line"></div><div class="line">        <span class="title">lock</span>.<span class="title">lock</span><span class="params">()</span>;</div><div class="line">        <span class="title">try</span> &#123;</div><div class="line">            <span class="title">while</span> <span class="params">(<span class="keyword">this</span>.elementCount == <span class="keyword">this</span>.elements.length)</span> &#123;</div><div class="line">                <span class="title">notFull</span>.<span class="title">await</span><span class="params">()</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="title">elements</span>[<span class="title">putIndex</span>] = <span class="title">element</span>;</div><div class="line">            <span class="title">if</span> <span class="params">(++putIndex == <span class="keyword">this</span>.elements.length)</span> &#123;</div><div class="line">                <span class="title">putIndex</span> = 0;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            ++<span class="title">elementCount</span>;</div><div class="line"></div><div class="line">            <span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="string">" put method:"</span> + Arrays.toString(elements))</span>;</div><div class="line"></div><div class="line">            <span class="title">notEmpty</span>.<span class="title">signal</span><span class="params">()</span>;</div><div class="line"></div><div class="line">        &#125;<span class="title">finally</span> &#123;</div><div class="line">            <span class="title">lock</span>.<span class="title">unlock</span><span class="params">()</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="title">public</span> <span class="title">String</span> <span class="title">take</span><span class="params">()</span> <span class="title">throws</span> <span class="title">InterruptedException</span> &#123;</div><div class="line"></div><div class="line">        <span class="title">lock</span>.<span class="title">lock</span><span class="params">()</span>;</div><div class="line">        <span class="title">try</span> &#123;</div><div class="line">            <span class="title">while</span> <span class="params">(<span class="keyword">this</span>.elementCount == <span class="number">0</span>)</span> &#123;</div><div class="line">                <span class="title">notEmpty</span>.<span class="title">await</span><span class="params">()</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="title">String</span> <span class="title">element</span> = <span class="title">elements</span>[<span class="title">takeIndex</span>];</div><div class="line"></div><div class="line">            <span class="title">elements</span>[<span class="title">takeIndex</span>] = <span class="title">null</span>;</div><div class="line">            <span class="title">if</span> <span class="params">(++takeIndex == <span class="keyword">this</span>.elements.length)</span> &#123;</div><div class="line">                <span class="title">takeIndex</span> = 0;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            --<span class="title">elementCount</span>;</div><div class="line"></div><div class="line">            <span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="string">"take method:"</span> + Arrays.toString(elements))</span>;</div><div class="line"></div><div class="line">            <span class="title">notFull</span>.<span class="title">signal</span><span class="params">()</span>;</div><div class="line"></div><div class="line">            <span class="title">return</span> <span class="title">element</span>;</div><div class="line"></div><div class="line">        &#125;<span class="title">finally</span> &#123;</div><div class="line">            <span class="title">lock</span>.<span class="title">unlock</span><span class="params">()</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Condition factors out the Object monitor methods (wait, notify and notifyAll) into distinct objects to give the effect of having multiple wait-sets per object, by combining them with the use of arbitrary Lock implementations. Where a Lock replaces the use of synchronized methods and statements, a Condition replaces the use of the Object monitor methods.</p>
+<p>Condition类似于将对象监视器方法(wait、notify和notifyAll)分解到不同的对象中，通过将它们与任意Lock实现结合使用，实现一个对象具有多个等待集合的效果。Lock代替synchronized方法和语句块的使用，Condition代替Object监视器方法的使用。</p>
+<p>Conditions (also known as condition queues or condition variables) provide a means for one thread to suspend execution (to “wait”) until notified by another thread that some state condition may now be true. Because access to this shared state information occurs in different threads, it must be protected, so a lock of some form is associated with the condition. The key property that waiting for a condition provides is that it atomically releases the associated lock and suspends the current thread, just like Object.wait.</p>
+<p>Conditions(也称为条件队列或条件变量)提供了一种方法，让一个线程暂停执行(“等待”)，直到另一个线程通知某个状态条件现在可能为true。因为对共享状态信息的访问发生在不同的线程中，所以必须保护它，所以某种形式的Lock与Condition相关联。等待条件提供的关键属性是它自动释放关联的锁并挂起当前线程，就像Object.wait一样。</p>
+<p>A Condition instance is intrinsically bound to a lock. To obtain a Condition instance for a particular Lock instance use its newCondition() method.</p>
+<p>一个Condition实例会被天然的绑定到lock上。要获取特定Lock实例锁对应的Condition实例，请使用其newCondition()方法。</p>
+<p>As an example, suppose we have a bounded buffer which supports put and take methods. If a take is attempted on an empty buffer, then the thread will block until an item becomes available; if a put is attempted on a full buffer, then the thread will block until a space becomes available. We would like to keep waiting put threads and take threads in separate wait-sets so that we can use the optimization of only notifying a single thread at a time when items or spaces become available in the buffer. This can be achieved using two Condition instances.</p>
+<p>例如，假设我们有一个有界的缓冲区，它支持put和take方法。如果尝试在空缓冲区上执行take操作，则线程将阻塞，直到某个项可用为止;如果在一个完整的缓冲区上尝试put，那么线程将阻塞，直到空间可用为止。我们希望将put线程和take线程放在不同的等待集中，这样我们就可以优化在缓冲区中的项或空间可用时只通知单个线程。这可以通过使用两个条件实例来实现。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> <span class="title">BoundedBuffer</span> &#123;</div><div class="line">  final Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();</div><div class="line">  final Condition notFull  = <span class="keyword">lock</span>.newCondition(); </div><div class="line">  final Condition notEmpty = <span class="keyword">lock</span>.newCondition(); </div><div class="line">  </div><div class="line">  final Object[] items = <span class="keyword">new</span> Object[<span class="number">100</span>];</div><div class="line">  <span class="keyword">int</span> putptr, takeptr, count;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span>(<span class="params">Object x</span>) throws InterruptedException </span>&#123;</div><div class="line">    <span class="keyword">lock</span>.<span class="keyword">lock</span>();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="keyword">while</span> (count == items.length)</div><div class="line">        notFull.<span class="keyword">await</span>();</div><div class="line">      items[putptr] = x;</div><div class="line">      <span class="keyword">if</span> (++putptr == items.length) putptr = <span class="number">0</span>;</div><div class="line">      ++count;</div><div class="line">      notEmpty.signal();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      <span class="keyword">lock</span>.unlock();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">take</span>(<span class="params"></span>) throws InterruptedException </span>&#123;</div><div class="line">    <span class="keyword">lock</span>.<span class="keyword">lock</span>();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="keyword">while</span> (count == <span class="number">0</span>)</div><div class="line">        notEmpty.<span class="keyword">await</span>();</div><div class="line">      Object x = items[takeptr];</div><div class="line">      <span class="keyword">if</span> (++takeptr == items.length) takeptr = <span class="number">0</span>;</div><div class="line">      --count;</div><div class="line">      notFull.signal();</div><div class="line">      <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      <span class="keyword">lock</span>.unlock();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>(The java.util.concurrent.ArrayBlockingQueue class provides this functionality, so there is no reason to implement this sample usage class.)</p>
+<p>A Condition implementation can provide behavior and semantics that is different from that of the Object monitor methods, such as guaranteed ordering for notifications, or not requiring a lock to be held when performing notifications. If an implementation provides such specialized semantics then the implementation must document those semantics.</p>
+<p>Condition实现可以提供与Object监视器方法不同的行为和语义，比如通知的保证顺序，或者在执行通知时不需要持有锁。如果实现提供了这种专门的语义，那么实现必须记录这些语义。</p>
+<p>Note that Condition instances are just normal objects and can themselves be used as the target in a synchronized statement, and can have their own monitor wait and notification methods invoked. Acquiring the monitor lock of a Condition instance, or using its monitor methods, has no specified relationship with acquiring the Lock associated with that Condition or the use of its waiting and signalling methods. It is recommended that to avoid confusion you never use Condition instances in this way, except perhaps within their own implementation.</p>
+<p>请注意，Condition实例只是普通对象，它们本身可以用作synchronized语句块中的目标，并且可以调用它们自己的监视器等待和通知方法。获取Condition实例的监控器锁，或使用其监控器方法，与获取与该条件相关的锁或使用其等待和发送信号的方法没有指定的关系。为了避免混淆，建议您永远不要以这种方式使用条件实例，除非在它们自己的实现中。</p>
+<p>Except where noted, passing a null value for any parameter will result in a NullPointerException being thrown.</p>
+<p>除非特别指出，为任何参数传递null值都会导致抛出NullPointerException。</p>
+<p>Implementation Considerations</p>
+<p>实现注意事项</p>
+<p>When waiting upon a Condition, a “spurious wakeup” is permitted to occur, in general, as a concession to the underlying platform semantics. This has little practical impact on most application programs as a Condition should always be waited upon in a loop, testing the state predicate that is being waited for. An implementation is free to remove the possibility of spurious wakeups but it is recommended that applications programmers always assume that they can occur and so always wait in a loop.</p>
+<p>在等待条件时，通常允许出现“伪唤醒”，这是对底层平台语义的让步。这对大多数应用程序几乎没有实际影响，因为应该始终在循环中等待一个条件，测试正在等待的状态谓词。实现可以自由地消除虚假唤醒的可能性，但建议应用程序编程人员始终假设它们会发生，因此始终在循环中等待。</p>
+<h3 id="await"><a href="#await" class="headerlink" title="await()"></a>await()</h3><p>Causes the current thread to wait until it is signalled or interrupted.<br>The lock associated with this Condition is atomically released and the current thread becomes disabled for thread scheduling purposes and lies dormant until one of four things happens:</p>
+<p>导致当前线程等待，直到被signall或中断。</p>
+<p>与此Condition相关的Lock被原子释放，当前线程出于线程调度的目的被禁用，并处于休眠状态，直到发生以下四种情况之一:</p>
+<ul>
+<li>Some other thread invokes the signal method for this Condition and the current thread happens to be chosen as the thread to be awakened; or</li>
+<li>Some other thread invokes the signalAll method for this Condition; or</li>
+<li>Some other thread interrupts the current thread, and interruption of thread suspension is supported; or</li>
+<li><p>A “spurious wakeup” occurs.</p>
+</li>
+<li><p>其他一些线程调用该Condition下的signal方法，而当前线程被选择为要唤醒的线程;或</p>
+</li>
+<li>其他一些线程调用signalAll方法为这个条件;或</li>
+<li>其他线程中断当前线程，支持中断线程暂停;或</li>
+<li>一个“虚假的觉醒”发生了。</li>
+</ul>
+<p>In all cases, before this method can return the current thread must re-acquire the lock associated with this condition. When the thread returns it is guaranteed to hold this lock.<br>If the current thread:</p>
+<p>在所有情况下，在此方法返回之前，当前线程必须重新获取与此condition关联的lock。当线程返回时，它保证持有这个锁。</p>
+<p>如果当前线程:</p>
+<ul>
+<li>has its interrupted status set on entry to this method; or</li>
+<li><p>is interrupted while waiting and interruption of thread suspension is supported,</p>
+</li>
+<li><p>在进入此方法时已设置其中断状态;或</p>
+</li>
+<li>在等待时中断，支持线程暂停中断，</li>
+</ul>
+<p>then InterruptedException is thrown and the current thread’s interrupted status is cleared. It is not specified, in the first case, whether or not the test for interruption occurs before the lock is released.</p>
+<p>然后抛出InterruptedException，并清除当前线程的中断状态。在第一种情况下，没有指定是否在释放锁之前进行中断测试。</p>
+<h3 id="awaitUninterruptibly"><a href="#awaitUninterruptibly" class="headerlink" title="awaitUninterruptibly()"></a>awaitUninterruptibly()</h3><h3 id="awaitNanos-long-nanosTimeout"><a href="#awaitNanos-long-nanosTimeout" class="headerlink" title="awaitNanos(long nanosTimeout)"></a>awaitNanos(long nanosTimeout)</h3><h3 id="await-long-time-TimeUnit-unit"><a href="#await-long-time-TimeUnit-unit" class="headerlink" title="await(long time, TimeUnit unit)"></a>await(long time, TimeUnit unit)</h3><h3 id="awaitUntil-Date-deadline"><a href="#awaitUntil-Date-deadline" class="headerlink" title="awaitUntil(Date deadline)"></a>awaitUntil(Date deadline)</h3><h3 id="signal"><a href="#signal" class="headerlink" title="signal()"></a>signal()</h3><p>Wakes up one waiting thread.</p>
+<p>唤醒一个正在等待的线程。</p>
+<p>If any threads are waiting on this condition then one is selected for waking up. That thread must then re-acquire the lock before returning from await.</p>
+<p>如果有任何线程在此condition下等待，则选择一个线程进行唤醒。然后，该线程必须在从wait返回之前重新获取锁。</p>
+<p>Implementation Considerations</p>
+<p>实现注意事项</p>
+<p>An implementation may (and typically does) require that the current thread hold the lock associated with this Condition when this method is called. Implementations must document this precondition and any actions taken if the lock is not held. Typically, an exception such as IllegalMonitorStateException will be thrown.</p>
+<p>实现可能(通常是这样)要求当前线程在调用此方法时持有与此Condition关联的lock。实现必须记录此前提条件和在未持有锁时所采取的任何操作。通常，会抛出一个异常，如IllegalMonitorStateException。</p>
+<h3 id="signalAll"><a href="#signalAll" class="headerlink" title="signalAll()"></a>signalAll()</h3><p>Wakes up all waiting threads.</p>
+<p>唤醒所有等待的线程。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/13/java-concurrency-lock/" rel="next" title="Lock">
+                <i class="fa fa-chevron-left"></i> Lock
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition"><span class="nav-number">1.</span> <span class="nav-text">Condition</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await"><span class="nav-number">1.2.</span> <span class="nav-text">await()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awaitUninterruptibly"><span class="nav-number">1.3.</span> <span class="nav-text">awaitUninterruptibly()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awaitNanos-long-nanosTimeout"><span class="nav-number">1.4.</span> <span class="nav-text">awaitNanos(long nanosTimeout)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await-long-time-TimeUnit-unit"><span class="nav-number">1.5.</span> <span class="nav-text">await(long time, TimeUnit unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awaitUntil-Date-deadline"><span class="nav-number">1.6.</span> <span class="nav-text">awaitUntil(Date deadline)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal"><span class="nav-number">1.7.</span> <span class="nav-text">signal()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signalAll"><span class="nav-number">1.8.</span> <span class="nav-text">signalAll()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
