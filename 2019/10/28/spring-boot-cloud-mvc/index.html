@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="spring cloud," />
 
 
 
@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="多线程">
+<meta name="description" content="Spring boot 对于Spring MVC整合">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多线程进阶-对象的共享">
-<meta property="og:url" content="http://boblwboy.github.io/2017/08/30/java-thread-advanced-object-sharing/index.html">
+<meta property="og:title" content="Spring boot 对于Spring MVC整合">
+<meta property="og:url" content="http://boblwboy.github.io/2019/10/28/spring-boot-cloud-mvc/index.html">
 <meta property="og:site_name" content="Bob's blog">
-<meta property="og:description" content="多线程">
-<meta property="og:updated_time" content="2019-03-28T16:28:33.346Z">
+<meta property="og:description" content="Spring boot 对于Spring MVC整合">
+<meta property="og:updated_time" content="2019-12-19T08:28:22.693Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="多线程进阶-对象的共享">
-<meta name="twitter:description" content="多线程">
+<meta name="twitter:title" content="Spring boot 对于Spring MVC整合">
+<meta name="twitter:description" content="Spring boot 对于Spring MVC整合">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://boblwboy.github.io/2017/08/30/java-thread-advanced-object-sharing/"/>
+  <link rel="canonical" href="http://boblwboy.github.io/2019/10/28/spring-boot-cloud-mvc/"/>
 
 
 
 
 
-  <title>多线程进阶-对象的共享 | Bob's blog</title>
+  <title>Spring boot 对于Spring MVC整合 | Bob's blog</title>
   
 
 
@@ -251,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2017/08/30/java-thread-advanced-object-sharing/">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/10/28/spring-boot-cloud-mvc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BOB">
@@ -268,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">多线程进阶-对象的共享</h1>
+          <h1 class="post-title" itemprop="name headline">Spring boot 对于Spring MVC整合</h1>
         
 
         <div class="post-meta">
@@ -280,8 +280,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-30T10:10:16+08:00">
-                2017-08-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T21:42:16+08:00">
+                2019-10-28
               </time>
             
 
@@ -327,7 +327,7 @@
 
           
               <div class="post-description">
-                  多线程
+                  Spring boot 对于Spring MVC整合
               </div>
           
 
@@ -344,27 +344,40 @@
       
 
       
-        <h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><h3 id="安全发布"><a href="#安全发布" class="headerlink" title="安全发布"></a>安全发布</h3><h4 id="安全发布的常用模式"><a href="#安全发布的常用模式" class="headerlink" title="安全发布的常用模式"></a>安全发布的常用模式</h4><p>要安全地发布一个对象，对象的引用以及对象的状态必须同时对其他线程可见。一个正确构造的对象可以通过以下方式来安全地发布：</p>
-<ul>
-<li>在静态初始化函数中初始化一个对象引用。</li>
-<li>将对象的引用保存到volatile类型的域或者AtomicReferance对象中。</li>
-<li>将对象的引用保存到某个正确构造对象的final类型域中。</li>
-<li>将对象的引用保存到一个由锁保护的域中。</li>
-</ul>
-<h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>对象的发布需要取决于它的可变性：</p>
-<ul>
-<li>不可变对象可以通过任意机制来发布。</li>
-<li>事实不可变对象必须通过安全方式来发布。</li>
-<li>可变对象必须通过安全方式来发布，并且必须是线程安全的或者由某个锁保护起来。</li>
-</ul>
-<h4 id="安全地共享对象"><a href="#安全地共享对象" class="headerlink" title="安全地共享对象"></a>安全地共享对象</h4><p>在并发程序中使用和共享对象时，可以使用一些策略，包括：</p>
-<ul>
-<li>线程封闭。线程封闭的对象只能由一个线程拥有，对象被封闭在该线程中，并且只能由这个线程修改。</li>
-<li>只读共享。在没有额外同步的情况下，共享的只读对象可以由多个线程并发访问，但任何线程都不能修改它。共享的只读对象包括不可变对象和事实不可变对象。</li>
-<li>线程安全共享。线程安全的对象在其内部实现同步，因此多个线程可以通过对象的公有接口来进行访问而不需要进一步的同步。</li>
-<li>保护对象。被保护的对象只能通过持有特定的锁来访问。保护对象包括封装在其他线程安全对象中的对象，以及已发布的并且由某个特定锁保护的对象。</li>
-</ul>
-
+        <a id="more"></a>
+<h2 id="Spring-boot-对于Spring-MVC整合"><a href="#Spring-boot-对于Spring-MVC整合" class="headerlink" title="Spring boot 对于Spring MVC整合"></a>Spring boot 对于Spring MVC整合</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>Spring MVC 开发</p>
+<p>web.xml</p>
+<p>部署描述符</p>
+<p>Servlet<br>Filter<br>Listener</p>
+<p>位于WEB-INF目录下</p>
+<p>DispatcherServlet</p>
+<p>/*</p>
+<p>ContextLoaderListener</p>
+<p>jar war</p>
+<p>Servlet3.0规范讲起（标准） 开始变化注解代替配置文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>...</div><div class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>...</div><div class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">mapping</span> /&gt;</span></div></pre></td></tr></table></figure>
+<p>@WebServlet(name=…)<br>@WebFilter<br>@WebListener</p>
+<p>SPI</p>
+<h3 id="ServletContainerInitializer"><a href="#ServletContainerInitializer" class="headerlink" title="ServletContainerInitializer"></a>ServletContainerInitializer</h3><p>ServletContainerInitializers (SCIs) are registered via an entry in the file META-INF/services/javax.servlet.ServletContainerInitializer that must be included in the JAR file that contains the SCI implementation.</p>
+<p>Servletcontainerinitialalizer (SCIs)是通过在META-INF/services/javax.servlet.ServletContainerInitializer文件中的一个条目注册的。必须包含在JAR文件中包含SCI的实现。</p>
+<p>SCI processing is performed regardless of the setting of metadata-complete. SCI processing can be controlled per JAR file via fragment ordering. If an absolute ordering is defined, the only those JARs included in the ordering will be processed for SCIs. To disable SCI processing completely, an empty absolute ordering may be defined.</p>
+<p>SCI处理的执行与元数据完成的设置无关。SCI处理可以通过片段排序来控制每个JAR文件。如果定义了绝对排序，则仅对排序中包含的那些jar进行SCIs处理。为了完全禁用SCI处理，可以定义一个空的绝对排序。</p>
+<p>SCIs register an interest in annotations (class, method or field) and/or types via the javax.servlet.annotation.HandlesTypes annotation which is added to the class.</p>
+<p>SCIs通过添加到类中的javax.servlet.annotation.HandlesTypes注解注册(类、方法或字段)和/或类型。</p>
+<h4 id="onStartup-Set"><a href="#onStartup-Set" class="headerlink" title="onStartup(Set"></a>onStartup(Set<class<?>&gt; c,ServletContext ctx)</class<?></h4><p>Receives notification during startup of a web application of the classes within the web application that matched the criteria defined via the javax.servlet.annotation.HandlesTypes annotation.</p>
+<p>符合HandlesTypes注解标准的类会在web应用程序启动期间接收到通知。</p>
+<p>Params:<br>c – The (possibly null) set of classes that met the specified criteria<br>ctx – The ServletContext of the web application in which the classes were discovered</p>
+<h3 id="SpringServletContainerInitializer"><a href="#SpringServletContainerInitializer" class="headerlink" title="SpringServletContainerInitializer"></a>SpringServletContainerInitializer</h3><p>Servlet 3.0 ServletContainerInitializer designed to support code-based configuration of the servlet container using Spring’s WebApplicationInitializer SPI as opposed to (or possibly in combination with) the traditional web.xml-based approach.</p>
+<p>Servlet 3.0 ServletContainerInitializer 被设计成基于代码的配置与传统的web.xml配置相反或者可以搭配来使用。</p>
+<p>Mechanism of Operation</p>
+<p>运行机制</p>
+<p>This class will be loaded and instantiated and have its onStartup method invoked by any Servlet 3.0-compliant container during container startup assuming that the spring-web module JAR is present on the classpath. This occurs through the JAR Services API ServiceLoader.load(Class) method detecting the spring-web module’s META-INF/services/javax.servlet.ServletContainerInitializer service provider configuration file. </p>
+<p>这个类将被加载和实例化，并在容器启动期间由任何Servlet 3.0兼容的容器调用它的onStartup方法(假设类路径上存在spring-web模块JAR)。这是通过JAR Services API ServiceLoader.load(Class)方法检测spring-web模块的META-INF/services/javax.servlet.ServletContainerInitializer服务提供者的配置文件。</p>
+<p>In combination with web.xml</p>
+<p>与web.xml搭配使用</p>
+<p>A web application can choose to limit the amount of classpath scanning the Servlet container does at startup either through the metadata-complete attribute in web.xml, which controls scanning for Servlet annotations or through an <absolute-ordering> element also in web.xml, which controls which web fragments (i.e. jars) are allowed to perform a ServletContainerInitializer scan. When using this feature, the SpringServletContainerInitializer can be enabled by adding “spring_web” to the list of named web fragments in web.xml as follows:</absolute-ordering></p>
+<p>web应用程序可以选择限制类路径扫描Servlet container的数量在启动的时候，通过web.xml中的metada-complete属性，它控制扫描Servlet注解或通过<absolute-ordering>元素也在web.xml，它控制允许哪些web片段(即jar)允许执行ServletContainerInitializer扫描。当使用这个特性时，SpringServletContainerInitializer可以通过在web.xml的命名web片段列表中添加“spring_web”来启用，如下所示:</absolute-ordering></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">absolute-ordering</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>some_web_fragment<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>spring_web<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">absolute-ordering</span>&gt;</span></div></pre></td></tr></table></figure>
       
     </div>
     
@@ -381,7 +394,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
           
         </div>
       
@@ -394,8 +407,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/30/java-time/" rel="next" title="Time">
-                <i class="fa fa-chevron-left"></i> Time
+              <a href="/2019/10/28/spring-boot-cloud-7/" rel="next" title="SpringApplication源码分析与作用">
+                <i class="fa fa-chevron-left"></i> SpringApplication源码分析与作用
               </a>
             
           </div>
@@ -404,8 +417,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/08/30/java-static-final/" rel="prev" title="static final">
-                static final <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/19/java-concurrency-Object/" rel="prev" title="Object Thead方法">
+                Object Thead方法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -538,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#可见性"><span class="nav-number">1.</span> <span class="nav-text">可见性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安全发布"><span class="nav-number">1.1.</span> <span class="nav-text">安全发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安全发布的常用模式"><span class="nav-number">1.1.1.</span> <span class="nav-text">安全发布的常用模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可变对象"><span class="nav-number">1.1.2.</span> <span class="nav-text">可变对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安全地共享对象"><span class="nav-number">1.1.3.</span> <span class="nav-text">安全地共享对象</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-boot-对于Spring-MVC整合"><span class="nav-number">1.</span> <span class="nav-text">Spring boot 对于Spring MVC整合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#历史"><span class="nav-number">1.1.</span> <span class="nav-text">历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletContainerInitializer"><span class="nav-number">1.2.</span> <span class="nav-text">ServletContainerInitializer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#onStartup-Set"><span class="nav-number">1.2.1.</span> <span class="nav-text">onStartup(Set> c,ServletContext ctx)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringServletContainerInitializer"><span class="nav-number">1.3.</span> <span class="nav-text">SpringServletContainerInitializer</span></a></li></ol></li></ol></div>
             
 
           </div>
