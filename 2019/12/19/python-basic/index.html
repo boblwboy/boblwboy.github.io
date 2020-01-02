@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="python basic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python basic">
+<meta property="og:url" content="http://boblwboy.github.io/2019/12/19/python-basic/index.html">
+<meta property="og:site_name" content="Bob's blog">
+<meta property="og:description" content="python basic">
+<meta property="og:updated_time" content="2020-01-02T00:28:06.738Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python basic">
+<meta name="twitter:description" content="python basic">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://boblwboy.github.io/2019/12/19/python-basic/"/>
+
+
+
+
+
+  <title>python basic | Bob's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bob's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">WHILE(TRUE) CODING();</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://boblwboy.github.io/2019/12/19/python-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BOB">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bob's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python basic</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-19T18:42:16+08:00">
+                2019-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  python basic
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h2 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h2><h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><p>type<br>id<br>help</p>
+<h4 id="input-print"><a href="#input-print" class="headerlink" title="input print"></a>input print</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; name = input(<span class="string">"your name is: "</span>)</div><div class="line">your name <span class="symbol">is:</span> zhangsan</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; name</div><div class="line"><span class="string">'zhangsan'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(name)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print(name)</div><div class="line">zhangsan</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>name.py</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">#coding:utf-8</div><div class="line">'''</div><div class="line"></div><div class="line">your name and age.</div><div class="line">'''</div><div class="line">name = input("your name: ")</div><div class="line">age = input("your age: ")</div><div class="line"></div><div class="line">after = int(age) + 10</div><div class="line"></div><div class="line">print("your name is: ",name)</div><div class="line">print("after ten years, you are ",after)</div></pre></td></tr></table></figure>
+<h3 id="整数-浮点数-四则运算"><a href="#整数-浮点数-四则运算" class="headerlink" title="整数 浮点数 四则运算"></a>整数 浮点数 四则运算</h3><h3 id="标准库中的math"><a href="#标准库中的math" class="headerlink" title="标准库中的math"></a>标准库中的math</h3><figure class="highlight moonscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="built_in">math</span></div><div class="line">dir(<span class="built_in">math</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="symbol">'__doc__</span>', <span class="symbol">'__file__</span>', <span class="symbol">'__loader__</span>', <span class="symbol">'__name__</span>', <span class="symbol">'__package__</span>', <span class="symbol">'__spec__</span>', <span class="symbol">'acos</span>', <span class="symbol">'acosh</span>', <span class="symbol">'asin</span>', <span class="symbol">'asinh</span>', <span class="symbol">'atan</span>', <span class="symbol">'atan2</span>', <span class="symbol">'atanh</span>', <span class="symbol">'ceil</span>', <span class="symbol">'copysign</span>', <span class="symbol">'cos</span>', <span class="symbol">'cosh</span>', <span class="symbol">'degrees</span>', <span class="symbol">'e</span>', <span class="symbol">'erf</span>', <span class="symbol">'erfc</span>', <span class="symbol">'exp</span>', <span class="symbol">'expm1</span>', <span class="symbol">'fabs</span>', <span class="symbol">'factorial</span>', <span class="symbol">'floor</span>', <span class="symbol">'fmod</span>', <span class="symbol">'frexp</span>', <span class="symbol">'fsum</span>', <span class="symbol">'gamma</span>', <span class="symbol">'gcd</span>', <span class="symbol">'hypot</span>', <span class="symbol">'inf</span>', <span class="symbol">'isclose</span>', <span class="symbol">'isfinite</span>', <span class="symbol">'isinf</span>', <span class="symbol">'isnan</span>', <span class="symbol">'ldexp</span>', <span class="symbol">'lgamma</span>', <span class="symbol">'log</span>', <span class="symbol">'log10</span>', <span class="symbol">'log1p</span>', <span class="symbol">'log2</span>', <span class="symbol">'modf</span>', <span class="symbol">'nan</span>', <span class="symbol">'pi</span>', <span class="symbol">'pow</span>', <span class="symbol">'radians</span>', <span class="symbol">'remainder</span>', <span class="symbol">'sin</span>', <span class="symbol">'sinh</span>', <span class="symbol">'sqrt</span>', <span class="symbol">'tan</span>', <span class="symbol">'tanh</span>', <span class="symbol">'tau</span>', <span class="symbol">'trunc</span>']</div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import math</div><div class="line">math.pi</div><div class="line"></div><div class="line">math.pow(<span class="number">2</span>,<span class="number">3</span>)</div><div class="line"><span class="number">2</span> ** <span class="number">3</span></div></pre></td></tr></table></figure>
+<p>异常运算精度问题 大部分使用round可解决</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import decimal</div><div class="line"><span class="selector-tag">a</span> = decimal.Decimal(<span class="string">'0.1'</span>)</div><div class="line"><span class="selector-tag">b</span> = decimal.Decimal(<span class="string">'0.2'</span>)</div><div class="line"></div><div class="line"><span class="selector-tag">a</span> + <span class="selector-tag">b</span> </div><div class="line"></div><div class="line">输出</div><div class="line"><span class="function"><span class="title">Decimal</span><span class="params">(<span class="string">'0.3'</span>)</span></span></div></pre></td></tr></table></figure>
+<p>浮点数溢出问题：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="number">2</span> ** <span class="number">10000</span> * <span class="number">0</span>.<span class="number">1</span></div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="symbol">OverflowError:</span> int too large to convert to float</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>python文件 force.py<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#coding:utf-8</div><div class="line">'''</div><div class="line">my first programe.</div><div class="line">filename: force.py</div><div class="line">'''</div><div class="line"></div><div class="line">import math</div><div class="line">f1 = 20</div><div class="line">f2 = 10</div><div class="line">alpha = math.pi / 3</div><div class="line"></div><div class="line">x<span class="emphasis">_force = f1 + f2 * math.sin(alpha)</span></div><div class="line">y_force = f2 * math.cos(alpha)</div><div class="line"></div><div class="line">force = math.sqrt(x<span class="emphasis">_force * x_</span>force + y<span class="emphasis">_force ** 2)</span></div><div class="line"></div><div class="line">print(<span class="emphasis">'The result is : '</span>,round(force,2),<span class="emphasis">'N'</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="字符和字符串"><a href="#字符和字符串" class="headerlink" title="字符和字符串"></a>字符和字符串</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; ord('a')</div><div class="line"><span class="number">97</span></div><div class="line">&gt;&gt;&gt; bin(<span class="number">97</span>)</div><div class="line">'<span class="number">0b1100001</span>'</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; import sys</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; sys.getdefaultencoding()</div><div class="line"><span class="string">'utf-8'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>字符串定义</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; a = <span class="string">"python"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(a)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; b = <span class="string">'python'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(b)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(<span class="string">'250'</span>)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; int(<span class="string">'250'</span>)</div><div class="line"><span class="number">250</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; str(<span class="number">250</span>)</div><div class="line"><span class="string">'250'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">'what'</span>s your name<span class="string">'</span></div><div class="line">  File "&lt;stdin&gt;", line 1</div><div class="line">    'what<span class="string">'s your name'</span></div><div class="line">          ^</div><div class="line"><span class="symbol">SyntaxError:</span> invalid syntax</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"what's your name"</span></div><div class="line"><span class="string">"what's your name"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">'what"s your name'</span></div><div class="line"><span class="string">'what"s your name'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">'what\'s your name'</span></div><div class="line"><span class="string">"what's your name"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p><a href="https://www.runoob.com/python/python-strings.html" target="_blank" rel="external">https://www.runoob.com/python/python-strings.html</a></p>
+<p>序列及其基本操作</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; m = <span class="string">'python'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; n = <span class="string">'book'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; m + n</div><div class="line"><span class="string">'pythonbook'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; m</div><div class="line"><span class="string">'python'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line">&gt;&gt;&gt; n</div><div class="line"><span class="string">'book'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; m * <span class="number">3</span></div><div class="line"><span class="string">'pythonpythonpython'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; len(m)</div><div class="line"><span class="number">6</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line">&gt;&gt;&gt; name = <span class="string">"张三"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; len(name)</div><div class="line"><span class="number">2</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; m</div><div class="line"><span class="string">'python'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">'p'</span> in m</div><div class="line">True</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">'m'</span> in m</div><div class="line">False</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>索引和切片</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r = <span class="string">"python book"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; len(r)</div><div class="line"><span class="number">11</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="number">0</span>]</div><div class="line"><span class="string">'p'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[-<span class="number">1</span>]</div><div class="line"><span class="string">'k'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="number">1</span><span class="symbol">:</span><span class="number">9</span>]</div><div class="line"><span class="string">'ython bo'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="number">1</span><span class="symbol">:</span><span class="number">9</span><span class="symbol">:</span><span class="number">1</span>]</div><div class="line"><span class="string">'ython bo'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="symbol">:</span><span class="number">9</span><span class="symbol">:</span><span class="number">2</span>]</div><div class="line"><span class="string">'pto o'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="number">2</span><span class="symbol">:</span>]</div><div class="line"><span class="string">'thon book'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="symbol">:</span>]</div><div class="line"><span class="string">'python book'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="symbol">:</span><span class="symbol">:-</span><span class="number">1</span>]</div><div class="line"><span class="string">'koob nohtyp'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[-<span class="number">10</span><span class="symbol">:</span><span class="number">8</span><span class="symbol">:</span><span class="number">2</span>]</div><div class="line"><span class="string">'yhnb'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r[<span class="number">8</span><span class="symbol">:-</span><span class="number">10</span><span class="symbol">:-</span><span class="number">2</span>]</div><div class="line"><span class="string">'o ot'</span></div></pre></td></tr></table></figure>
+<h4 id="字符串的常用属性和方法"><a href="#字符串的常用属性和方法" class="headerlink" title="字符串的常用属性和方法"></a>字符串的常用属性和方法</h4><h5 id="查看对象的属性和方法"><a href="#查看对象的属性和方法" class="headerlink" title="查看对象的属性和方法"></a>查看对象的属性和方法</h5><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; dir(str)</div><div class="line">[<span class="string">'__add__'</span>, <span class="string">'__class__'</span>, <span class="string">'__contains__'</span>, <span class="string">'__delattr__'</span>, <span class="string">'__dir__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__eq__'</span>, <span class="string">'__format__'</span>, <span class="string">'__ge__'</span>, <span class="string">'__getattribute__'</span>, <span class="string">'__getitem__'</span>, <span class="string">'__getnewargs__'</span>, <span class="string">'__gt__'</span>, <span class="string">'__hash__'</span>, <span class="string">'__init__'</span>, <span class="string">'__init_subclass__'</span>, <span class="string">'__iter__'</span>, <span class="string">'__le__'</span>, <span class="string">'__len__'</span>, <span class="string">'__lt__'</span>, <span class="string">'__mod__'</span>, <span class="string">'__mul__'</span>, <span class="string">'__ne__'</span>, <span class="string">'__new__'</span>, <span class="string">'__reduce__'</span>, <span class="string">'__reduce_ex__'</span>, <span class="string">'__repr__'</span>, <span class="string">'__rmod__'</span>, <span class="string">'__rmul__'</span>, <span class="string">'__setattr__'</span>, <span class="string">'__sizeof__'</span>, <span class="string">'__str__'</span>, <span class="string">'__subclasshook__'</span>, <span class="string">'capitalize'</span>, <span class="string">'casefold'</span>, <span class="string">'center'</span>, <span class="string">'count'</span>, <span class="string">'encode'</span>, <span class="string">'endswith'</span>, <span class="string">'expandtabs'</span>, <span class="string">'find'</span>, <span class="string">'format'</span>, <span class="string">'format_map'</span>, <span class="string">'index'</span>, <span class="string">'isalnum'</span>, <span class="string">'isalpha'</span>, <span class="string">'isascii'</span>, <span class="string">'isdecimal'</span>, <span class="string">'isdigit'</span>, <span class="string">'isidentifier'</span>, <span class="string">'islower'</span>, <span class="string">'isnumeric'</span>, <span class="string">'isprintable'</span>, <span class="string">'isspace'</span>, <span class="string">'istitle'</span>, <span class="string">'isupper'</span>, <span class="string">'join'</span>, <span class="string">'ljust'</span>, <span class="string">'lower'</span>, <span class="string">'lstrip'</span>, <span class="string">'maketrans'</span>, <span class="string">'partition'</span>, <span class="string">'replace'</span>, <span class="string">'rfind'</span>, <span class="string">'rindex'</span>, <span class="string">'rjust'</span>, <span class="string">'rpartition'</span>, <span class="string">'rsplit'</span>, <span class="string">'rstrip'</span>, <span class="string">'split'</span>, <span class="string">'splitlines'</span>, <span class="string">'startswith'</span>, <span class="string">'strip'</span>, <span class="string">'swapcase'</span>, <span class="string">'title'</span>, <span class="string">'translate'</span>, <span class="string">'upper'</span>, <span class="string">'zfill'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; s = <span class="string">'python lesson'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; s</div><div class="line"><span class="string">'python lesson'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; s.index(<span class="string">'n'</span>)</div><div class="line"><span class="number">5</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; s.index(<span class="string">'n'</span>,<span class="number">6</span>)</div><div class="line"><span class="number">12</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; s.index(<span class="string">'on'</span>)</div><div class="line"><span class="number">4</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; a = <span class="string">"I LOVE PYTHON"</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; a.split(<span class="string">" "</span>)</div><div class="line">[<span class="string">'I'</span>, <span class="string">'LOVE'</span>, <span class="string">'PYTHON'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst = a.split(<span class="string">" "</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="string">'I'</span>, <span class="string">'LOVE'</span>, <span class="string">'PYTHON'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"-"</span>.join(lst)</div><div class="line"><span class="string">'I-LOVE-PYTHON'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"I like &#123;0&#125; and &#123;1&#125;"</span>.format(<span class="string">"python"</span>,<span class="string">"physics"</span>)</div><div class="line"><span class="string">'I like python and physics'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"I like &#123;0&#125; and &#123;1&#125;"</span>.format(<span class="string">"PHP"</span>,<span class="string">"money"</span>)</div><div class="line"><span class="string">'I like PHP and money'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"I like &#123;0:10&#125; and &#123;1:&gt;15&#125;"</span>.format(<span class="string">"python"</span>,<span class="string">"physics"</span>)</div><div class="line"><span class="string">'I like python     and         physics'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; <span class="string">"She is &#123;0:4d&#125; years old and &#123;1:.1f&#125;m in height"</span>.format(<span class="number">28</span>,<span class="number">1</span>,<span class="number">68</span>)</div><div class="line"><span class="string">'She is   28 years old and 1.0m in height'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<h5 id="使用帮助文档"><a href="#使用帮助文档" class="headerlink" title="使用帮助文档"></a>使用帮助文档</h5><h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">3.14</span>,<span class="string">"python lesson"</span>,[]]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(list)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">type</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line">&gt;&gt;&gt; dir(list)</div><div class="line">[<span class="string">'__add__'</span>, <span class="string">'__class__'</span>, <span class="string">'__contains__'</span>, <span class="string">'__delattr__'</span>, <span class="string">'__delitem__'</span>, <span class="string">'__dir__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__eq__'</span>, <span class="string">'__format__'</span>, <span class="string">'__ge__'</span>, <span class="string">'__getattribute__'</span>, <span class="string">'__getitem__'</span>, <span class="string">'__gt__'</span>, <span class="string">'__hash__'</span>, <span class="string">'__iadd__'</span>, <span class="string">'__imul__'</span>, <span class="string">'__init__'</span>, <span class="string">'__init_subclass__'</span>, <span class="string">'__iter__'</span>, <span class="string">'__le__'</span>, <span class="string">'__len__'</span>, <span class="string">'__lt__'</span>, <span class="string">'__mul__'</span>, <span class="string">'__ne__'</span>, <span class="string">'__new__'</span>, <span class="string">'__reduce__'</span>, <span class="string">'__reduce_ex__'</span>, <span class="string">'__repr__'</span>, <span class="string">'__reversed__'</span>, <span class="string">'__rmul__'</span>, <span class="string">'__setattr__'</span>, <span class="string">'__setitem__'</span>, <span class="string">'__sizeof__'</span>, <span class="string">'__str__'</span>, <span class="string">'__subclasshook__'</span>, <span class="string">'append'</span>, <span class="string">'clear'</span>, <span class="string">'copy'</span>, <span class="string">'count'</span>, <span class="string">'extend'</span>, <span class="string">'index'</span>, <span class="string">'insert'</span>, <span class="string">'pop'</span>, <span class="string">'remove'</span>, <span class="string">'reverse'</span>, <span class="string">'sort'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line"><span class="comment"># append 尾部追加，无返回值</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">300</span>,<span class="number">4</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.append(<span class="string">'python'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.append(<span class="string">'lesson'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; list</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">list</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>, <span class="string">'lesson'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r = lst.append(<span class="string">'zhangsan'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; r</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print(r)</div><div class="line">None</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line"><span class="comment"># insert 指定索引前增加对象</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.insert(<span class="number">0</span>,<span class="number">10</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>, <span class="string">'lesson'</span>, <span class="string">'zhangsan'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line"><span class="comment"># extend 增加可迭代对象</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2 = [<span class="string">'a'</span>,<span class="string">'b'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.extend(lst2)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>, <span class="string">'lesson'</span>, <span class="string">'zhangsan'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.extend(<span class="string">'book'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>, <span class="string">'lesson'</span>, <span class="string">'zhangsan'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'b'</span>, <span class="string">'o'</span>, <span class="string">'o'</span>, <span class="string">'k'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line"><span class="comment"># pop 指定索引删除对象默认删除尾部，返回对象  remove 删除第一次出现的指定对象 无返回</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.pop()</div><div class="line"><span class="string">'k'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.pop(<span class="number">0</span>)</div><div class="line"><span class="number">10</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.remove(<span class="string">'b'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">300</span>, <span class="number">4</span>, <span class="string">'python'</span>, <span class="string">'lesson'</span>, <span class="string">'zhangsan'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'o'</span>, <span class="string">'o'</span>]</div><div class="line"></div><div class="line"><span class="comment"># clear 清空</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2.clear()</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line"><span class="comment"># sort 排序，只能同类型  reverse</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst.sort()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="symbol">TypeError:</span> <span class="string">'&lt;'</span> <span class="keyword">not</span> supported between instances of <span class="string">'str'</span> <span class="keyword">and</span> <span class="string">'int'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; </div><div class="line"></div><div class="line">&gt;&gt;&gt; lst2.sort()</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">9</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2.sort(reverse=True)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">9</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2.sort(reverse=False)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">9</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2.reverse()</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">9</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2.append(<span class="number">3</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">9</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; sorted(lst2)</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">9</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst2</div><div class="line">[<span class="number">9</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; reversed(lst2)</div><div class="line">&lt;list_reverseiterator object at <span class="number">0x103c3dd30</span>&gt;</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>比较列表与字符串</p>
+<ul>
+<li>都是序列</li>
+<li>列表是容器类对象，列表可变</li>
+<li>字符串不可变</li>
+</ul>
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><p>元组只有一个元素必须加逗号</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; t = (<span class="number">1</span>,<span class="number">2</span>,<span class="string">'python'</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t</div><div class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="string">'python'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(t)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">tuple</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; tuple()</div><div class="line">()</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; tuple([<span class="number">1</span>,<span class="number">23</span>,<span class="number">44</span>])</div><div class="line">(<span class="number">1</span>, <span class="number">23</span>, <span class="number">44</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; (<span class="string">'a'</span>,)</div><div class="line">(<span class="string">'a'</span>,)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t = (<span class="string">'a'</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t</div><div class="line"><span class="string">'a'</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>元组也是序列</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; t = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; type(t)</div><div class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">tuple</span>'&gt;</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; dir(t)</div><div class="line">[<span class="string">'__add__'</span>, <span class="string">'__class__'</span>, <span class="string">'__contains__'</span>, <span class="string">'__delattr__'</span>, <span class="string">'__dir__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__eq__'</span>, <span class="string">'__format__'</span>, <span class="string">'__ge__'</span>, <span class="string">'__getattribute__'</span>, <span class="string">'__getitem__'</span>, <span class="string">'__getnewargs__'</span>, <span class="string">'__gt__'</span>, <span class="string">'__hash__'</span>, <span class="string">'__init__'</span>, <span class="string">'__init_subclass__'</span>, <span class="string">'__iter__'</span>, <span class="string">'__le__'</span>, <span class="string">'__len__'</span>, <span class="string">'__lt__'</span>, <span class="string">'__mul__'</span>, <span class="string">'__ne__'</span>, <span class="string">'__new__'</span>, <span class="string">'__reduce__'</span>, <span class="string">'__reduce_ex__'</span>, <span class="string">'__repr__'</span>, <span class="string">'__rmul__'</span>, <span class="string">'__setattr__'</span>, <span class="string">'__sizeof__'</span>, <span class="string">'__str__'</span>, <span class="string">'__subclasshook__'</span>, <span class="string">'count'</span>, <span class="string">'index'</span>]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div></pre></td></tr></table></figure>
+<p>元组是不可变对象，不可修改</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t = (<span class="number">1</span>,<span class="number">2</span>,<span class="string">'python'</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t</div><div class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="string">'python'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t[<span class="number">1</span>] = <span class="number">200</span></div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="symbol">TypeError:</span> <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst = list(t)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="string">'python'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst[<span class="number">1</span>] = <span class="number">200</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; lst</div><div class="line">[<span class="number">1</span>, <span class="number">200</span>, <span class="string">'python'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t = tuple(lst)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; t</div><div class="line">(<span class="number">1</span>, <span class="number">200</span>, <span class="string">'python'</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; t1 = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</div><div class="line">&gt;&gt;&gt; t2 = (<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>)</div><div class="line">&gt;&gt;&gt; t1 + t2</div><div class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, 'a', 'b', 'c')</div><div class="line">&gt;&gt;&gt; t1 * <span class="number">3</span></div><div class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div><div class="line">&gt;&gt;&gt; len(t1)</div><div class="line"><span class="number">3</span></div><div class="line">&gt;&gt;&gt; <span class="number">1</span> in t1</div><div class="line">True</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<p>比较元组和列表</p>
+<ul>
+<li>元组不可变</li>
+<li>元组运算速度快</li>
+<li>两者都是容器类、序列类对象</li>
+</ul>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/16/java-concurrency-Condition/" rel="next" title="Condition">
+                <i class="fa fa-chevron-left"></i> Condition
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/19/spring-boot-cloud-mvc/" rel="prev" title="Spring boot 对于Spring MVC整合">
+                Spring boot 对于Spring MVC整合 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BOB</p>
+              <p class="site-description motion-element" itemprop="description">3</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#basic"><span class="nav-number">1.</span> <span class="nav-text">basic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内置函数"><span class="nav-number">1.1.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#input-print"><span class="nav-number">1.1.1.</span> <span class="nav-text">input print</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整数-浮点数-四则运算"><span class="nav-number">1.2.</span> <span class="nav-text">整数 浮点数 四则运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准库中的math"><span class="nav-number">1.3.</span> <span class="nav-text">标准库中的math</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符和字符串"><span class="nav-number">1.4.</span> <span class="nav-text">字符和字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串的常用属性和方法"><span class="nav-number">1.4.1.</span> <span class="nav-text">字符串的常用属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看对象的属性和方法"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">查看对象的属性和方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用帮助文档"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">使用帮助文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列表"><span class="nav-number">1.5.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元组"><span class="nav-number">1.6.</span> <span class="nav-text">元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字典"><span class="nav-number">1.7.</span> <span class="nav-text">字典</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BOB</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
