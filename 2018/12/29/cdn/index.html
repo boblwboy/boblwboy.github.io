@@ -87,8 +87,8 @@
 <meta property="og:description" content="cdn">
 <meta property="og:image" content="http://boblwboy.github.io/img/cdn/cdn-01.jpg">
 <meta property="og:image" content="http://boblwboy.github.io/img/cdn/cdn-02.jpg">
-<meta property="og:image" content="http://boblwboy.github.io/img/cdn/cdn-03.jpg">
-<meta property="og:updated_time" content="2020-04-29T09:17:20.369Z">
+<meta property="og:image" content="http://boblwboy.github.io/img/cdn/cdn-03.png">
+<meta property="og:updated_time" content="2020-04-29T11:19:32.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CDN详解">
 <meta name="twitter:description" content="cdn">
@@ -377,16 +377,20 @@
 <li>CDN 的 DNS 服务器将 CDN 的全局负载均衡设备 IP 地址返回用户。</li>
 <li>用户向 CDN 的全局负载均衡设备发起内容 URL 访问请求。</li>
 <li>CDN 全局负载均衡设备根据用户 IP 地址，以及用户请求的内容URL，选择一台用户所属区域的区域负载均衡设备，告诉用户向这台设备发起请求。</li>
-<li>基于以下这些条件的综合分析之后，区域负载均衡设备会向全局负载均衡设备返回一台缓存服务器的IP地址：</li>
+<li>基于以下这些条件的综合分析之后，区域负载均衡设备会向全局负载均衡设备返回一台缓存服务器的IP地址：<ul>
 <li>根据用户 IP 地址，判断哪一台服务器距用户最近；</li>
 <li>根据用户所请求的 URL 中携带的内容名称，判断哪一台服务器上有用户所需内容；</li>
 <li>查询各个服务器当前的负载情况，判断哪一台服务器尚有服务能力。</li>
+</ul>
+</li>
 <li>全局负载均衡设备把服务器的 IP 地址返回给用户。</li>
 <li>用户向缓存服务器发起请求，缓存服务器响应用户请求，将用户所需内容传送到用户终端。如果这台缓存服务器上并没有用户想要的内容，而区域均衡设备依然将它分配给了用户，那么这台服务器就要向它的上一级缓存服务器请求内容，直至追溯到网站的源服务器将内容拉到本地。</li>
 </ol>
 <p>DNS 服务器根据用户 IP 地址，将域名解析成相应节点的缓存服务器IP地址，实现用户就近访问。使用 CDN 服务的网站，只需将其域名解析权交给 CDN 的全局负载均衡（GSLB）设备，将需要分发的内容注入 CDN，就可以实现内容加速了。</p>
 <p>使用CDN后的http请求处理流程如下图，其中左边为DNS解析过程，右边为内容访问过程：</p>
-<p><img src="http://boblwboy.github.io/img/cdn/cdn-03.jpg" alt="cdn-03"></p>
+<p><img src="http://boblwboy.github.io/img/cdn/cdn-03.png" alt="cdn-03"></p>
+<h3 id="回源是什么意思？"><a href="#回源是什么意思？" class="headerlink" title="回源是什么意思？"></a>回源是什么意思？</h3><p>当 cdn 缓存服务器中没有符合客户端要求的资源的时候，缓存服务器会请求上一级缓存服务器，以此类推，直到获取到。最后如果还是没有，就会回到我们自己的服务器去获取资源。<br>那都有哪些时候会回源呢？没有资源，资源过期，访问的资源是不缓存资源等都会导致回源。其他情况欢迎小伙伴们在评论区补充~</p>
+<h3 id="资源的过期如何判定？cdn-是如何更新数据的？"><a href="#资源的过期如何判定？cdn-是如何更新数据的？" class="headerlink" title="资源的过期如何判定？cdn 是如何更新数据的？"></a>资源的过期如何判定？cdn 是如何更新数据的？</h3><p>资源过期时间就是根据我们老生常谈的请求头部来判定。这个后面会单拎出一篇文章带大家复习一下。<br>那么 cdn 是如何更新数据的？分两种，主动（PUSH）和被动（PULL）。被动刚才我们已经提到过了，利用回源就可以被动在途经的 cdn 节点缓存数据。 而主动指的是，我们从服务器主动往 cdn 推送数据。</p>
 
       
     </div>
@@ -417,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/12/kafka-basic/" rel="next" title="Kafka基本概念与术语">
-                <i class="fa fa-chevron-left"></i> Kafka基本概念与术语
+              <a href="/2018/12/12/clean-code-basic/" rel="next" title="整洁代码">
+                <i class="fa fa-chevron-left"></i> 整洁代码
               </a>
             
           </div>
@@ -561,7 +565,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CND详解"><span class="nav-number">1.</span> <span class="nav-text">CND详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN的基本工作过程"><span class="nav-number">1.1.</span> <span class="nav-text">CDN的基本工作过程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CND详解"><span class="nav-number">1.</span> <span class="nav-text">CND详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN的基本工作过程"><span class="nav-number">1.1.</span> <span class="nav-text">CDN的基本工作过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回源是什么意思？"><span class="nav-number">1.2.</span> <span class="nav-text">回源是什么意思？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源的过期如何判定？cdn-是如何更新数据的？"><span class="nav-number">1.3.</span> <span class="nav-text">资源的过期如何判定？cdn 是如何更新数据的？</span></a></li></ol></li></ol></div>
             
 
           </div>
